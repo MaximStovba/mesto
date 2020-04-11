@@ -1,0 +1,12 @@
+.profile__profile-info {
+  margin: 0;
+  grid-area: profile-info;
+  display: grid;
+  grid-template-columns: minmax(min-content, max-content) 24px;
+  grid-template-rows: repeat(2, minmax(min-content, max-content));
+  grid-column-gap: 17px;
+  grid-row-gap: 16px;
+  grid-template-areas:
+  "title edit-button"
+  "subtitle subtitle";
+}

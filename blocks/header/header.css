@@ -4,6 +4,7 @@
 .header {
   margin: 0 auto;
   max-width: 882px;
+  height: 74px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
