@@ -14,3 +14,15 @@
 .popup__icon-close:hover {
   opacity: 0.6;
 }
+
+@media all and (max-width : 550px) {
+  /* телефоны */
+  .popup__icon-close {
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 20.7px;
+    width: 20.7px;
+    top: -18px;
+    right: -18px;
+  }
+}

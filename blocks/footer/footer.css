@@ -5,3 +5,19 @@
   max-width: 882px;
   padding-bottom: 60px;
 }
+
+@media all and (max-width : 920px) {
+  /* стили для планшета */
+  .footer {
+    margin-top: 48px;
+    max-width: 582px;
+    padding-bottom: 36px;
+  }
+}
+
+@media all and (max-width : 620px) {
+  /* телефоны */
+  .footer {
+    max-width: 282px;
+  }
+}

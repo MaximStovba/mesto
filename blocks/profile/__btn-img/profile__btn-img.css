@@ -1,0 +1,12 @@
+.profile__btn-img {
+  width: 22px;
+  height: 22px;
+}
+
+@media all and (max-width : 920px) {
+  /* стили для планшета */
+  .profile__btn-img {
+    width: 16px;
+    height: 16px;
+  }
+}

@@ -2,3 +2,11 @@
   width: 142.01px;
   height: auto;
 }
+
+@media all and (max-width : 920px) {
+  /* телефоны */
+  .header__logo {
+    margin-left: 27px;
+    width: 103.74px;
+  }
+}

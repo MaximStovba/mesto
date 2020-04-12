@@ -4,6 +4,7 @@
 @import url(./__edit-button/profile__edit-button.css);
 @import url(./__subtitle/profile__subtitle.css);
 @import url(./__add-button/profile__add-button.css);
+@import url(./__btn-img/profile__btn-img.css);
 
 .profile {
   margin: 40px auto 0;
@@ -14,4 +15,18 @@
   grid-column-gap: 30px;
   grid-template-areas:
   "avatar profile-info add-button";
+}
+
+@media all and (max-width : 920px) {
+  /* стили для планшета */
+  .profile {
+    margin-top: 42px;
+    max-width: 282px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 120px 1fr 50px;
+    grid-template-areas:
+    "avatar"
+    "profile-info"
+    "add-button";
+  }
 }

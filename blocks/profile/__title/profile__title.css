@@ -1,11 +1,22 @@
 .profile__title {
   grid-area: title;
-  margin: 6px 0 0 0; /* c смещения вниз 12 = 18 */
+  margin: 18px 0 0 0;
   font-style: normal;
   font-weight: 500;
   font-size: 42px;
   line-height: 56px;
+  height: 43px;
   color: #FFFFFF;
   align-self: end;
-  transform: translate(0, 12px);
+}
+
+@media all and (max-width : 920px) {
+  /* стили для планшета */
+  .profile__title {
+    margin: 0;
+    font-size: 27px;
+    line-height: 56px;
+    transform: translate(0, 0);
+    height: 38px;
+  }
 }

@@ -10,3 +10,11 @@
   justify-content: space-between;
   align-items: flex-start;
 }
+
+@media all and (max-width : 920px) {
+  /* телефоны */
+  .header {
+    margin: 0;
+    height: 56px;
+  }
+}

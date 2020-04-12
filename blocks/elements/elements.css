@@ -11,4 +11,22 @@
   grid-template-rows: repeat(2, 361px);
   grid-column-gap: 18px;
   grid-row-gap: 21px;
+  justify-content: center;
+}
+
+@media all and (max-width : 920px) {
+  /* стили для планшета */
+  .elements {
+    grid-template-columns: repeat(2, 282px);
+    grid-template-rows: repeat(3, 361px);
+    grid-row-gap: 20px;
+  }
+}
+
+@media all and (max-width : 620px) {
+  /* телефоны */
+  .elements {
+    grid-template-columns: repeat(1, 282px);
+    grid-template-rows: repeat(6, 361px);
+  }
 }
