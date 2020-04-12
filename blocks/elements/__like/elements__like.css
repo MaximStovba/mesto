@@ -1,0 +1,10 @@
+.elements__like {
+  margin: 31px 22.24px 0 0;
+  width: 20.76px;
+  height: 18.13px;
+  grid-area: like;
+  background-color: #ffffff;
+  border-width: 0;
+  background-image: url(../../../images/elements__like.svg);
+  justify-self: end;
+}

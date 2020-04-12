@@ -1,0 +1,14 @@
+@import url(./__element/elements__element.css);
+@import url(./__image/elements__image.css);
+@import url(./__title/elements__title.css);
+@import url(./__like/elements__like.css);
+
+.elements {
+  margin: 46.25px auto 0;
+  max-width: 882px;
+  display: grid;
+  grid-template-columns: repeat(3, 282px);
+  grid-template-rows: repeat(2, 361px);
+  grid-column-gap: 18px;
+  grid-row-gap: 21px;
+}
