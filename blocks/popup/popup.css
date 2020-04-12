@@ -1,4 +1,5 @@
-@import url(./_opened/popup_opened.css);
+@import url(./_status/popup_status_closed.css);
+@import url(./_status/popup_status_opened.css);
 @import url(./__container/popup__container.css);
 @import url(./__title/popup__title.css);
 @import url(./__text/popup__text.css);
@@ -10,10 +11,15 @@
 @import url(./__icon-close/popup__icon-close.css);
 
 .popup {
+  margin: 0;
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.5);
+  /* flex */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

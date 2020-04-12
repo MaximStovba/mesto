@@ -55,19 +55,20 @@
           <button class="elements__like"></button>
         </div>
       </section>
-      <section class="popup popup_opened">
-        <div class="popup__container">
+      <section class="popup popup_status_closed">
+        <form class="popup__container">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <input type="text" value="Жак-Ив Кусто" class="popup__text popup__text_type_name">
-          <input type="text" value="Исследователь океана" class="popup__text popup__text_type_about">
-          <button class="popup__btn popup__btn_action_add">Сохранить</button>
+          <input type="text" value="" class="popup__text popup__text_type_name">
+          <input type="text" value="" class="popup__text popup__text_type_about">
+          <input type="submit" value="Сохранить" class="popup__btn popup__btn_action_add">
           <button class="popup__icon-close"></button>
-        </div>
+        </form>
       </section>
     </main>
     <footer class="footer">
       <p class="footer__copyright">© 2020 Mesto Russia</p>
     </footer>
   </div>
+  <script src="./script/script.js"></script>
 </body>
 </html>
