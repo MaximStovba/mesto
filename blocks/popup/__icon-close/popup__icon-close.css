@@ -1,0 +1,16 @@
+.popup__icon-close {
+  margin: 0;
+  position: absolute;
+  border-width: 0;
+  height: 40.7px;
+  width: 40.7px;
+  top: -38px;
+  right: -38px;
+  transform: rotate(45deg);
+  background-color: transparent;
+  background-image: url(../../../images/close-icon.svg);
+}
+
+.popup__icon-close:hover {
+  opacity: 0.6;
+}

@@ -1,0 +1,18 @@
+.popup__btn {
+  margin: 48px 36px 0 36px;
+  padding: 0;
+  border-width: 0;
+  background: #000000;
+  border-radius: 2px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  color: #FFFFFF;
+  height: 50.15px;
+}
+
+.popup__btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
