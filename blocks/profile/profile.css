@@ -11,7 +11,7 @@
   max-width: 882px;
   display: grid;
   grid-template-columns: 120px 1fr 150px;
-  grid-template-rows: 120px;
+  grid-template-rows: minmax(min-content, max-content); /*120*/
   grid-column-gap: 30px;
   grid-template-areas:
   "avatar profile-info add-button";
@@ -23,7 +23,7 @@
     margin-top: 42px;
     max-width: 282px;
     grid-template-columns: 1fr;
-    grid-template-rows: 120px 1fr 50px;
+    grid-template-rows: 120px minmax(min-content, max-content) 50px;
     grid-template-areas:
     "avatar"
     "profile-info"

@@ -1,4 +1,4 @@
-let content = document.querySelector('.content');
+const content = document.querySelector('.content');
 let popUp = content.querySelector('.popup');
 let editButton = content.querySelector('.profile__edit-button');
 let closeButton = content.querySelector('.popup__icon-close');

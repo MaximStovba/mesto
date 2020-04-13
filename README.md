@@ -1,17 +1,23 @@
-# Проект 4: Место
+# Проект: Место
 
 ### Обзор
+*Сервис Mesto: интерактивная страница,*
+  *куда можно добавлять фотографии,*
+    *удалять их и ставить лайки.*
 
-* Figma
-* Картинки
+**Макет Figma**
 
-**Figma**
+* [Ссылка на макет](https://www.figma.com/file/StZjf8HnoeLdiXS7dYrLAh/JavaScript.-Sprint-4)
 
-* [Ссылка на макет в Figma](https://www.figma.com/file/StZjf8HnoeLdiXS7dYrLAh/JavaScript.-Sprint-4)
+**GitHub Pages**
 
-**Картинки**
+* [Ссылка на проектную работу](https://maximstovba.github.io/mesto/index.html)
 
-Доставать картинки предстоит из Фигмы. Это расхожая практика, поэтому полезно потренироваться.
-Не забудьте [оптимизировать картинки](https://tinypng.com/), чтобы ваш сайт загружался быстрее.
-
-Удачи!
+**Tехнологии, которые позволили реализовать данный проект:**
+1. Flexbox-вёрстка
+2. Grid Layout
+3. HTML5
+4. CSS
+5. JavaScript
+5. Адаптивная верстка
+6. БЭМ Nested
