@@ -13,6 +13,7 @@
 
 .popup__icon-close:hover {
   opacity: 0.6;
+  transition: opacity 0.5s ease;
 }
 
 @media all and (max-width : 550px) {

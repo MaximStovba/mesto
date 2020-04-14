@@ -4,7 +4,6 @@
 @import url(./__edit-button/profile__edit-button.css);
 @import url(./__subtitle/profile__subtitle.css);
 @import url(./__add-button/profile__add-button.css);
-@import url(./__btn-img/profile__btn-img.css);
 
 .profile {
   margin: 40px auto 0;

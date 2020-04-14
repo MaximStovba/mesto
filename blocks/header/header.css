@@ -1,20 +1,8 @@
 @import url(./__logo/header__logo.css);
-@import url(./__line/header__line.css);
 
 .header {
   margin: 0 auto;
   max-width: 882px;
-  height: 74px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-@media all and (max-width : 920px) {
-  /* телефоны */
-  .header {
-    margin: 0;
-    height: 56px;
-  }
+  /* декоротивный элемент снизу */
+  border-bottom: 1px solid rgba(84, 84, 84, 0.7);
 }

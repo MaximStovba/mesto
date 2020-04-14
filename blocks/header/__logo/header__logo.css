@@ -1,12 +1,14 @@
 .header__logo {
   width: 142.01px;
   height: auto;
+  margin-bottom: calc(74px - 33.4px - 1px);
 }
 
 @media all and (max-width : 920px) {
   /* телефоны */
   .header__logo {
-    margin-left: 27px;
     width: 103.74px;
+    margin-left: 27px;
+    margin-bottom: calc(56px - 24.4px - 1px);
   }
 }

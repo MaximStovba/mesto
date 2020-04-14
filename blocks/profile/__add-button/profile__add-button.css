@@ -9,10 +9,14 @@
   box-sizing: border-box;
   border-radius: 2px;
   align-self: center;
+  /* дизайн кнопки фоновым изображением */
+  background: url(../../../images/add-button-img.svg) 22px 22px no-repeat;
+  background-position: center;
 }
 
 .profile__add-button:hover {
   opacity: 0.6;
+  transition: opacity 0.5s ease;
 }
 
 @media all and (max-width : 920px) {
@@ -20,7 +24,7 @@
   .profile__add-button {
     width: 100%;
     height: 100%;
-    /* background-repeat: no-repeat;
-    background-size: cover; */
+    /* дизайн кнопки фоновым изображением */
+    background-size: 16px 16px;
   }
 }

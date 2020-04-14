@@ -11,62 +11,61 @@
   <div class="page">
     <header class="header">
       <img src="./images/header__logo.svg" alt="Логотип" class="header__logo">
-      <img src="./images/header__line.svg" alt="Разделительная линия" class="header__line">
     </header>
     <main class="content">
       <section class="profile">
-        <img src="./images/profile__avatar.png" alt="Фото профиля" class="profile__avatar">
+        <img src="./images/profile__avatar.jpg" alt="Жак-Ив Кусто" class="profile__avatar">
         <div class="profile__profile-info">
           <h1 class="profile__title">Жак-Ив Кусто</h1>
-          <button class="profile__edit-button"></button>
+          <button type="button" class="profile__edit-button"></button>
           <p class="profile__subtitle">Исследователь океана</p>
         </div>
-        <button class="profile__add-button"><img src="./images/add-button-img.svg" alt="Дизайн кнопки добавить" class="profile__btn-img"></button>
+        <button type="button" class="profile__add-button"></button>
       </section>
       <section class="elements">
         <div class="elements__element">
-          <img src="./images/img_karachaevsk.png" alt="Карачаевск" class="elements__image">
+          <img src="./images/img_karachaevsk.jpg" alt="Карачаевск" class="elements__image">
           <h2 class="elements__title">Карачаевск</h2>
-          <button class="elements__like"></button>
+          <button type="submit" class="elements__like"></button>
         </div>
         <div class="elements__element">
-          <img src="./images/img_elbrus.png" alt="Гора Эльбрус" class="elements__image">
+          <img src="./images/img_elbrus.jpg" alt="Гора Эльбрус" class="elements__image">
           <h2 class="elements__title">Гора Эльбрус</h2>
-          <button class="elements__like"></button>
+          <button type="submit" class="elements__like"></button>
         </div>
         <div class="elements__element">
-          <img src="./images/img_dombay.png" alt="Домбай" class="elements__image">
+          <img src="./images/img_dombay.jpg" alt="Домбай" class="elements__image">
           <h2 class="elements__title">Домбай</h2>
-          <button class="elements__like"></button>
+          <button type="submit" class="elements__like"></button>
         </div>
         <div class="elements__element">
-          <img src="./images/img_elbrus.png" alt="Гора Эльбрус" class="elements__image">
+          <img src="./images/img_elbrus.jpg" alt="Гора Эльбрус" class="elements__image">
           <h2 class="elements__title">Гора Эльбрус</h2>
-          <button class="elements__like"></button>
+          <button type="submit" class="elements__like"></button>
         </div>
         <div class="elements__element">
-          <img src="./images/img_dombay.png" alt="Домбай" class="elements__image">
+          <img src="./images/img_dombay.jpg" alt="Домбай" class="elements__image">
           <h2 class="elements__title">Домбай</h2>
-          <button class="elements__like"></button>
+          <button type="submit" class="elements__like"></button>
         </div>
         <div class="elements__element">
-          <img src="./images/img_karachaevsk.png" alt="Карачаево-Черкеск" class="elements__image">
+          <img src="./images/img_karachaevsk.jpg" alt="Карачаево-Черкеск" class="elements__image">
           <h2 class="elements__title">Карачаево-Черкеск</h2>
-          <button class="elements__like"></button>
+          <button type="submit" class="elements__like"></button>
         </div>
       </section>
       <section class="popup popup_status_closed">
-        <form class="popup__container">
+        <form name="Редактировать профиль" method="POST" action="#" class="popup__container">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <input type="text" value="" class="popup__text popup__text_type_name">
-          <input type="text" value="" class="popup__text popup__text_type_about">
+          <input type="text" name="Имя" placeholder="Имя" value="" class="popup__text popup__text_type_name" required>
+          <input type="text" name="О себе" placeholder="О себе" value="" class="popup__text popup__text_type_about" required>
           <input type="submit" value="Сохранить" class="popup__btn popup__btn_action_add">
-          <button class="popup__icon-close"></button>
+          <button type="button" class="popup__icon-close"></button>
         </form>
       </section>
     </main>
     <footer class="footer">
-      <p class="footer__copyright">© 2020 Mesto Russia</p>
+      <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
     </footer>
   </div>
   <script src="./script/script.js"></script>
