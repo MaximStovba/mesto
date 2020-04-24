@@ -1,6 +1,9 @@
 .elements__image {
   width: 282px;
   height: 282px;
-  grid-area: image;
   border-radius: 10px 10px 0px 0px;
+  /*позтционирование
+  и выравнивание в сетке*/
+  grid-column: 1/-1;
+  grid-row: 1;
 }

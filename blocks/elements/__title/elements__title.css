@@ -1,6 +1,5 @@
 .elements__title {
   margin: 25px 0 0 21px;
-  grid-area: title;
   font-style: normal;
   font-weight: 900;
   font-size: 24px;
@@ -9,4 +8,8 @@
   white-space: nowrap; /* Запрещаем перенос строк */
   overflow: hidden; /* Обрезаем все, что не помещается в область */
   text-overflow: ellipsis; /* Добавляем многоточие */
+  /*позтционирование
+  и выравнивание в сетке*/
+  grid-column: 1;
+  grid-row: 2;
 }

@@ -17,50 +17,56 @@
         <img src="./images/profile__avatar.jpg" alt="Жак-Ив Кусто" class="profile__avatar">
         <div class="profile__profile-info">
           <h1 class="profile__title">Жак-Ив Кусто</h1>
-          <button type="button" class="profile__edit-button"></button>
+          <button type="button" class="profile__edit-button" aria-label="Редактировать"></button>
           <p class="profile__subtitle">Исследователь океана</p>
         </div>
-        <button type="button" class="profile__add-button"></button>
+        <button type="button" class="profile__add-button" aria-label="Добавить"></button>
       </section>
       <section class="elements">
         <div class="elements__element">
           <img src="./images/img_karachaevsk.jpg" alt="Карачаевск" class="elements__image">
           <h2 class="elements__title">Карачаевск</h2>
-          <button type="submit" class="elements__like"></button>
+          <button type="submit" class="elements__like" aria-label="Лайкнуть"></button>
+          <button type="submit" class="elements__trash" aria-label="Удалить"></button>
         </div>
         <div class="elements__element">
           <img src="./images/img_elbrus.jpg" alt="Гора Эльбрус" class="elements__image">
           <h2 class="elements__title">Гора Эльбрус</h2>
-          <button type="submit" class="elements__like"></button>
+          <button type="submit" class="elements__like" aria-label="Лайкнуть"></button>
+          <button type="submit" class="elements__trash" aria-label="Удалить"></button>
         </div>
         <div class="elements__element">
           <img src="./images/img_dombay.jpg" alt="Домбай" class="elements__image">
           <h2 class="elements__title">Домбай</h2>
-          <button type="submit" class="elements__like"></button>
+          <button type="submit" class="elements__like" aria-label="Лайкнуть"></button>
+          <button type="submit" class="elements__trash" aria-label="Удалить"></button>
         </div>
         <div class="elements__element">
           <img src="./images/img_elbrus.jpg" alt="Гора Эльбрус" class="elements__image">
           <h2 class="elements__title">Гора Эльбрус</h2>
-          <button type="submit" class="elements__like"></button>
+          <button type="submit" class="elements__like" aria-label="Лайкнуть"></button>
+          <button type="submit" class="elements__trash" aria-label="Удалить"></button>
         </div>
         <div class="elements__element">
           <img src="./images/img_dombay.jpg" alt="Домбай" class="elements__image">
           <h2 class="elements__title">Домбай</h2>
-          <button type="submit" class="elements__like"></button>
+          <button type="submit" class="elements__like" aria-label="Лайкнуть"></button>
+          <button type="submit" class="elements__trash" aria-label="Удалить"></button>
         </div>
         <div class="elements__element">
           <img src="./images/img_karachaevsk.jpg" alt="Карачаево-Черкеск" class="elements__image">
           <h2 class="elements__title">Карачаево-Черкеск</h2>
-          <button type="submit" class="elements__like"></button>
+          <button type="submit" class="elements__like" aria-label="Лайкнуть"></button>
+          <button type="submit" class="elements__trash" aria-label="Удалить"></button>
         </div>
       </section>
       <section class="popup popup_status_closed">
-        <form name="Редактировать профиль" method="POST" action="#" class="popup__container">
+        <form name="edit-profile" method="POST" action="#" class="popup__container">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <input type="text" name="Имя" placeholder="Имя" value="" class="popup__text popup__text_type_name" required>
-          <input type="text" name="О себе" placeholder="О себе" value="" class="popup__text popup__text_type_about" required>
-          <input type="submit" value="Сохранить" class="popup__btn popup__btn_action_add">
-          <button type="button" class="popup__icon-close"></button>
+          <input type="text" name="name" placeholder="Имя" value="" class="popup__text popup__text_type_name" required>
+          <input type="text" name="about" placeholder="О себе" value="" class="popup__text popup__text_type_about" required>
+          <button type="submit" class="popup__btn popup__btn_action_add">Сохранить</button>
+          <button type="button" class="popup__icon-close" aria-label="Закрыть"></button>
         </form>
       </section>
     </main>

@@ -5,7 +5,4 @@
   display: grid;
   grid-template-columns: 210px 72px;
   grid-template-rows: 282px 79px;
-  grid-template-areas:
-  "image image"
-  "title like";
 }
