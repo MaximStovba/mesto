@@ -50,6 +50,14 @@ function addNewCard(item) {
   cardElement.querySelector('.elements__image').src = item.link;
   cardElement.querySelector('.elements__image').alt = item.name;
   cardElement.querySelector('.elements__title').textContent = item.name;
+  // настройка переключения лайка
+  cardElement.querySelector('.elements__like').addEventListener('click', function (evt) {
+    evt.target.classList.toggle('elements__like_active');
+});
+  // настройка удаления карточки
+  cardElement.querySelector('.elements__trash').addEventListener('click', function (evt) {
+    evt.target.parentElement.remove();
+});
   // отображаем на странице в начале блока
   cardsContainer.prepend(cardElement);
 }
