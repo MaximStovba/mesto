@@ -14,9 +14,51 @@ let popupTextTypeName = content.querySelector('.popup__text_type_name'); // На
 let popupTextTypeAbout = content.querySelector('.popup__text_type_about'); // Находим поле ввода "О себе"
 let popupTextTypePlace = content.querySelector('.popup__text_type_place'); // Находим поле ввода "Название места"
 let popupTextTypeUrl = content.querySelector('.popup__text_type_url'); // Находим поле ввода "Ссылка на картинку"
-let eventTargetBtnClassName = ''; // переменная для записи класса кнопки
+const cardTemplate = document.querySelector('#card').content; // Находим шаблон "карточки"
+const cardsContainer = document.querySelector('.elements'); // Элемент куда будем вставлять "карточки"
+const initialCards = [
+  {
+      name: 'Архыз',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+      name: 'Челябинская область',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+      name: 'Иваново',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+      name: 'Камчатка',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+      name: 'Холмогорский район',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+      name: 'Байкал',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
+];
 
-function popupOpeneClose(typeOfButton, btnClassName) {
+function addNewCard(item) {
+  // клонируем содержимое тега template
+  const cardElement = cardTemplate.cloneNode(true);
+  // наполняем содержимым
+  cardElement.querySelector('.elements__image').src = item.link;
+  cardElement.querySelector('.elements__image').alt = item.name;
+  cardElement.querySelector('.elements__title').textContent = item.name;
+  // отображаем на странице в начале блока
+  cardsContainer.prepend(cardElement);
+}
+// наполняем страницу карточками из массива
+initialCards.forEach(function (card) {
+  addNewCard(card);
+});
+
+function popupOpeneClose(typeOfButton) {
   switch (typeOfButton) {
     case 'editButton':
       if (popUpEdit.classList.contains('popup_status_profile-closed')) {
@@ -62,20 +104,22 @@ function formEditSubmitHandler (evt) { // Обработчик «отправк�
 
 function formAddSubmitHandler (evt) { // Обработчик «отправки» формы добавления карточки
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
+  const initialCard = {};
+  initialCard.name = popupTextTypePlace.value; // сохраняем данные карточки - место
+  initialCard.link = popupTextTypeUrl.value; // сохраняем данные карточки - ссылка на изображение
+  addNewCard(initialCard);
   popupOpeneClose('closeAddFormButton'); // Закрываем форму добавления карточки
 }
 
 // слушатель открытия формы редактирования профиля
 editButton.addEventListener('click', function (evt) {
-  eventTargetBtnClassName = evt.target.className;
-  console.log('Кликнули по элементу editButton его класс '+ eventTargetBtnClassName);
+  console.log('Кликнули по элементу editButton');
   popupOpeneClose('editButton');
 });
 
 // слушатель открытия формы добавления карточки
 addButton.addEventListener('click', function (evt) {
-  eventTargetBtnClassName = evt.target.className;
-  console.log('Кликнули по элементу addButton его класс '+ eventTargetBtnClassName);
+  console.log('Кликнули по элементу addButton');
   popupOpeneClose('addButton');
 });
 
