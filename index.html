@@ -60,13 +60,22 @@
           <button type="submit" class="elements__trash" aria-label="Удалить"></button>
         </div>
       </section>
-      <section class="popup popup_status_closed">
-        <form name="edit-profile" method="POST" action="#" class="popup__container">
+      <section class="popup popup_type_edit popup_status_profile-closed">
+        <form name="edit-profile" method="POST" action="#" class="popup__container popup__container_formtype_edit">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <input type="text" name="name" placeholder="Имя" value="" class="popup__text popup__text_type_name" required>
-          <input type="text" name="about" placeholder="О себе" value="" class="popup__text popup__text_type_about" required>
-          <button type="submit" class="popup__btn popup__btn_action_add">Сохранить</button>
-          <button type="button" class="popup__icon-close" aria-label="Закрыть"></button>
+          <input type="text" name="name" placeholder="Имя" value="" class="popup__text popup__text_location_top popup__text_type_name" required>
+          <input type="text" name="about" placeholder="О себе" value="" class="popup__text popup__text_location_bottom popup__text_type_about" required>
+          <button type="submit" class="popup__btn popup__btn_action_save">Сохранить</button>
+          <button type="button" class="popup__btn-close popup__btn-close_formtype_edit" aria-label="Закрыть"></button>
+        </form>
+      </section>
+      <section class="popup popup_type_add popup_status_item-closed">
+        <form name="add-item" method="POST" action="#" class="popup__container popup__container_formtype_add">
+          <h2 class="popup__title">Новое место</h2>
+          <input type="text" name="place" placeholder="Название" value="" class="popup__text popup__text_location_top popup__text_type_place" required>
+          <input type="text" name="url" placeholder="Ссылка на картинку" value="" class="popup__text popup__text_location_bottom popup__text_type_url" required>
+          <button type="submit" class="popup__btn popup__btn_action_create">Создать</button>
+          <button type="button" class="popup__btn-close popup__btn-close_formtype_add" aria-label="Закрыть"></button>
         </form>
       </section>
     </main>
