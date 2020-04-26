@@ -1,5 +1,6 @@
 .popup__btn-close {
   margin: 0;
+  padding: 0;
   position: absolute;
   border-width: 0;
   height: 40.7px;
@@ -14,6 +15,7 @@
 .popup__btn-close:hover {
   opacity: 0.6;
   transition: opacity 0.5s ease;
+  cursor: pointer;
 }
 
 @media all and (max-width : 550px) {

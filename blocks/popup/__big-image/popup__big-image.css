@@ -1,0 +1,8 @@
+.popup__big-image {
+  max-width: 75vw;
+  max-height: 75vh;
+  width: auto;
+  height: auto;
+  grid-column: 1;
+  grid-row: 1;
+}

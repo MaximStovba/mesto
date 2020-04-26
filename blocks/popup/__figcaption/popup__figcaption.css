@@ -1,0 +1,15 @@
+.popup__figcaption {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  color: #FFFFFF;
+  /*позиционирование
+  и выравнивание в сетке*/
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+  align-self: end;
+  /*смещение вниз*/
+  transform: translate(0, 22px);
+}
