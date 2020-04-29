@@ -12,19 +12,19 @@ const closeImgFormButton = content.querySelector('.popup__btn-close_formtype_ima
 const formEditElement = content.querySelector('.popup__container_formtype_edit'); // Находим форму редактирования профиля
 const formAddElement = content.querySelector('.popup__container_formtype_add'); // Находим форму добавления карточки
 
-let profileTitle = content.querySelector('.profile__title'); // Находим заголовок "Имени"
-let profileSubtitle = content.querySelector('.profile__subtitle'); // Находим заголовок "О себе"
-let profileAvatar = content.querySelector('.profile__avatar'); // Находим аватар профиля
-let popupTextTypeName = content.querySelector('.popup__text_type_name'); // Находим поле ввода "Имя"
-let popupTextTypeAbout = content.querySelector('.popup__text_type_about'); // Находим поле ввода "О себе"
-let popupTextTypePlace = content.querySelector('.popup__text_type_place'); // Находим поле ввода "Название места"
-let popupTextTypeUrl = content.querySelector('.popup__text_type_url'); // Находим поле ввода "Ссылка на картинку"
-let popupBigImage = content.querySelector('.popup__big-image'); // Находим большое изображение
-let popupFigcaption = content.querySelector('.popup__figcaption'); // Находим подпись большого изображения
+const profileTitle = content.querySelector('.profile__title'); // Находим заголовок "Имени"
+const profileSubtitle = content.querySelector('.profile__subtitle'); // Находим заголовок "О себе"
+const profileAvatar = content.querySelector('.profile__avatar'); // Находим аватар профиля
+const popupTextTypeName = content.querySelector('.popup__text_type_name'); // Находим поле ввода "Имя"
+const popupTextTypeAbout = content.querySelector('.popup__text_type_about'); // Находим поле ввода "О себе"
+const popupTextTypePlace = content.querySelector('.popup__text_type_place'); // Находим поле ввода "Название места"
+const popupTextTypeUrl = content.querySelector('.popup__text_type_url'); // Находим поле ввода "Ссылка на картинку"
+const popupBigImage = content.querySelector('.popup__big-image'); // Находим большое изображение
+const popupFigcaption = content.querySelector('.popup__figcaption'); // Находим подпись большого изображения
 
 const cardTemplate = document.querySelector('#card').content; // Находим шаблон "карточки"
 const cardsContainer = document.querySelector('.elements'); // Элемент куда будем вставлять "карточки"
-
+const initialCard = [{}];
 const initialCards = [
   {
       name: 'Архыз',
@@ -52,7 +52,49 @@ const initialCards = [
   }
 ];
 
-function addNewCard(item) {
+// функция открытия и закрытия pop-up
+function togglePopup(targetClassName) {
+  if ((targetClassName == 'profile__edit-button') || (targetClassName == 'popup__btn-close_formtype_edit') || (targetClassName == 'popup__container_formtype_edit')) {
+    if (targetClassName == 'profile__edit-button') {
+      popupTextTypeName.value = profileTitle.textContent;
+      popupTextTypeAbout.value = profileSubtitle.textContent;
+    }
+    popUpEdit.classList.toggle('popup_hidden'); // переключаем класс скрытия попапа
+  } else if ((targetClassName == 'profile__add-button') || (targetClassName == 'popup__btn-close_formtype_add') || (targetClassName == 'popup__container_formtype_add')) {
+    popupTextTypePlace.value = '';
+    popupTextTypeUrl.value = '';
+    popUpAdd.classList.toggle('popup_hidden'); // переключаем класс скрытия попапа
+  } else if ((targetClassName == 'elements__image') || (targetClassName == 'popup__btn-close_formtype_image')) {
+    popUpImg.classList.toggle('popup_hidden'); // переключаем класс скрытия попапа
+  }
+}
+
+// ------------------------------------------------------
+
+// функция переключения лайка
+function toggleLike(evt) {
+  evt.target.classList.toggle('elements__like_active');
+}
+
+// функция удаления карточки
+function delCard(evt) {
+  evt.target.closest('.elements__element').remove(); // удаляем карточку
+  // снимаем обработчики с карточки
+  evt.target.closest('.elements__element').querySelector('.elements__like').removeEventListener('click', toggleLike);
+  evt.target.closest('.elements__element').querySelector('.elements__trash').removeEventListener('click', delCard);
+  evt.target.closest('.elements__element').querySelector('.elements__image').removeEventListener('click', openPopupImg);
+}
+
+// функция открытия попапа с большым изображением
+function openPopupImg(evt) {
+  popupBigImage.src = evt.target.src;
+  popupBigImage.alt = evt.target.alt;
+  popupFigcaption.textContent = evt.target.alt;
+  togglePopup(evt.target.className); // открываем попап
+}
+
+// функция создания новой карточки
+function createCard(item) {
   // клонируем содержимое тега template
   const cardElement = cardTemplate.cloneNode(true);
   // наполняем содержимым
@@ -60,105 +102,67 @@ function addNewCard(item) {
   cardElement.querySelector('.elements__image').alt = item.name;
   cardElement.querySelector('.elements__title').textContent = item.name;
   // настройка переключения лайка
-  cardElement.querySelector('.elements__like').addEventListener('click', function (evt) {
-    evt.target.classList.toggle('elements__like_active');
-  });
+  cardElement.querySelector('.elements__like').addEventListener('click', toggleLike);
   // настройка удаления карточки
-  cardElement.querySelector('.elements__trash').addEventListener('click', function (evt) {
-    evt.target.parentElement.remove();
-  });
+  cardElement.querySelector('.elements__trash').addEventListener('click', delCard);
   // настройка открытия попапа с большым изображением
-  cardElement.querySelector('.elements__image').addEventListener('click', function (evt) {
-    popupBigImage.src = evt.target.src;
-    popupBigImage.alt = evt.target.alt;
-    popupFigcaption.textContent = evt.target.alt;
-    popupOpeneClose('imgButton'); // открываем попап с большим изображением
-  });
-  // отображаем на странице в начале блока
-  cardsContainer.prepend(cardElement);
+  cardElement.querySelector('.elements__image').addEventListener('click', openPopupImg);
+  // отображаем карточку на странице в начале блока
+  return cardElement;
 }
 
-// наполняем страницу карточками из массива
-initialCards.forEach(function (card) {
-  addNewCard(card);
-});
-
-function popupOpeneClose(typeOfButton) {
-  switch (typeOfButton) {
-    case 'editButton':
-      popUpEdit.classList.remove('popup_status_profile-closed');
-      popUpEdit.classList.add('popup_status_profile-opened');
-      popupTextTypeName.value = profileTitle.textContent;
-      popupTextTypeAbout.value = profileSubtitle.textContent;
-      break;
-    case 'addButton':
-      popUpAdd.classList.remove('popup_status_item-closed');
-      popUpAdd.classList.add('popup_status_item-opened');
-      break;
-    case 'imgButton':
-      popUpImg.classList.remove('popup_status_image-closed');
-      popUpImg.classList.add('popup_status_image-opened');
-      break;
-    case 'closeEditFormButton':
-      popUpEdit.classList.remove('popup_status_profile-opened');
-      popUpEdit.classList.add('popup_status_profile-closed');
-      break;
-    case 'closeAddFormButton':
-      popUpAdd.classList.remove('popup_status_item-opened');
-      popUpAdd.classList.add('popup_status_item-closed');
-      break;
-    case 'closeImgFormButton':
-      popUpImg.classList.remove('popup_status_image-opened');
-      popUpImg.classList.add('popup_status_image-closed');
-      popupTextTypePlace.value = '';
-      popupTextTypeUrl.value = '';
-  }
+// функция добавления карточек в разметке
+function publicCards(cards) {
+  // наполняем страницу карточками из массива
+  console.log(cards)
+  cards.forEach(function (card) {
+    cardsContainer.prepend(createCard(card)); // отображаем карточку на странице в начале блока
+  });
 }
 
 function formEditSubmitHandler (evt) { // Обработчик «отправки» формы редактирования профиля
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
-  profileTitle.textContent = popupTextTypeName.value; // Сохраняем значение Имя
-  profileSubtitle.textContent = popupTextTypeAbout.value; // Сохраняем значение О себе
+  profileTitle.textContent = popupTextTypeName.value; // Сохраняем значение "Имя"
+  profileSubtitle.textContent = popupTextTypeAbout.value; // Сохраняем значение "О себе"
   profileAvatar.setAttribute('alt', popupTextTypeName.value); // Изменяем "альт" аватара профиля
-  popupOpeneClose('closeEditFormButton'); // Закрываем форму редактирования профиля
+  togglePopup(evt.target.className.slice(17)); // Закрываем форму редактирования профиля
+  // убираем первую часть строки "popup__container " = 17 символов
 }
 
 function formAddSubmitHandler (evt) { // Обработчик «отправки» формы добавления карточки
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
-  const initialCard = {};
-  initialCard.name = popupTextTypePlace.value; // сохраняем данные карточки - место
-  initialCard.link = popupTextTypeUrl.value; // сохраняем данные карточки - ссылка на изображение
-  addNewCard(initialCard);
-  popupOpeneClose('closeAddFormButton'); // Закрываем форму добавления карточки
+  initialCard[0].name = popupTextTypePlace.value; // сохраняем данные карточки - место
+  initialCard[0].link = popupTextTypeUrl.value; // сохраняем данные карточки - ссылка на изображение
+  publicCards(initialCard); // добавляем карточку в разметку
+  togglePopup(evt.target.className.slice(17)); // Закрываем форму добавления карточки
+  // убираем первую часть строки "popup__container " = 17 символов
 }
 
 // слушатель открытия формы редактирования профиля
-editButton.addEventListener('click', function (evt) {
-  popupOpeneClose('editButton');
-});
+// открываем попап редактирования профиля
+editButton.addEventListener('click', (evt) => togglePopup(evt.target.className));
 
 // слушатель открытия формы добавления карточки
-addButton.addEventListener('click', function (evt) {
-  popupOpeneClose('addButton');
-});
+// открываем попап добавления карточки
+addButton.addEventListener('click', (evt) => togglePopup(evt.target.className));
 
 // слушатель закрытия формы редактирования профиля
-closeEditFormButton.addEventListener('click', function (evt) {
-  popupOpeneClose('closeEditFormButton');
-});
+// закрываем попап редактирования профиля - убираем первую часть строки "popup__btn-close " = 17 символов
+closeEditFormButton.addEventListener('click', (evt) => togglePopup(evt.target.className.slice(17)));
 
 // слушатель закрытия формы добавления карточки
-closeAddFormButton.addEventListener('click', function (evt) {
-  popupOpeneClose('closeAddFormButton');
-});
+// закрываем попап добавления карточки - убираем первую часть строки "popup__btn-close " = 17 символов
+closeAddFormButton.addEventListener('click', (evt) => togglePopup(evt.target.className.slice(17)));
 
 // слушатель закрытия формы с большим изображением
-closeImgFormButton.addEventListener('click', function (evt) {
-  popupOpeneClose('closeImgFormButton');
-});
+// закрываем попап показа большого изображения - убираем первую часть строки "popup__btn-close " = 17 символов
+closeImgFormButton.addEventListener('click', (evt) => togglePopup(evt.target.className.slice(17)));
 
 // Прикрепляем обработчик к форме редактирования профиля
 formEditElement.addEventListener('submit', formEditSubmitHandler);
 
 // Прикрепляем обработчик к форме добавления карточки
 formAddElement.addEventListener('submit', formAddSubmitHandler);
+
+// первоначальная загрузка карточек
+publicCards(initialCards);
