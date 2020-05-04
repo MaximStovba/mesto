@@ -24,7 +24,7 @@ const popupFigcaption = content.querySelector('.popup__figcaption'); // Нахо
 
 const cardTemplate = document.querySelector('#card').content; // Находим шаблон "карточки"
 const cardsContainer = document.querySelector('.elements'); // Элемент куда будем вставлять "карточки"
-const initialCard = [{}];
+const newCard = [{}];
 const initialCards = [
   {
       name: 'Архыз',
@@ -53,23 +53,27 @@ const initialCards = [
 ];
 
 // функция открытия и закрытия pop-up
-function togglePopup(targetClassName) {
-  if ((targetClassName == 'profile__edit-button') || (targetClassName == 'popup__btn-close_formtype_edit') || (targetClassName == 'popup__container_formtype_edit')) {
-    if (targetClassName == 'profile__edit-button') {
-      popupTextTypeName.value = profileTitle.textContent;
-      popupTextTypeAbout.value = profileSubtitle.textContent;
-    }
-    popUpEdit.classList.toggle('popup_hidden'); // переключаем класс скрытия попапа
-  } else if ((targetClassName == 'profile__add-button') || (targetClassName == 'popup__btn-close_formtype_add') || (targetClassName == 'popup__container_formtype_add')) {
-    popupTextTypePlace.value = '';
+function togglePopup(popupElement) {
+  // условие для попапа редактирования профиля
+  if (popupElement.classList.contains('profile__edit-button')) {
+    popupTextTypeName.value = profileTitle.textContent; // отображение в форме информации из профиля при нажатии кнопки "редактировать"
+    popupTextTypeAbout.value = profileSubtitle.textContent;
+  }
+  // условие для попапа редактирования профиля
+  if (popupElement.classList.contains('profile__edit-button') || popupElement.classList.contains('popup__btn-close_formtype_edit') || popupElement.classList.contains('popup__container_formtype_edit')) {
+    popUpEdit.classList.toggle('popup_hidden'); // попап редактирования профиля
+  }
+  // условие для попапа добавления новой карточки
+  if (popupElement.classList.contains('profile__add-button') || popupElement.classList.contains('popup__btn-close_formtype_add') || popupElement.classList.contains('popup__container_formtype_add')) {
+    popupTextTypePlace.value = ''; // очистка значений полей в форме создания новой карточки
     popupTextTypeUrl.value = '';
-    popUpAdd.classList.toggle('popup_hidden'); // переключаем класс скрытия попапа
-  } else if ((targetClassName == 'elements__image') || (targetClassName == 'popup__btn-close_formtype_image')) {
-    popUpImg.classList.toggle('popup_hidden'); // переключаем класс скрытия попапа
+    popUpAdd.classList.toggle('popup_hidden'); // попап добавления новой карточки
+  }
+  // условие для попапа просмотра изображения
+  if (popupElement.classList.contains('elements__image') || popupElement.classList.contains('popup__btn-close_formtype_image')) {
+    popUpImg.classList.toggle('popup_hidden'); // попап просмотра изображения
   }
 }
-
-// ------------------------------------------------------
 
 // функция переключения лайка
 function toggleLike(evt) {
@@ -78,11 +82,11 @@ function toggleLike(evt) {
 
 // функция удаления карточки
 function delCard(evt) {
-  evt.target.closest('.elements__element').remove(); // удаляем карточку
   // снимаем обработчики с карточки
   evt.target.closest('.elements__element').querySelector('.elements__like').removeEventListener('click', toggleLike);
   evt.target.closest('.elements__element').querySelector('.elements__trash').removeEventListener('click', delCard);
   evt.target.closest('.elements__element').querySelector('.elements__image').removeEventListener('click', openPopupImg);
+  evt.target.closest('.elements__element').remove(); // удаляем карточку
 }
 
 // функция открытия попапа с большым изображением
@@ -90,7 +94,7 @@ function openPopupImg(evt) {
   popupBigImage.src = evt.target.src;
   popupBigImage.alt = evt.target.alt;
   popupFigcaption.textContent = evt.target.alt;
-  togglePopup(evt.target.className); // открываем попап
+  togglePopup(evt.target); // открываем попап
 }
 
 // функция создания новой карточки
@@ -114,10 +118,11 @@ function createCard(item) {
 // функция добавления карточек в разметке
 function publicCards(cards) {
   // наполняем страницу карточками из массива
-  console.log(cards)
-  cards.forEach(function (card) {
-    cardsContainer.prepend(createCard(card)); // отображаем карточку на странице в начале блока
+  const taskElements = cards.map(card => {
+    return createCard(card);
   });
+  // добавим элементы в DOM, «разложив» массив
+  cardsContainer.prepend(...taskElements);
 }
 
 function formEditSubmitHandler (evt) { // Обработчик «отправки» формы редактирования профиля
@@ -125,38 +130,33 @@ function formEditSubmitHandler (evt) { // Обработчик «отправк�
   profileTitle.textContent = popupTextTypeName.value; // Сохраняем значение "Имя"
   profileSubtitle.textContent = popupTextTypeAbout.value; // Сохраняем значение "О себе"
   profileAvatar.setAttribute('alt', popupTextTypeName.value); // Изменяем "альт" аватара профиля
-  togglePopup(evt.target.className.slice(17)); // Закрываем форму редактирования профиля
-  // убираем первую часть строки "popup__container " = 17 символов
+  togglePopup(evt.target); // Закрываем форму редактирования профиля
 }
 
 function formAddSubmitHandler (evt) { // Обработчик «отправки» формы добавления карточки
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
-  initialCard[0].name = popupTextTypePlace.value; // сохраняем данные карточки - место
-  initialCard[0].link = popupTextTypeUrl.value; // сохраняем данные карточки - ссылка на изображение
-  publicCards(initialCard); // добавляем карточку в разметку
-  togglePopup(evt.target.className.slice(17)); // Закрываем форму добавления карточки
-  // убираем первую часть строки "popup__container " = 17 символов
+  newCard[0].name = popupTextTypePlace.value; // записываем данные новой карточки - место
+  newCard[0].link = popupTextTypeUrl.value; // записываем данные карточки - ссылка на изображение
+  // Добавляем новую карточку в разметку - publicCards внутри вызывает createCard
+  publicCards(newCard);
+  togglePopup(evt.target); // Закрываем форму добавления карточки
 }
 
 // слушатель открытия формы редактирования профиля
 // открываем попап редактирования профиля
-editButton.addEventListener('click', (evt) => togglePopup(evt.target.className));
+editButton.addEventListener('click', (evt) => togglePopup(evt.target));
 
 // слушатель открытия формы добавления карточки
-// открываем попап добавления карточки
-addButton.addEventListener('click', (evt) => togglePopup(evt.target.className));
+addButton.addEventListener('click', (evt) => togglePopup(evt.target));
 
 // слушатель закрытия формы редактирования профиля
-// закрываем попап редактирования профиля - убираем первую часть строки "popup__btn-close " = 17 символов
-closeEditFormButton.addEventListener('click', (evt) => togglePopup(evt.target.className.slice(17)));
+closeEditFormButton.addEventListener('click', (evt) => togglePopup(evt.target));
 
 // слушатель закрытия формы добавления карточки
-// закрываем попап добавления карточки - убираем первую часть строки "popup__btn-close " = 17 символов
-closeAddFormButton.addEventListener('click', (evt) => togglePopup(evt.target.className.slice(17)));
+closeAddFormButton.addEventListener('click', (evt) => togglePopup(evt.target));
 
 // слушатель закрытия формы с большим изображением
-// закрываем попап показа большого изображения - убираем первую часть строки "popup__btn-close " = 17 символов
-closeImgFormButton.addEventListener('click', (evt) => togglePopup(evt.target.className.slice(17)));
+closeImgFormButton.addEventListener('click', (evt) => togglePopup(evt.target));
 
 // Прикрепляем обработчик к форме редактирования профиля
 formEditElement.addEventListener('submit', formEditSubmitHandler);

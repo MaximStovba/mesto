@@ -3,8 +3,8 @@
   padding: 0;
   position: absolute;
   border-width: 0;
-  height: 40.7px;
-  width: 40.7px;
+  height: 40px;
+  width: 40px;
   top: -38px;
   right: -38px;
   transform: rotate(45deg);
@@ -23,9 +23,9 @@
   .popup__btn-close {
     background-repeat: no-repeat;
     background-size: cover;
-    height: 20.7px;
-    width: 20.7px;
-    top: -18px;
-    right: -18px;
+    height: 30px;
+    width: 30px;
+    top: -28px;
+    right: -28px;
   }
 }

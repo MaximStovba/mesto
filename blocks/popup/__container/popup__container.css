@@ -13,6 +13,6 @@
 @media all and (max-width : 550px) {
   /* телефоны */
   .popup__container {
-    width: 230px;
+    width: 240px;
   }
 }
