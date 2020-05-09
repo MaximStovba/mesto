@@ -23,8 +23,7 @@ const popupBigImage = content.querySelector('.popup__big-image'); // Наход�
 const popupFigcaption = content.querySelector('.popup__figcaption'); // Находим подпись большого изображения
 
 const cardTemplate = document.querySelector('#card').content; // Находим шаблон "карточки"
-const cardsContainer = document.querySelector('.elements'); // Элемент куда будем вставлять "карточки"
-const newCard = [{}];
+const cardsContainer = document.querySelector('.card-container'); // Элемент куда будем вставлять "карточки"
 const initialCards = [
   {
       name: 'Архыз',
@@ -54,39 +53,36 @@ const initialCards = [
 
 // функция открытия и закрытия pop-up
 function togglePopup(popupElement) {
-  // условие для попапа редактирования профиля
-  if (popupElement.classList.contains('profile__edit-button')) {
-    popupTextTypeName.value = profileTitle.textContent; // отображение в форме информации из профиля при нажатии кнопки "редактировать"
+  // проверяем, что это форма "редактирования профиля" и она скрыта
+  if ((popupElement.classList.contains('popup_type_edit')) && (popupElement.classList.contains('popup_hidden'))) {
+    // отображаем в форме информацию из профиля
+    popupTextTypeName.value = profileTitle.textContent;
     popupTextTypeAbout.value = profileSubtitle.textContent;
   }
-  // условие для попапа редактирования профиля
-  if (popupElement.classList.contains('profile__edit-button') || popupElement.classList.contains('popup__btn-close_formtype_edit') || popupElement.classList.contains('popup__container_formtype_edit')) {
-    popUpEdit.classList.toggle('popup_hidden'); // попап редактирования профиля
-  }
-  // условие для попапа добавления новой карточки
-  if (popupElement.classList.contains('profile__add-button') || popupElement.classList.contains('popup__btn-close_formtype_add') || popupElement.classList.contains('popup__container_formtype_add')) {
-    popupTextTypePlace.value = ''; // очистка значений полей в форме создания новой карточки
+  // проверяем, что это форма "создания карточки" и она скрыта
+  if ((popupElement.classList.contains('popup_type_add')) && (popupElement.classList.contains('popup_hidden'))) {
+    // очищаем значения полей в форме создания новой карточки
+    popupTextTypePlace.value = '';
     popupTextTypeUrl.value = '';
-    popUpAdd.classList.toggle('popup_hidden'); // попап добавления новой карточки
   }
-  // условие для попапа просмотра изображения
-  if (popupElement.classList.contains('elements__image') || popupElement.classList.contains('popup__btn-close_formtype_image')) {
-    popUpImg.classList.toggle('popup_hidden'); // попап просмотра изображения
-  }
+  // тогглим попап
+  popupElement.classList.toggle('popup_hidden');
 }
 
 // функция переключения лайка
 function toggleLike(evt) {
-  evt.target.classList.toggle('elements__like_active');
+  evt.target.classList.toggle('card__like_active');
 }
 
 // функция удаления карточки
 function delCard(evt) {
+  const elementsElement = evt.target.closest('.card');
   // снимаем обработчики с карточки
-  evt.target.closest('.elements__element').querySelector('.elements__like').removeEventListener('click', toggleLike);
-  evt.target.closest('.elements__element').querySelector('.elements__trash').removeEventListener('click', delCard);
-  evt.target.closest('.elements__element').querySelector('.elements__image').removeEventListener('click', openPopupImg);
-  evt.target.closest('.elements__element').remove(); // удаляем карточку
+  elementsElement.querySelector('.card__like').removeEventListener('click', toggleLike);
+  elementsElement.querySelector('.card__trash').removeEventListener('click', delCard);
+  elementsElement.querySelector('.card__image').removeEventListener('click', openPopupImg);
+  // удаляем карточку
+  elementsElement.remove();
 }
 
 // функция открытия попапа с большым изображением
@@ -94,35 +90,36 @@ function openPopupImg(evt) {
   popupBigImage.src = evt.target.src;
   popupBigImage.alt = evt.target.alt;
   popupFigcaption.textContent = evt.target.alt;
-  togglePopup(evt.target); // открываем попап
+  togglePopup(popUpImg); // открываем попап с большым изображением
 }
 
 // функция создания новой карточки
 function createCard(item) {
   // клонируем содержимое тега template
   const cardElement = cardTemplate.cloneNode(true);
+  const cardElementImage = cardElement.querySelector('.card__image');
   // наполняем содержимым
-  cardElement.querySelector('.elements__image').src = item.link;
-  cardElement.querySelector('.elements__image').alt = item.name;
-  cardElement.querySelector('.elements__title').textContent = item.name;
+  cardElementImage.src = item.link;
+  cardElementImage.alt = item.name;
+  cardElement.querySelector('.card__title').textContent = item.name;
   // настройка переключения лайка
-  cardElement.querySelector('.elements__like').addEventListener('click', toggleLike);
+  cardElement.querySelector('.card__like').addEventListener('click', toggleLike);
   // настройка удаления карточки
-  cardElement.querySelector('.elements__trash').addEventListener('click', delCard);
+  cardElement.querySelector('.card__trash').addEventListener('click', delCard);
   // настройка открытия попапа с большым изображением
-  cardElement.querySelector('.elements__image').addEventListener('click', openPopupImg);
+  cardElementImage.addEventListener('click', openPopupImg);
   // отображаем карточку на странице в начале блока
   return cardElement;
 }
 
-// функция добавления карточек в разметке
+// Формируем массив карт
+function loadCards(cards) {
+  return cards.map((card) => createCard(card));
+}
+
+// Принимаем массив для отрисовки
 function publicCards(cards) {
-  // наполняем страницу карточками из массива
-  const taskElements = cards.map(card => {
-    return createCard(card);
-  });
-  // добавим элементы в DOM, «разложив» массив
-  cardsContainer.prepend(...taskElements);
+  cardsContainer.prepend(...cards);
 }
 
 function formEditSubmitHandler (evt) { // Обработчик «отправки» формы редактирования профиля
@@ -130,33 +127,33 @@ function formEditSubmitHandler (evt) { // Обработчик «отправк�
   profileTitle.textContent = popupTextTypeName.value; // Сохраняем значение "Имя"
   profileSubtitle.textContent = popupTextTypeAbout.value; // Сохраняем значение "О себе"
   profileAvatar.setAttribute('alt', popupTextTypeName.value); // Изменяем "альт" аватара профиля
-  togglePopup(evt.target); // Закрываем форму редактирования профиля
+  togglePopup(popUpEdit); // Закрываем форму редактирования профиля
 }
 
 function formAddSubmitHandler (evt) { // Обработчик «отправки» формы добавления карточки
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
-  newCard[0].name = popupTextTypePlace.value; // записываем данные новой карточки - место
-  newCard[0].link = popupTextTypeUrl.value; // записываем данные карточки - ссылка на изображение
-  // Добавляем новую карточку в разметку - publicCards внутри вызывает createCard
-  publicCards(newCard);
-  togglePopup(evt.target); // Закрываем форму добавления карточки
+  // создаем и наполняем новую карточку данными
+  const userCard = createCard({ name: popupTextTypePlace.value, link: popupTextTypeUrl.value });
+  // Добавляем новую карточку в разметку
+  publicCards([userCard]);
+  togglePopup(popUpAdd); // Закрываем форму добавления карточки
 }
 
 // слушатель открытия формы редактирования профиля
 // открываем попап редактирования профиля
-editButton.addEventListener('click', (evt) => togglePopup(evt.target));
+editButton.addEventListener('click', (evt) => togglePopup(popUpEdit));
 
 // слушатель открытия формы добавления карточки
-addButton.addEventListener('click', (evt) => togglePopup(evt.target));
+addButton.addEventListener('click', (evt) => togglePopup(popUpAdd));
 
 // слушатель закрытия формы редактирования профиля
-closeEditFormButton.addEventListener('click', (evt) => togglePopup(evt.target));
+closeEditFormButton.addEventListener('click', (evt) => togglePopup(popUpEdit));
 
 // слушатель закрытия формы добавления карточки
-closeAddFormButton.addEventListener('click', (evt) => togglePopup(evt.target));
+closeAddFormButton.addEventListener('click', (evt) => togglePopup(popUpAdd));
 
 // слушатель закрытия формы с большим изображением
-closeImgFormButton.addEventListener('click', (evt) => togglePopup(evt.target));
+closeImgFormButton.addEventListener('click', (evt) => togglePopup(popUpImg));
 
 // Прикрепляем обработчик к форме редактирования профиля
 formEditElement.addEventListener('submit', formEditSubmitHandler);
@@ -165,4 +162,4 @@ formEditElement.addEventListener('submit', formEditSubmitHandler);
 formAddElement.addEventListener('submit', formAddSubmitHandler);
 
 // первоначальная загрузка карточек
-publicCards(initialCards);
+publicCards(loadCards(initialCards));

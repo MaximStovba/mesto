@@ -1,11 +1,4 @@
-@import url(./__element/elements__element.css);
-@import url(./__image/elements__image.css);
-@import url(./__title/elements__title.css);
-@import url(./__like/elements__like.css);
-@import url(./__like/_active/elements__like_active.css);
-@import url(./__trash/elements__trash.css);
-
-.elements {
+.card-container {
   margin: 46.25px auto 0;
   max-width: 882px;
   display: grid;
@@ -19,7 +12,7 @@
 
 @media all and (max-width : 920px) {
   /* стили для планшета */
-  .elements {
+  .card-container {
     grid-template-columns: repeat(2, 282px);
     grid-template-rows: repeat(3, 361px);
     grid-row-gap: 20px;
@@ -28,8 +21,9 @@
 
 @media all and (max-width : 620px) {
   /* телефоны */
-  .elements {
+  .card-container {
     grid-template-columns: repeat(1, 282px);
     grid-template-rows: repeat(6, 361px);
   }
 }
+

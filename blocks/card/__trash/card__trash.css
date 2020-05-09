@@ -1,20 +1,22 @@
-.elements__like {
-  margin: 31px 22.24px 0 0;
+.card__trash {
+  margin: 18px 15px 0 0;
   padding: 0;
-  width: 20.76px;
-  height: 18.13px;
-  background-color: #ffffff;
+  width: 18px;
+  height: 19.3px;
+  background-color: transparent;
   border-width: 0;
-  background-image: url(../../../images/elements__like.svg);
+  background-image: url(../../../images/trash.svg);
   background-repeat: no-repeat;
   /*позтционирование
   и выравнивание в сетке*/
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 1;
+  align-self: start;
   justify-self: end;
+  z-index: 1;
 }
 
-.elements__like:hover {
+.card__trash:hover {
   opacity: 0.6;
   transition: opacity 0.5s ease;
   cursor: pointer;
