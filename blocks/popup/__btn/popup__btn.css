@@ -11,6 +11,7 @@
   text-align: center;
   color: #FFFFFF;
   height: 50px;
+  pointer-events: initial;
 }
 
 .popup__btn:hover {

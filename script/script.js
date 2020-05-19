@@ -28,11 +28,14 @@ const popupFigcaption = content.querySelector('.popup__figcaption'); // Нахо
 const cardTemplate = document.querySelector('#card').content; // Находим шаблон "карточки"
 const cardsContainer = document.querySelector('.card-container'); // Элемент куда будем вставлять "карточки"
 
+// Находим все поля внутри форм, делаем из них массив
+const inputListEditForm = Array.from(formEditElement.querySelectorAll('.popup__text'));
+const inputListAddForm = Array.from(formAddElement.querySelectorAll('.popup__text'));
+
 const setObj = {
   formSelector: '.popup__container',
   inputSelector: '.popup__text',
-  formEditClass: 'popup__container_formtype_edit',
-  formAddClass: 'popup__container_formtype_add',
+  buttonSelector: '.popup__submit',
   inputErrorClass: 'popup__text_type_error',
   errorClass: 'popup__text-error_active',
   inactiveButtonClass: 'popup__btn_disabled',
@@ -103,26 +106,31 @@ function toggleEventListeners (popupElement) {
   }
 }
 
+// Функция отображения / скрытия ошибок валидации при открытии формы
+function checkImputBeforFormOpening (inputList, formElement) {
+  inputList.forEach((inputElement) => {
+    checkInputValidity(formElement, inputElement, setObj);
+  });
+}
+
 // Функция открытия и закрытия pop-up
 function togglePopup(popupElement) {
-  // Находим все поля внутри форм, делаем из них массив
-  const inputListEditForm = Array.from(formEditElement.querySelectorAll('.popup__text'));
-  const inputListAddForm = Array.from(formAddElement.querySelectorAll('.popup__text'));
-
   // проверяем, что это форма "редактирования профиля" и она скрыта
   if ((popupElement.classList.contains('popup_type_edit')) && (popupElement.classList.contains('popup_hidden'))) {
     // отображаем в форме информацию из профиля
     showInfoOfProfile();
     // проводим валидацию полей ввода формы "редактирования профиля"
-    toggleButtonState(inputListEditForm, formEditElement);
+    checkImputBeforFormOpening(inputListEditForm, formEditElement);
+    toggleButtonState(inputListEditForm, saveButton, setObj);
   }
 
   // проверяем, что это форма "создания карточки" и она скрыта
   if ((popupElement.classList.contains('popup_type_add')) && (popupElement.classList.contains('popup_hidden'))) {
-    // проводим валидацию полей ввода формы "создания карточки"
-    toggleButtonState(inputListAddForm, formAddElement);
     // сбрасываем все поля формы
     formAddElement.reset();
+    // проводим валидацию полей ввода формы "создания карточки"
+    checkImputBeforFormOpening(inputListAddForm, formAddElement);
+    toggleButtonState(inputListAddForm, createButton, setObj);
   }
 
   // проверяем, скрыта или открыта форма и устанавливаем / снимаем слушатели Esc и Overlay
@@ -192,7 +200,9 @@ function formEditSubmitHandler (evt) { // Обработчик «отправк�
   profileSubtitle.textContent = popupTextTypeAbout.value; // Сохраняем значение "О себе"
   profileAvatar.setAttribute('alt', popupTextTypeName.value); // Изменяем "альт" аватара профиля
   togglePopup(popUpEdit); // Закрываем форму редактирования профиля
-  setSubmitButtonState(false, formEditElement);
+
+  // проводим валидацию полей ввода формы "редактирования профиля"
+  toggleButtonState(inputListEditForm, saveButton, setObj);
 }
 
 function formAddSubmitHandler (evt) { // Обработчик «отправки» формы добавления карточки
@@ -202,7 +212,10 @@ function formAddSubmitHandler (evt) { // Обработчик «отправки
   // Добавляем новую карточку в разметку
   publicCards([userCard]);
   togglePopup(popUpAdd); // Закрываем форму добавления карточки
-  setSubmitButtonState(false, formAddElement);
+
+  // проводим валидацию полей ввода формы "создания карточки"
+  toggleButtonState(inputListAddForm, createButton, setObj);
+
   // сбрасываем все поля
   formAddElement.reset();
 }
