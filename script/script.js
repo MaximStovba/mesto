@@ -65,19 +65,58 @@ const initialCards = [
   }
 ];
 
+// Функция закрытия формы
+function closePopup (evt, formElement) {
+  if ((evt.target.classList.contains('popup')) || (evt.key === 'Escape')) {
+    togglePopup(formElement);
+  }
+}
+
+// Функция определения открытой формы
+function whatFormToClose (evt) {
+  const searchPopupList = content.querySelectorAll('.popup');
+  searchPopupList.forEach((formElement) => {
+    if (!formElement.classList.contains('popup_hidden')) {
+      closePopup(evt, formElement);
+    }
+  });
+}
+
+// Функция отображения в форме информации из профиля
+function showInfoOfProfile () {
+  popupTextTypeName.value = profileTitle.textContent;
+  popupTextTypeAbout.value = profileSubtitle.textContent;
+}
+
+// Функция устанавки / снятия слушатели Esc и Overlay
+function toggleEventListeners (popupElement) {
+  if (popupElement.classList.contains('popup_hidden')) {
+    // Устанавливаем слушатель закрытия формы кликом на оверлей
+    document.addEventListener('click', whatFormToClose);
+    // Устанавливаем слушатель клавиатуры
+    document.addEventListener('keydown', whatFormToClose);
+  } else {
+    // Снятие слушателя закрытия формы кликом на оверлей
+    document.removeEventListener('click', whatFormToClose);
+    // Снятие слушателя клавиатуры
+    document.removeEventListener('keydown', whatFormToClose);
+  }
+}
+
 // Функция открытия и закрытия pop-up
 function togglePopup(popupElement) {
   // Находим все поля внутри форм, делаем из них массив
   const inputListEditForm = Array.from(formEditElement.querySelectorAll('.popup__text'));
   const inputListAddForm = Array.from(formAddElement.querySelectorAll('.popup__text'));
+
   // проверяем, что это форма "редактирования профиля" и она скрыта
   if ((popupElement.classList.contains('popup_type_edit')) && (popupElement.classList.contains('popup_hidden'))) {
     // отображаем в форме информацию из профиля
-    popupTextTypeName.value = profileTitle.textContent;
-    popupTextTypeAbout.value = profileSubtitle.textContent;
+    showInfoOfProfile();
     // проводим валидацию полей ввода формы "редактирования профиля"
     toggleButtonState(inputListEditForm, formEditElement);
   }
+
   // проверяем, что это форма "создания карточки" и она скрыта
   if ((popupElement.classList.contains('popup_type_add')) && (popupElement.classList.contains('popup_hidden'))) {
     // проводим валидацию полей ввода формы "создания карточки"
@@ -85,6 +124,10 @@ function togglePopup(popupElement) {
     // сбрасываем все поля формы
     formAddElement.reset();
   }
+
+  // проверяем, скрыта или открыта форма и устанавливаем / снимаем слушатели Esc и Overlay
+  toggleEventListeners(popupElement);
+
   // тогглим попап
   popupElement.classList.toggle('popup_hidden');
 }
@@ -164,23 +207,6 @@ function formAddSubmitHandler (evt) { // Обработчик «отправки
   formAddElement.reset();
 }
 
-// Функция закрытия попап кликом на оверлей
-function closePopupOverlay (evt, formElement) {
-  if (evt.target.classList.contains('popup')) {
-    togglePopup(formElement);
-  }
-}
-
-// Функция закрытия попап при нажатии Esc
-function closePopupIfEsc () {
-  const searchPopupList = content.querySelectorAll('.popup');
-  searchPopupList.forEach((formElement) => {
-    if (!formElement.classList.contains('popup_hidden')) {
-      togglePopup(formElement);
-    }
-  });
-}
-
 // слушатель открытия формы редактирования профиля
 // открываем попап редактирования профиля
 editButton.addEventListener('click', () => togglePopup(popUpEdit));
@@ -190,31 +216,18 @@ addButton.addEventListener('click', () => togglePopup(popUpAdd));
 
 // слушатель закрытия формы редактирования профиля
 closeEditFormButton.addEventListener('click', () => togglePopup(popUpEdit));
-// слушатель закрытия формы редактирования профиля кликом на оверлей
-popUpEdit.addEventListener('click', (evt) => closePopupOverlay(evt, popUpEdit));
 
 // слушатель закрытия формы добавления карточки
 closeAddFormButton.addEventListener('click', () => togglePopup(popUpAdd));
-// слушатель закрытия формы добавления карточки кликом на оверлей
-popUpAdd.addEventListener('click', (evt) => closePopupOverlay(evt, popUpAdd));
 
 // слушатель закрытия формы с большим изображением
 closeImgFormButton.addEventListener('click', () => togglePopup(popUpImg));
-// слушатель закрытия формы с большим изображением кликом на оверлей
-popUpImg.addEventListener('click', (evt) => closePopupOverlay(evt, popUpImg));
 
 // Прикрепляем обработчики к форме редактирования профиля
 formEditElement.addEventListener('submit', formEditSubmitHandler);
 
 // Прикрепляем обработчики к форме добавления карточки
 formAddElement.addEventListener('submit', formAddSubmitHandler);
-
-// Слушатель клавиатуры
-document.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Escape') {
-    closePopupIfEsc();
-  }
-});
 
 // Первоначальная загрузка карточек
 publicCards(loadCards(initialCards));
