@@ -29,12 +29,22 @@
   justify-content: center;
   align-items: center;
   z-index: 2;
-  /* плавное открытие попапа */
+  
+  /* плавное открытие попапа
   visibility: visible;
   opacity: 1;
   -moz-transition: visibility 0s, opacity 0.8s linear;
   -webkit-transition: visibility 0s, opacity 0.8s linear;
   -o-transition: visibility 0s, opacity 0.8s linear;
   -ms-transition: visibility 0s, opacity 0.8s linear;
-  transition: visibility 0s, opacity 0.8s linear;
+  transition: visibility 0s, opacity 0.8s linear; */
+
+  /* плавное закрытие попапа */
+  visibility: hidden;
+  opacity: 0;
+  -moz-transition: visibility 0.8s, opacity 0.8s linear;
+  -webkit-transition: visibility 0.8s, opacity 0.8s linear;
+  -o-transition: visibility 0.8s, opacity 0.8s linear;
+  -ms-transition: visibility 0.8s, opacity 0.8s linear;
+  transition: visibility 0.8s, opacity 0.8s linear;
 }

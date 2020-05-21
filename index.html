@@ -25,7 +25,7 @@
       <section class="card-container">
         <!--Заполняется JS-->
       </section>
-      <section class="popup popup_type_edit popup_hidden">
+      <section class="popup popup_type_edit">
         <form name="edit-profile" method="POST" action="#" class="popup__container popup__container_formtype_edit" novalidate>
           <h2 class="popup__title">Редактировать профиль</h2>
           <input type="text" name="name" placeholder="Имя" id="name-input" class="popup__text popup__text_location_top popup__text_type_name" minlength="2" maxlength="40" required pattern="[А-Яа-яA-Za-z -]{1,}">
@@ -36,7 +36,7 @@
           <button type="button" class="popup__btn-close popup__btn-close_formtype_edit" aria-label="Закрыть"></button>
         </form>
       </section>
-      <section class="popup popup_type_add popup_hidden">
+      <section class="popup popup_type_add">
         <form name="add-item" method="POST" action="#" class="popup__container popup__container_formtype_add" novalidate>
           <h2 class="popup__title">Новое место</h2>
           <input type="text" name="place" placeholder="Название" id="place-input" class="popup__text popup__text_location_top popup__text_type_place" minlength="1" maxlength="30" required>
@@ -47,7 +47,7 @@
           <button type="button" class="popup__btn-close popup__btn-close_formtype_add" aria-label="Закрыть"></button>
         </form>
       </section>
-      <section class="popup popup_type_image popup_hidden">
+      <section class="popup popup_type_image">
         <figure class="popup__img-container">
           <button type="button" class="popup__btn-close popup__btn-close_formtype_image" aria-label="Закрыть"></button>
           <img src="" alt="" class="popup__big-image">

@@ -68,20 +68,10 @@ const initialCards = [
   }
 ];
 
-// Функция закрытия формы
-function closePopup (evt, formElement) {
-  if ((evt.target.classList.contains('popup')) || (evt.key === 'Escape')) {
-    togglePopup(formElement);
-  }
-}
-
-// Функция определения открытой формы
-function whatFormToClose (evt) {
-  const searchPopupList = content.querySelectorAll('.popup');
-  searchPopupList.forEach((formElement) => {
-    if (!formElement.classList.contains('popup_hidden')) {
-      closePopup(evt, formElement);
-    }
+// Функция отображения / скрытия ошибок валидации при открытии формы
+function checkImputBeforFormOpening (inputList, formElement) {
+  inputList.forEach((inputElement) => {
+    hideImputError(formElement, inputElement, setObj);
   });
 }
 
@@ -91,9 +81,15 @@ function showInfoOfProfile () {
   popupTextTypeAbout.value = profileSubtitle.textContent;
 }
 
+// Функция определения открытой формы
+function whatFormToClose (evt) {
+  const openedFormElement = content.querySelector('.popup_opened'); // Находим открытую форму
+  closePopup(evt, openedFormElement);
+}
+
 // Функция устанавки / снятия слушатели Esc и Overlay
 function toggleEventListeners (popupElement) {
-  if (popupElement.classList.contains('popup_hidden')) {
+  if (!popupElement.classList.contains('popup_opened')) {
     // Устанавливаем слушатель закрытия формы кликом на оверлей
     document.addEventListener('click', whatFormToClose);
     // Устанавливаем слушатель клавиатуры
@@ -106,38 +102,35 @@ function toggleEventListeners (popupElement) {
   }
 }
 
-// Функция отображения / скрытия ошибок валидации при открытии формы
-function checkImputBeforFormOpening (inputList, formElement) {
-  inputList.forEach((inputElement) => {
-    checkInputValidity(formElement, inputElement, setObj);
-  });
-}
-
 // Функция открытия и закрытия pop-up
 function togglePopup(popupElement) {
   // проверяем, что это форма "редактирования профиля" и она скрыта
-  if ((popupElement.classList.contains('popup_type_edit')) && (popupElement.classList.contains('popup_hidden'))) {
+  if ((popupElement.classList.contains('popup_type_edit')) && (!popupElement.classList.contains('popup_opened'))) {
     // отображаем в форме информацию из профиля
     showInfoOfProfile();
     // проводим валидацию полей ввода формы "редактирования профиля"
     checkImputBeforFormOpening(inputListEditForm, formEditElement);
     toggleButtonState(inputListEditForm, saveButton, setObj);
   }
-
   // проверяем, что это форма "создания карточки" и она скрыта
-  if ((popupElement.classList.contains('popup_type_add')) && (popupElement.classList.contains('popup_hidden'))) {
+  if ((popupElement.classList.contains('popup_type_add')) && (!popupElement.classList.contains('popup_opened'))) {
     // сбрасываем все поля формы
     formAddElement.reset();
     // проводим валидацию полей ввода формы "создания карточки"
     checkImputBeforFormOpening(inputListAddForm, formAddElement);
     toggleButtonState(inputListAddForm, createButton, setObj);
   }
-
   // проверяем, скрыта или открыта форма и устанавливаем / снимаем слушатели Esc и Overlay
   toggleEventListeners(popupElement);
-
   // тогглим попап
-  popupElement.classList.toggle('popup_hidden');
+  popupElement.classList.toggle('popup_opened');
+}
+
+// Функция закрытия формы
+function closePopup (evt, formElement) {
+  if ((evt.target.classList.contains('popup')) || (evt.key === 'Escape')) {
+    togglePopup(formElement);
+  }
 }
 
 // функция переключения лайка
