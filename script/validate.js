@@ -1,16 +1,16 @@
 // Функция отображения ошибок валидации
 const showImputError = (formElement, inputElement, errorMessage, obj) => {
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
-  inputElement.classList.add(obj['inputErrorClass']);
+  inputElement.classList.add(obj.inputErrorClass);
   errorElement.textContent = errorMessage;
-  errorElement.classList.add(obj['errorClass']);
+  errorElement.classList.add(obj.errorClass);
 };
 
 // Функция скрытия ошибок валидации
 const hideImputError = (formElement, inputElement, obj) => {
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
-  inputElement.classList.remove(obj['inputErrorClass']);
-  errorElement.classList.remove(obj['errorClass']);
+  inputElement.classList.remove(obj.inputErrorClass);
+  errorElement.classList.remove(obj.errorClass);
   // Очистим ошибку
   errorElement.textContent = '|';
 };
@@ -41,18 +41,18 @@ const toggleButtonState = (inputList, buttonElement, obj) => {
   // Если есть хотя бы один невалидный инпут
   if (hasInvalidInput(inputList)) {
     // делаем кнопку неактивной
-    buttonElement.classList.add(obj['inactiveButtonClass']);
+    buttonElement.classList.add(obj.inactiveButtonClass);
   } else {
     // иначе делаем кнопку активной
-    buttonElement.classList.remove(obj['inactiveButtonClass']);
+    buttonElement.classList.remove(obj.inactiveButtonClass);
   }
 };
 
 // Функция добавления слушателей событий всем полям ввода формы
 const setEventListeners = (formElement, obj) => {
   // Находим все поля внутри формы, делаем из них массив
-  const inputList = Array.from(formElement.querySelectorAll(obj['inputSelector']));
-  const buttonElement = formElement.querySelector(obj['buttonSelector']);
+  const inputList = Array.from(formElement.querySelectorAll(obj.inputSelector));
+  const buttonElement = formElement.querySelector(obj.buttonSelector);
   // Проверяем состояние кнопки при первой загрузке страницы
   toggleButtonState(inputList, buttonElement, obj);
   // toggleButtonState(inputList, formElement);
@@ -74,7 +74,7 @@ const setEventListeners = (formElement, obj) => {
 const enableValidation = (obj) => {
   // Найдём все формы с указанным классом в DOM,
   // сделаем из них массив методом Array.from
-  const formList = Array.from(document.querySelectorAll(obj['formSelector']));
+  const formList = Array.from(document.querySelectorAll(obj.formSelector));
   // Переберём полученную коллекцию
   formList.forEach((formElement) => {
     // Для каждой формы вызовем функцию setEventListeners,
