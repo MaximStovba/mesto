@@ -84,7 +84,7 @@ function showInfoOfProfile () {
 // Функция определения открытой формы
 function whatFormToClose (evt) {
   const openedFormElement = content.querySelector('.popup_opened'); // Находим открытую форму
-  closePopup(evt, openedFormElement);
+  eventToClosePopup(evt, openedFormElement);
 }
 
 // Функция устанавки / снятия слушатели Esc и Overlay
@@ -102,34 +102,40 @@ function toggleEventListeners (popupElement) {
   }
 }
 
+// Функция подготовки формы "редактирования профиля" к открытию
+function prepareEditFormToOpened(popupElement) {
+  // отображаем в форме информацию из профиля
+  showInfoOfProfile();
+  // проводим валидацию полей ввода формы "редактирования профиля"
+  checkImputBeforFormOpening(inputListEditForm, formEditElement);
+  toggleButtonState(inputListEditForm, saveButton, setObj);
+  // тогглим попап
+  togglePopup(popupElement);
+}
+
+// Функция подготовки формы "создания карточки" к открытию
+function prepareAddFormToOpened(popupElement) {
+  // сбрасываем все поля формы
+  formAddElement.reset();
+  // проводим валидацию полей ввода формы "создания карточки"
+  checkImputBeforFormOpening(inputListAddForm, formAddElement);
+  toggleButtonState(inputListAddForm, createButton, setObj);
+  // тогглим попап
+  togglePopup(popupElement);
+}
+
 // Функция открытия и закрытия pop-up
 function togglePopup(popupElement) {
-  // проверяем, что это форма "редактирования профиля" и она скрыта
-  if ((popupElement.classList.contains('popup_type_edit')) && (!popupElement.classList.contains('popup_opened'))) {
-    // отображаем в форме информацию из профиля
-    showInfoOfProfile();
-    // проводим валидацию полей ввода формы "редактирования профиля"
-    checkImputBeforFormOpening(inputListEditForm, formEditElement);
-    toggleButtonState(inputListEditForm, saveButton, setObj);
-  }
-  // проверяем, что это форма "создания карточки" и она скрыта
-  if ((popupElement.classList.contains('popup_type_add')) && (!popupElement.classList.contains('popup_opened'))) {
-    // сбрасываем все поля формы
-    formAddElement.reset();
-    // проводим валидацию полей ввода формы "создания карточки"
-    checkImputBeforFormOpening(inputListAddForm, formAddElement);
-    toggleButtonState(inputListAddForm, createButton, setObj);
-  }
-  // проверяем, скрыта или открыта форма и устанавливаем / снимаем слушатели Esc и Overlay
+  // тогглим слушатели Esc и Overlay
   toggleEventListeners(popupElement);
   // тогглим попап
   popupElement.classList.toggle('popup_opened');
 }
 
-// Функция закрытия формы
-function closePopup (evt, formElement) {
+// Функция закрытия формы по событию (Esc и Overlay)
+function eventToClosePopup (evt, formElement) { // eventToClosePopup
   if ((evt.target.classList.contains('popup')) || (evt.key === 'Escape')) {
-    togglePopup(formElement);
+    togglePopup(formElement); // закрываем попап по событию!
   }
 }
 
@@ -143,7 +149,7 @@ function openPopupImg(evt) {
   popupBigImage.src = evt.target.src;
   popupBigImage.alt = evt.target.alt;
   popupFigcaption.textContent = evt.target.alt;
-  togglePopup(popUpImg); // открываем попап с большым изображением
+  togglePopup(popUpImg); // открываем попап с большым изображением!
 }
 
 // функция удаления карточки
@@ -192,10 +198,10 @@ function formEditSubmitHandler (evt) { // Обработчик «отправк�
   profileTitle.textContent = popupTextTypeName.value; // Сохраняем значение "Имя"
   profileSubtitle.textContent = popupTextTypeAbout.value; // Сохраняем значение "О себе"
   profileAvatar.setAttribute('alt', popupTextTypeName.value); // Изменяем "альт" аватара профиля
-  togglePopup(popUpEdit); // Закрываем форму редактирования профиля
+  togglePopup(popUpEdit); // Закрываем форму редактирования профиля!
 
   // проводим валидацию полей ввода формы "редактирования профиля"
-  toggleButtonState(inputListEditForm, saveButton, setObj);
+  // toggleButtonState(inputListEditForm, saveButton, setObj);
 }
 
 function formAddSubmitHandler (evt) { // Обработчик «отправки» формы добавления карточки
@@ -204,10 +210,10 @@ function formAddSubmitHandler (evt) { // Обработчик «отправки
   const userCard = createCard({ name: popupTextTypePlace.value, link: popupTextTypeUrl.value });
   // Добавляем новую карточку в разметку
   publicCards([userCard]);
-  togglePopup(popUpAdd); // Закрываем форму добавления карточки
+  togglePopup(popUpAdd); // Закрываем форму добавления карточки!
 
   // проводим валидацию полей ввода формы "создания карточки"
-  toggleButtonState(inputListAddForm, createButton, setObj);
+  // toggleButtonState(inputListAddForm, createButton, setObj);
 
   // сбрасываем все поля
   formAddElement.reset();
@@ -215,10 +221,10 @@ function formAddSubmitHandler (evt) { // Обработчик «отправки
 
 // слушатель открытия формы редактирования профиля
 // открываем попап редактирования профиля
-editButton.addEventListener('click', () => togglePopup(popUpEdit));
+editButton.addEventListener('click', () => prepareEditFormToOpened(popUpEdit));
 
 // слушатель открытия формы добавления карточки
-addButton.addEventListener('click', () => togglePopup(popUpAdd));
+addButton.addEventListener('click', () => prepareAddFormToOpened(popUpAdd));
 
 // слушатель закрытия формы редактирования профиля
 closeEditFormButton.addEventListener('click', () => togglePopup(popUpEdit));
