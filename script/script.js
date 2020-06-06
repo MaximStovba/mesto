@@ -69,6 +69,7 @@ const initialCards = [
 ];
 
 // ------  класс Card -------
+
 class Card {
 	constructor(item, cardSelector) {
     this._link = item.link;
@@ -132,8 +133,16 @@ class Card {
 }
 // --------------------------
 
+// Функция скрытия ошибок валидации при открытии формы
+const hideImputError = (formElement, inputElement, obj) => {
+  const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
+  inputElement.classList.remove(obj.inputErrorClass);
+  errorElement.classList.remove(obj.errorClass);
+  // Очистим ошибку
+  errorElement.textContent = '|';
+};
 
-// Функция отображения / скрытия ошибок валидации при открытии формы
+// Функция подготовки к скрытию ошибок валидации при открытии формы
 function checkImputBeforFormOpening (inputList, formElement) {
   inputList.forEach((inputElement) => {
     hideImputError(formElement, inputElement, setObj);
@@ -166,6 +175,30 @@ function toggleEventListeners (popupElement) {
     document.removeEventListener('keydown', whatFormToClose);
   }
 }
+
+// Функция обходит массив полей для проверки их валидности
+const hasInvalidInput = (inputList) => {
+  // проходим по этому массиву методом some
+  return inputList.some((inputElement) => {
+    // Если поле не валидно, колбэк вернёт true
+    // Обход массива прекратится и вся фунцкция
+    // hasInvalidInput вернёт true
+    return !inputElement.validity.valid;
+  })
+};
+
+// Функция принимает массив полей ввода
+// и элемент формы, содержащий кнопку, состояние которой нужно поменять
+const toggleButtonState = (inputList, buttonElement, obj) => {
+  // Если есть хотя бы один невалидный инпут
+  if (hasInvalidInput(inputList)) {
+    // делаем кнопку неактивной
+    buttonElement.classList.add(obj.inactiveButtonClass);
+  } else {
+    // иначе делаем кнопку активной
+    buttonElement.classList.remove(obj.inactiveButtonClass);
+  }
+};
 
 // Функция подготовки формы "редактирования профиля" к открытию
 function prepareEditFormToOpened(popupElement) {
@@ -225,7 +258,6 @@ function formAddSubmitHandler (evt) { // Обработчик «отправки
 }
 
 // слушатель открытия формы редактирования профиля
-// открываем попап редактирования профиля
 editButton.addEventListener('click', () => prepareEditFormToOpened(popUpEdit));
 
 // слушатель открытия формы добавления карточки
