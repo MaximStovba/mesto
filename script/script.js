@@ -68,6 +68,71 @@ const initialCards = [
   }
 ];
 
+// ------  класс Card -------
+class Card {
+	constructor(item, cardSelector) {
+    this._link = item.link;
+    this._name = item.name;
+    this._cardSelector = cardSelector;
+	}
+
+  _getTemplate() {
+  	const cardElement = document
+      .querySelector(this._cardSelector) // #card
+      .content // Находим шаблон "карточки"
+      .querySelector('.card')
+      .cloneNode(true); // Клонируем содержимое тега template
+
+    this._element = cardElement;
+  }
+
+  // установка слушателей
+	_setEventListeners() {
+    // настройка переключения лайка
+		this._element.querySelector('.card__like').addEventListener('click', () => {
+			this._toggleLike();
+    });
+    // настройка удаления карточки
+    this._element.querySelector('.card__trash').addEventListener('click', () => {
+			this._delCard();
+    });
+    // настройка открытия попапа с большым изображением
+    this._element.querySelector('.card__image').addEventListener('click', () => {
+			this._openPopupImg();
+    });
+	}
+
+  // приватный метод переключения лайка
+  _toggleLike() {
+    this._element.querySelector('.card__like').classList.toggle('card__like_active');
+  }
+
+  // приватный метод удаления карточки
+  _delCard() {
+    this._element.querySelector('.card__trash').closest('.card').remove();
+  }
+
+  // приватный метод открытия попапа с большым изображением
+  _openPopupImg() {
+    popupBigImage.src = this._element.querySelector('.card__image').src;
+    popupBigImage.alt = this._element.querySelector('.card__image').alt;
+    popupFigcaption.textContent = this._element.querySelector('.card__image').alt;
+    togglePopup(popUpImg); // открываем попап с большым изображением!
+  }
+
+  // публичный метод наполнение карточки данными
+  generateCard() {
+    this._getTemplate();
+    this._setEventListeners();
+    this._element.querySelector('.card__image').src = this._link;
+    this._element.querySelector('.card__image').alt = this._name;
+    this._element.querySelector('.card__title').textContent = this._name;
+    return this._element;
+  }
+}
+// --------------------------
+
+
 // Функция отображения / скрытия ошибок валидации при открытии формы
 function checkImputBeforFormOpening (inputList, formElement) {
   inputList.forEach((inputElement) => {
@@ -139,82 +204,22 @@ function eventToClosePopup (evt, formElement) { // eventToClosePopup
   }
 }
 
-// функция переключения лайка
-function toggleLike(evt) {
-  evt.target.classList.toggle('card__like_active');
-}
-
-// функция открытия попапа с большым изображением
-function openPopupImg(evt) {
-  popupBigImage.src = evt.target.src;
-  popupBigImage.alt = evt.target.alt;
-  popupFigcaption.textContent = evt.target.alt;
-  togglePopup(popUpImg); // открываем попап с большым изображением!
-}
-
-// функция удаления карточки
-function delCard(evt) {
-  const elementsElement = evt.target.closest('.card');
-  // снимаем обработчики с карточки
-  elementsElement.querySelector('.card__like').removeEventListener('click', toggleLike);
-  elementsElement.querySelector('.card__trash').removeEventListener('click', delCard);
-  elementsElement.querySelector('.card__image').removeEventListener('click', openPopupImg);
-  // удаляем карточку
-  elementsElement.remove();
-}
-
-// функция создания новой карточки
-function createCard(item) {
-  // клонируем содержимое тега template
-  const cardElement = cardTemplate.cloneNode(true);
-  const cardElementImage = cardElement.querySelector('.card__image');
-  // наполняем содержимым
-  cardElementImage.src = item.link;
-  cardElementImage.alt = item.name;
-  cardElement.querySelector('.card__title').textContent = item.name;
-  // настройка переключения лайка
-  cardElement.querySelector('.card__like').addEventListener('click', toggleLike);
-  // настройка удаления карточки
-  cardElement.querySelector('.card__trash').addEventListener('click', delCard);
-  // настройка открытия попапа с большым изображением
-  cardElementImage.addEventListener('click', openPopupImg);
-  // отображаем карточку на странице в начале блока
-  return cardElement;
-}
-
-// Формируем массив карт
-function loadCards(cards) {
-  return cards.map((card) => createCard(card));
-}
-
-// Принимаем массив для отрисовки
-function publicCards(cards) {
-  cardsContainer.prepend(...cards);
-}
-
-
 function formEditSubmitHandler (evt) { // Обработчик «отправки» формы редактирования профиля
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
   profileTitle.textContent = popupTextTypeName.value; // Сохраняем значение "Имя"
   profileSubtitle.textContent = popupTextTypeAbout.value; // Сохраняем значение "О себе"
   profileAvatar.setAttribute('alt', popupTextTypeName.value); // Изменяем "альт" аватара профиля
   togglePopup(popUpEdit); // Закрываем форму редактирования профиля!
-
-  // проводим валидацию полей ввода формы "редактирования профиля"
-  // toggleButtonState(inputListEditForm, saveButton, setObj);
 }
 
 function formAddSubmitHandler (evt) { // Обработчик «отправки» формы добавления карточки
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
-  // создаем и наполняем новую карточку данными
-  const userCard = createCard({ name: popupTextTypePlace.value, link: popupTextTypeUrl.value });
-  // Добавляем новую карточку в разметку
-  publicCards([userCard]);
-  togglePopup(popUpAdd); // Закрываем форму добавления карточки!
-
-  // проводим валидацию полей ввода формы "создания карточки"
-  // toggleButtonState(inputListAddForm, createButton, setObj);
-
+  // создаем, наполняем данными и публикуем новую карточку v2
+  const userCard = new Card({ name: popupTextTypePlace.value, link: popupTextTypeUrl.value }, '#card');
+	const userCardElement = userCard.generateCard();
+	cardsContainer.prepend(userCardElement);
+  // закрываем форму добавления карточки!
+  togglePopup(popUpAdd);
   // сбрасываем все поля
   formAddElement.reset();
 }
@@ -241,5 +246,9 @@ formEditElement.addEventListener('submit', formEditSubmitHandler);
 // Прикрепляем обработчики к форме добавления карточки
 formAddElement.addEventListener('submit', formAddSubmitHandler);
 
-// Первоначальная загрузка карточек
-publicCards(loadCards(initialCards));
+// Первоначальная загрузка карточек v2
+initialCards.forEach((item) => {
+  const card = new Card(item, '#card');
+	const cardElement = card.generateCard();
+	cardsContainer.prepend(cardElement);
+});
