@@ -1,7 +1,10 @@
+import { Card } from './Card.js';
+import { FormValidator } from './FormValidator.js';
+
 const content = document.querySelector('.content');
 const popUpEdit = content.querySelector('.popup_type_edit'); // Находим pop-up редактирования профиля
 const popUpAdd = content.querySelector('.popup_type_add'); // Находим pop-up добавления карточки
-const popUpImg = content.querySelector('.popup_type_image'); // Находим pop-up открытия картинки
+export const popUpImg = content.querySelector('.popup_type_image'); // Находим pop-up открытия картинки
 
 const editButton = content.querySelector('.profile__edit-button'); // Находим кнопку редактирования профиля
 const addButton = content.querySelector('.profile__add-button'); // Находим кнопку добавления карточки
@@ -22,8 +25,8 @@ const popupTextTypeName = content.querySelector('.popup__text_type_name'); // Н
 const popupTextTypeAbout = content.querySelector('.popup__text_type_about'); // Находим поле ввода "О себе"
 const popupTextTypePlace = content.querySelector('.popup__text_type_place'); // Находим поле ввода "Название места"
 const popupTextTypeUrl = content.querySelector('.popup__text_type_url'); // Находим поле ввода "Ссылка на картинку"
-const popupBigImage = content.querySelector('.popup__big-image'); // Находим большое изображение
-const popupFigcaption = content.querySelector('.popup__figcaption'); // Находим подпись большого изображения
+export const popupBigImage = content.querySelector('.popup__big-image'); // Находим большое изображение
+export const popupFigcaption = content.querySelector('.popup__figcaption'); // Находим подпись большого изображения
 
 const cardTemplate = document.querySelector('#card').content; // Находим шаблон "карточки"
 const cardsContainer = document.querySelector('.card-container'); // Элемент куда будем вставлять "карточки"
@@ -67,71 +70,6 @@ const initialCards = [
       link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ];
-
-// ------  класс Card -------
-
-class Card {
-	constructor(item, cardSelector) {
-    this._link = item.link;
-    this._name = item.name;
-    this._cardSelector = cardSelector;
-	}
-
-  _getTemplate() {
-  	const cardElement = document
-      .querySelector(this._cardSelector) // #card
-      .content // Находим шаблон "карточки"
-      .querySelector('.card')
-      .cloneNode(true); // Клонируем содержимое тега template
-
-    this._element = cardElement;
-  }
-
-  // установка слушателей
-	_setEventListeners() {
-    // настройка переключения лайка
-		this._element.querySelector('.card__like').addEventListener('click', () => {
-			this._toggleLike();
-    });
-    // настройка удаления карточки
-    this._element.querySelector('.card__trash').addEventListener('click', () => {
-			this._delCard();
-    });
-    // настройка открытия попапа с большым изображением
-    this._element.querySelector('.card__image').addEventListener('click', () => {
-			this._openPopupImg();
-    });
-	}
-
-  // приватный метод переключения лайка
-  _toggleLike() {
-    this._element.querySelector('.card__like').classList.toggle('card__like_active');
-  }
-
-  // приватный метод удаления карточки
-  _delCard() {
-    this._element.querySelector('.card__trash').closest('.card').remove();
-  }
-
-  // приватный метод открытия попапа с большым изображением
-  _openPopupImg() {
-    popupBigImage.src = this._element.querySelector('.card__image').src;
-    popupBigImage.alt = this._element.querySelector('.card__image').alt;
-    popupFigcaption.textContent = this._element.querySelector('.card__image').alt;
-    togglePopup(popUpImg); // открываем попап с большым изображением!
-  }
-
-  // публичный метод наполнение карточки данными
-  generateCard() {
-    this._getTemplate();
-    this._setEventListeners();
-    this._element.querySelector('.card__image').src = this._link;
-    this._element.querySelector('.card__image').alt = this._name;
-    this._element.querySelector('.card__title').textContent = this._name;
-    return this._element;
-  }
-}
-// --------------------------
 
 // Функция скрытия ошибок валидации при открытии формы
 const hideImputError = (formElement, inputElement, obj) => {
@@ -223,7 +161,7 @@ function prepareAddFormToOpened(popupElement) {
 }
 
 // Функция открытия и закрытия pop-up
-function togglePopup(popupElement) {
+export function togglePopup(popupElement) {
   // тогглим слушатели Esc и Overlay
   toggleEventListeners(popupElement);
   // тогглим попап
@@ -278,9 +216,21 @@ formEditElement.addEventListener('submit', formEditSubmitHandler);
 // Прикрепляем обработчики к форме добавления карточки
 formAddElement.addEventListener('submit', formAddSubmitHandler);
 
-// Первоначальная загрузка карточек v2
+// Первоначальная загрузка карточек
 initialCards.forEach((item) => {
   const card = new Card(item, '#card');
 	const cardElement = card.generateCard();
 	cardsContainer.prepend(cardElement);
 });
+
+// Для каждой проверяемой формы создаем экземпляр класса
+  // Найдём все формы с указанным классом в DOM,
+  // сделаем из них массив методом Array.from
+  const formList = Array.from(document.querySelectorAll(setObj.formSelector));
+  // Переберём полученную коллекцию
+  formList.forEach((formElement) => {
+    // Для каждой формы создаем экземпляр класса,
+    // вызываем метод enableValidation
+    const formValid = new FormValidator(setObj, formElement);
+    formValid.enableValidation();
+  });

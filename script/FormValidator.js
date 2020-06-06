@@ -1,6 +1,6 @@
 // -------- начало класса FormValidator ------------ //
 
-class FormValidator {
+export class FormValidator {
   constructor(setObj, formElement) {
     this._obj = setObj;
     this._formElement = formElement;
@@ -85,15 +85,3 @@ class FormValidator {
 }
 
 // -------- конец класса FormValidator ------------ //
-
-// Для каждой проверяемой формы создаем экземпляр класса
-  // Найдём все формы с указанным классом в DOM,
-  // сделаем из них массив методом Array.from
-  const formList = Array.from(document.querySelectorAll(setObj.formSelector));
-  // Переберём полученную коллекцию
-  formList.forEach((formElement) => {
-    // Для каждой формы создаем экземпляр класса,
-    // вызываем метод enableValidation
-    const formValid = new FormValidator(setObj, formElement);
-    formValid.enableValidation();
-  });
