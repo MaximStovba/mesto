@@ -48,8 +48,7 @@ export class Card {
   // приватный метод открытия попапа с большым изображением
   _openPopupImg() {
     popupBigImage.src = this._element.querySelector('.card__image').src;
-    popupBigImage.alt = this._element.querySelector('.card__image').alt;
-    popupFigcaption.textContent = this._element.querySelector('.card__image').alt;
+    popupFigcaption.textContent = this._element.querySelector('.card__title').textContent;
     togglePopup(popUpImg); // открываем попап с большым изображением!
   }
 
@@ -58,7 +57,6 @@ export class Card {
     this._getTemplate();
     this._setEventListeners();
     this._element.querySelector('.card__image').src = this._link;
-    this._element.querySelector('.card__image').alt = this._name;
     this._element.querySelector('.card__title').textContent = this._name;
     return this._element;
   }

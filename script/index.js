@@ -28,14 +28,13 @@ const popupTextTypeUrl = content.querySelector('.popup__text_type_url'); // На
 export const popupBigImage = content.querySelector('.popup__big-image'); // Находим большое изображение
 export const popupFigcaption = content.querySelector('.popup__figcaption'); // Находим подпись большого изображения
 
-const cardTemplate = document.querySelector('#card').content; // Находим шаблон "карточки"
 const cardsContainer = document.querySelector('.card-container'); // Элемент куда будем вставлять "карточки"
 
 // Находим все поля внутри форм, делаем из них массив
 const inputListEditForm = Array.from(formEditElement.querySelectorAll('.popup__text'));
 const inputListAddForm = Array.from(formAddElement.querySelectorAll('.popup__text'));
 
-const setObj = {
+const formConfig = { // formConfig
   formSelector: '.popup__container',
   inputSelector: '.popup__text',
   buttonSelector: '.popup__submit',
@@ -71,19 +70,12 @@ const initialCards = [
   }
 ];
 
-// Функция скрытия ошибок валидации при открытии формы
-const hideImputError = (formElement, inputElement, obj) => {
-  const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
-  inputElement.classList.remove(obj.inputErrorClass);
-  errorElement.classList.remove(obj.errorClass);
-  // Очистим ошибку
-  errorElement.textContent = '|';
-};
-
 // Функция подготовки к скрытию ошибок валидации при открытии формы
-function checkImputBeforFormOpening (inputList, formElement) {
+function checkInputBeforFormOpening (inputList, formElement) {
+  const formValid = new FormValidator(formConfig, formElement);
+
   inputList.forEach((inputElement) => {
-    hideImputError(formElement, inputElement, setObj);
+    formValid.hideInputError(formElement, inputElement, formConfig);
   });
 }
 
@@ -125,26 +117,14 @@ const hasInvalidInput = (inputList) => {
   })
 };
 
-// Функция принимает массив полей ввода
-// и элемент формы, содержащий кнопку, состояние которой нужно поменять
-const toggleButtonState = (inputList, buttonElement, obj) => {
-  // Если есть хотя бы один невалидный инпут
-  if (hasInvalidInput(inputList)) {
-    // делаем кнопку неактивной
-    buttonElement.classList.add(obj.inactiveButtonClass);
-  } else {
-    // иначе делаем кнопку активной
-    buttonElement.classList.remove(obj.inactiveButtonClass);
-  }
-};
-
 // Функция подготовки формы "редактирования профиля" к открытию
 function prepareEditFormToOpened(popupElement) {
   // отображаем в форме информацию из профиля
   showInfoOfProfile();
   // проводим валидацию полей ввода формы "редактирования профиля"
-  checkImputBeforFormOpening(inputListEditForm, formEditElement);
-  toggleButtonState(inputListEditForm, saveButton, setObj);
+  checkInputBeforFormOpening(inputListEditForm, formEditElement);
+  // делаем кнопку активной при открытии
+  saveButton.classList.remove(formConfig.inactiveButtonClass);
   // тогглим попап
   togglePopup(popupElement);
 }
@@ -154,8 +134,7 @@ function prepareAddFormToOpened(popupElement) {
   // сбрасываем все поля формы
   formAddElement.reset();
   // проводим валидацию полей ввода формы "создания карточки"
-  checkImputBeforFormOpening(inputListAddForm, formAddElement);
-  toggleButtonState(inputListAddForm, createButton, setObj);
+  checkInputBeforFormOpening(inputListAddForm, formAddElement);
   // тогглим попап
   togglePopup(popupElement);
 }
@@ -226,11 +205,11 @@ initialCards.forEach((item) => {
 // Для каждой проверяемой формы создаем экземпляр класса
   // Найдём все формы с указанным классом в DOM,
   // сделаем из них массив методом Array.from
-  const formList = Array.from(document.querySelectorAll(setObj.formSelector));
+  const formList = Array.from(document.querySelectorAll(formConfig.formSelector));
   // Переберём полученную коллекцию
   formList.forEach((formElement) => {
     // Для каждой формы создаем экземпляр класса,
     // вызываем метод enableValidation
-    const formValid = new FormValidator(setObj, formElement);
+    const formValid = new FormValidator(formConfig, formElement);
     formValid.enableValidation();
   });

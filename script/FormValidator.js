@@ -1,34 +1,34 @@
 // -------- начало класса FormValidator ------------ //
 
 export class FormValidator {
-  constructor(setObj, formElement) {
-    this._obj = setObj;
+  constructor(formConfig, formElement) {
+    this._formConfig = formConfig;
     this._formElement = formElement;
   }
 
   // приватный метод отображения ошибок валидации
-  _showImputError(formElement, inputElement, errorMessage, obj) {
+  _showInputError(formElement, inputElement, errorMessage, formConfig) {
     const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
-    inputElement.classList.add(obj.inputErrorClass);
+    inputElement.classList.add(formConfig.inputErrorClass);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add(obj.errorClass);
+    errorElement.classList.add(formConfig.errorClass);
   }
 
-  // приватный метод скрытия ошибок валидации
-  _hideImputError(formElement, inputElement, obj) {
+  // публичный метод скрытия ошибок валидации
+  hideInputError(formElement, inputElement, formConfig) {
     const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
-    inputElement.classList.remove(obj.inputErrorClass);
-    errorElement.classList.remove(obj.errorClass);
+    inputElement.classList.remove(formConfig.inputErrorClass);
+    errorElement.classList.remove(formConfig.errorClass);
     // Очистим ошибку
     errorElement.textContent = '|';
   }
 
   // приватный метод проверяет formInput на корректность введённых данных и вызывает hideError/showError
-  _checkInputValidity(formElement, inputElement, obj) {
+  _checkInputValidity(formElement, inputElement, formConfig) {
     if (!inputElement.validity.valid) {
-      this._showImputError(formElement, inputElement, inputElement.validationMessage, obj);
+      this._showInputError(formElement, inputElement, inputElement.validationMessage, formConfig);
     } else {
-      this._hideImputError(formElement ,inputElement, obj);
+      this.hideInputError(formElement ,inputElement, formConfig);
     }
   }
 
@@ -45,24 +45,24 @@ export class FormValidator {
 
   // приватный метод принимает массив полей ввода
   // и элемент формы, содержащий кнопку, состояние которой нужно поменять
-  _toggleButtonState(inputList, buttonElement, obj) {
+  _toggleButtonState(inputList, buttonElement, formConfig) {
     // Если есть хотя бы один невалидный инпут
     if (this._hasInvalidInput(inputList)) {
     // делаем кнопку неактивной
-    buttonElement.classList.add(obj.inactiveButtonClass);
+    buttonElement.classList.add(formConfig.inactiveButtonClass);
     } else {
     // иначе делаем кнопку активной
-    buttonElement.classList.remove(obj.inactiveButtonClass);
+    buttonElement.classList.remove(formConfig.inactiveButtonClass);
     }
   }
 
   // установка слушателей
-  _setEventListeners(formElement, obj) {
+  _setEventListeners(formElement, formConfig) {
     // Находим все поля внутри формы, делаем из них массив
-    const inputList = Array.from(formElement.querySelectorAll(obj.inputSelector));
-    const buttonElement = formElement.querySelector(obj.buttonSelector);
+    const inputList = Array.from(formElement.querySelectorAll(formConfig.inputSelector));
+    const buttonElement = formElement.querySelector(formConfig.buttonSelector);
     // Проверяем состояние кнопки при первой загрузке страницы
-    this._toggleButtonState(inputList, buttonElement, obj);
+    this._toggleButtonState(inputList, buttonElement, formConfig);
     // toggleButtonState(inputList, formElement);
     // Обойдем все элементы полученной коллекции
     inputList.forEach((inputElement) => {
@@ -70,9 +70,9 @@ export class FormValidator {
     inputElement.addEventListener('input', () => {
       // Внутри колбэка вызовем isValid,
       // передав ей форму и проверяемый элемент
-      this._checkInputValidity(formElement, inputElement, obj);
+      this._checkInputValidity(formElement, inputElement, formConfig);
       // Проверка состояния кнопки при каждом изменении символа в любом из полей
-      this._toggleButtonState(inputList, buttonElement, obj);
+      this._toggleButtonState(inputList, buttonElement, formConfig);
       });
     });
   }
@@ -80,7 +80,7 @@ export class FormValidator {
   // публичный метод включения валидации формы
   enableValidation() {
     // Для формы вызовем функцию setEventListeners
-    this._setEventListeners(this._formElement, this._obj);
+    this._setEventListeners(this._formElement, this._formConfig);
   }
 }
 
