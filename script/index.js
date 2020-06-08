@@ -9,7 +9,7 @@ export const popUpImg = content.querySelector('.popup_type_image'); // Нахо�
 const editButton = content.querySelector('.profile__edit-button'); // Находим кнопку редактирования профиля
 const addButton = content.querySelector('.profile__add-button'); // Находим кнопку добавления карточки
 const saveButton = content.querySelector('.popup__btn_action_save'); // Находим кнопку сохранения профиля
-const createButton = content.querySelector('.popup__btn_action_create'); // Находим кнопку создания карточки
+
 const closeEditFormButton = content.querySelector('.popup__btn-close_formtype_edit'); // Находим кнопку закрытия попапа редактирования профиля
 const closeAddFormButton = content.querySelector('.popup__btn-close_formtype_add'); // Находим кнопку закрытия попапа добавления карточки
 const closeImgFormButton = content.querySelector('.popup__btn-close_formtype_image'); // Находим кнопку закрытия попапа открытия картинки
@@ -43,6 +43,13 @@ const formConfig = { // formConfig
   inactiveButtonClass: 'popup__btn_disabled',
 };
 
+// Для каждой проверяемой формы создаем экземпляр класса
+// и вызываем метод enableValidation
+const formEditValid = new FormValidator(formConfig, formEditElement);
+  formEditValid.enableValidation();
+const formAddValid = new FormValidator(formConfig, formAddElement);
+  formAddValid.enableValidation();
+
 const initialCards = [
   {
       name: 'Архыз',
@@ -71,9 +78,7 @@ const initialCards = [
 ];
 
 // Функция подготовки к скрытию ошибок валидации при открытии формы
-function checkInputBeforFormOpening (inputList, formElement) {
-  const formValid = new FormValidator(formConfig, formElement);
-
+function checkInputBeforeFormOpening (inputList, formElement, formValid) {
   inputList.forEach((inputElement) => {
     formValid.hideInputError(formElement, inputElement, formConfig);
   });
@@ -106,23 +111,12 @@ function toggleEventListeners (popupElement) {
   }
 }
 
-// Функция обходит массив полей для проверки их валидности
-const hasInvalidInput = (inputList) => {
-  // проходим по этому массиву методом some
-  return inputList.some((inputElement) => {
-    // Если поле не валидно, колбэк вернёт true
-    // Обход массива прекратится и вся фунцкция
-    // hasInvalidInput вернёт true
-    return !inputElement.validity.valid;
-  })
-};
-
 // Функция подготовки формы "редактирования профиля" к открытию
 function prepareEditFormToOpened(popupElement) {
   // отображаем в форме информацию из профиля
   showInfoOfProfile();
   // проводим валидацию полей ввода формы "редактирования профиля"
-  checkInputBeforFormOpening(inputListEditForm, formEditElement);
+  checkInputBeforeFormOpening(inputListEditForm, formEditElement, formEditValid);
   // делаем кнопку активной при открытии
   saveButton.classList.remove(formConfig.inactiveButtonClass);
   // тогглим попап
@@ -134,7 +128,7 @@ function prepareAddFormToOpened(popupElement) {
   // сбрасываем все поля формы
   formAddElement.reset();
   // проводим валидацию полей ввода формы "создания карточки"
-  checkInputBeforFormOpening(inputListAddForm, formAddElement);
+  checkInputBeforeFormOpening(inputListAddForm, formAddElement, formAddValid);
   // тогглим попап
   togglePopup(popupElement);
 }
@@ -201,15 +195,3 @@ initialCards.forEach((item) => {
 	const cardElement = card.generateCard();
 	cardsContainer.prepend(cardElement);
 });
-
-// Для каждой проверяемой формы создаем экземпляр класса
-  // Найдём все формы с указанным классом в DOM,
-  // сделаем из них массив методом Array.from
-  const formList = Array.from(document.querySelectorAll(formConfig.formSelector));
-  // Переберём полученную коллекцию
-  formList.forEach((formElement) => {
-    // Для каждой формы создаем экземпляр класса,
-    // вызываем метод enableValidation
-    const formValid = new FormValidator(formConfig, formElement);
-    formValid.enableValidation();
-  });

@@ -47,16 +47,21 @@ export class Card {
 
   // приватный метод открытия попапа с большым изображением
   _openPopupImg() {
-    popupBigImage.src = this._element.querySelector('.card__image').src;
-    popupFigcaption.textContent = this._element.querySelector('.card__title').textContent;
+    const cardImageElement = this._element.querySelector('.card__image');
+    popupBigImage.src = cardImageElement.src;
+    popupBigImage.alt = cardImageElement.alt;
+    popupFigcaption.textContent = cardImageElement.alt;
     togglePopup(popUpImg); // открываем попап с большым изображением!
-  }
+    }
 
   // публичный метод наполнение карточки данными
   generateCard() {
     this._getTemplate();
     this._setEventListeners();
-    this._element.querySelector('.card__image').src = this._link;
+
+    const cardImageElement = this._element.querySelector('.card__image');
+    cardImageElement.src = this._link;
+    cardImageElement.alt = this._name;
     this._element.querySelector('.card__title').textContent = this._name;
     return this._element;
   }
