@@ -1,3 +1,4 @@
+import { Section } from './Section.js';
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
 
@@ -29,6 +30,7 @@ export const popupBigImage = content.querySelector('.popup__big-image'); // На
 export const popupFigcaption = content.querySelector('.popup__figcaption'); // Находим подпись большого изображения
 
 const cardsContainer = document.querySelector('.card-container'); // Элемент куда будем вставлять "карточки"
+const cardListSection = '.card-container'; // Селектор, куда будем вставлять "карточки" v2
 
 // Находим все поля внутри форм, делаем из них массив
 const inputListEditForm = Array.from(formEditElement.querySelectorAll('.popup__text'));
@@ -158,10 +160,21 @@ function formEditSubmitHandler (evt) { // Обработчик «отправк�
 
 function formAddSubmitHandler (evt) { // Обработчик «отправки» формы добавления карточки
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
-  // создаем, наполняем данными и публикуем новую карточку v2
-  const userCard = new Card({ name: popupTextTypePlace.value, link: popupTextTypeUrl.value }, '#card');
-	const userCardElement = userCard.generateCard();
-	cardsContainer.prepend(userCardElement);
+
+  // создаем, наполняем данными и публикуем новую карточку v3
+  const newCard = new Section({
+    data: [{ name: popupTextTypePlace.value, link: popupTextTypeUrl.value }],
+    renderer: (item) => {
+      const card = new Card(item, '#card');
+      const cardElement = card.generateCard();
+      newCard.setItem(cardElement);
+      },
+    },
+    cardListSection
+  );
+  // отрисовка карточек v3
+  newCard.renderItems();
+
   // закрываем форму добавления карточки!
   togglePopup(popUpAdd);
   // сбрасываем все поля
@@ -189,9 +202,17 @@ formEditElement.addEventListener('submit', formEditSubmitHandler);
 // Прикрепляем обработчики к форме добавления карточки
 formAddElement.addEventListener('submit', formAddSubmitHandler);
 
-// Первоначальная загрузка карточек
-initialCards.forEach((item) => {
-  const card = new Card(item, '#card');
-	const cardElement = card.generateCard();
-	cardsContainer.prepend(cardElement);
-});
+// Первоначальная загрузка карточек v3
+const cardsList = new Section({
+  data: initialCards,
+  renderer: (item) => {
+    const card = new Card(item, '#card');
+    const cardElement = card.generateCard();
+    cardsList.setItem(cardElement);
+    },
+  },
+  cardListSection
+);
+
+// отрисовка карточек v3
+cardsList.renderItems();
