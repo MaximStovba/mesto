@@ -1,3 +1,4 @@
+import { Popup } from './Popup.js';
 import { Section } from './Section.js';
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
@@ -11,6 +12,7 @@ const editButton = content.querySelector('.profile__edit-button'); // Наход
 const addButton = content.querySelector('.profile__add-button'); // Находим кнопку добавления карточки
 const saveButton = content.querySelector('.popup__btn_action_save'); // Находим кнопку сохранения профиля
 
+// const closeFormButton = content.querySelector('.popup__btn-close'); // Находим кнопку закрытия попапа
 const closeEditFormButton = content.querySelector('.popup__btn-close_formtype_edit'); // Находим кнопку закрытия попапа редактирования профиля
 const closeAddFormButton = content.querySelector('.popup__btn-close_formtype_add'); // Находим кнопку закрытия попапа добавления карточки
 const closeImgFormButton = content.querySelector('.popup__btn-close_formtype_image'); // Находим кнопку закрытия попапа открытия картинки
@@ -36,7 +38,7 @@ const cardListSection = '.card-container'; // Селектор, куда буд�
 const inputListEditForm = Array.from(formEditElement.querySelectorAll('.popup__text'));
 const inputListAddForm = Array.from(formAddElement.querySelectorAll('.popup__text'));
 
-const formConfig = { // formConfig
+const formConfig = { // настройки формы
   formSelector: '.popup__container',
   inputSelector: '.popup__text',
   buttonSelector: '.popup__submit',
@@ -93,25 +95,50 @@ function showInfoOfProfile () {
 }
 
 // Функция определения открытой формы
-function whatFormToClose (evt) {
-  const openedFormElement = content.querySelector('.popup_opened'); // Находим открытую форму
-  eventToClosePopup(evt, openedFormElement);
-}
+// function whatFormToClose (evt) {
+//  const openedFormElement = content.querySelector('.popup_opened'); // Находим открытую форму
+//  eventToClosePopup(evt, openedFormElement);
+// }
 
-// Функция устанавки / снятия слушатели Esc и Overlay
-function toggleEventListeners (popupElement) {
-  if (!popupElement.classList.contains('popup_opened')) {
+// Функция устанавки / снятия слушателей Esc и Overlay
+// function toggleEventListeners (popupElement) {
+//  if (!popupElement.classList.contains('popup_opened')) {
     // Устанавливаем слушатель закрытия формы кликом на оверлей
-    document.addEventListener('click', whatFormToClose);
+//    document.addEventListener('click', whatFormToClose);
     // Устанавливаем слушатель клавиатуры
-    document.addEventListener('keydown', whatFormToClose);
-  } else {
+//    document.addEventListener('keydown', whatFormToClose);
+//  } else {
     // Снятие слушателя закрытия формы кликом на оверлей
-    document.removeEventListener('click', whatFormToClose);
+//    document.removeEventListener('click', whatFormToClose);
     // Снятие слушателя клавиатуры
-    document.removeEventListener('keydown', whatFormToClose);
-  }
-}
+//    document.removeEventListener('keydown', whatFormToClose);
+//  }
+//  }
+
+// ---------   тест класса PopupEdit ------------
+const popupEdit = new Popup({
+  formSelector: '.popup_type_edit',
+  closeButtonSelector: '.popup__btn-close_formtype_edit'
+  });
+popupEdit.setEventListeners();
+// ---------   тест класса PopupEdit ------------
+
+// ---------   тест класса PopupAdd ------------
+const popupAdd = new Popup({
+  formSelector: '.popup_type_add',
+  closeButtonSelector: '.popup__btn-close_formtype_add'
+  });
+  popupAdd.setEventListeners();
+// ---------   тест класса PopupAdd ------------
+
+// ---------   тест класса PopupImg ------------
+export const popupImage = new Popup({
+  formSelector: '.popup_type_image',
+  closeButtonSelector: '.popup__btn-close_formtype_image'
+  });
+  popupImage.setEventListeners();
+// ---------   тест класса PopupImg ------------
+
 
 // Функция подготовки формы "редактирования профиля" к открытию
 function prepareEditFormToOpened(popupElement) {
@@ -121,8 +148,12 @@ function prepareEditFormToOpened(popupElement) {
   checkInputBeforeFormOpening(inputListEditForm, formEditElement, formEditValid);
   // делаем кнопку активной при открытии
   saveButton.classList.remove(formConfig.inactiveButtonClass);
-  // тогглим попап
-  togglePopup(popupElement);
+
+  // тогглим попап >>> тест класса Popup
+  // togglePopup(popupElement);
+
+  // тогглим попап v2
+  popupEdit.openPopup();
 }
 
 // Функция подготовки формы "создания карточки" к открытию
@@ -131,31 +162,35 @@ function prepareAddFormToOpened(popupElement) {
   formAddElement.reset();
   // проводим валидацию полей ввода формы "создания карточки"
   checkInputBeforeFormOpening(inputListAddForm, formAddElement, formAddValid);
-  // тогглим попап
-  togglePopup(popupElement);
+  // тогглим попап >>> тест класса Popup
+  // togglePopup(popupElement);
+
+  // тогглим попап v2
+  popupAdd.openPopup();
 }
 
 // Функция открытия и закрытия pop-up
-export function togglePopup(popupElement) {
-  // тогглим слушатели Esc и Overlay
-  toggleEventListeners(popupElement);
-  // тогглим попап
-  popupElement.classList.toggle('popup_opened');
-}
+// export function togglePopup(popupElement) {
+// тогглим слушатели Esc и Overlay
+//  toggleEventListeners(popupElement);
+// тогглим попап
+//  popupElement.classList.toggle('popup_opened');
+// }
 
 // Функция закрытия формы по событию (Esc и Overlay)
-function eventToClosePopup (evt, formElement) { // eventToClosePopup
-  if ((evt.target.classList.contains('popup')) || (evt.key === 'Escape')) {
-    togglePopup(formElement); // закрываем попап по событию!
-  }
-}
+// function eventToClosePopup (evt, formElement) { // eventToClosePopup
+//  if ((evt.target.classList.contains('popup')) || (evt.key === 'Escape')) {
+//    togglePopup(formElement); // закрываем попап по событию!
+// }
+// }
 
 function formEditSubmitHandler (evt) { // Обработчик «отправки» формы редактирования профиля
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
   profileTitle.textContent = popupTextTypeName.value; // Сохраняем значение "Имя"
   profileSubtitle.textContent = popupTextTypeAbout.value; // Сохраняем значение "О себе"
   profileAvatar.setAttribute('alt', popupTextTypeName.value); // Изменяем "альт" аватара профиля
-  togglePopup(popUpEdit); // Закрываем форму редактирования профиля!
+  // togglePopup(popUpEdit); // Закрываем форму редактирования профиля!
+  popupEdit.closePopup();
 }
 
 function formAddSubmitHandler (evt) { // Обработчик «отправки» формы добавления карточки
@@ -176,7 +211,8 @@ function formAddSubmitHandler (evt) { // Обработчик «отправки
   newCard.renderItems();
 
   // закрываем форму добавления карточки!
-  togglePopup(popUpAdd);
+  // togglePopup(popUpAdd);
+  popupAdd.closePopup();
   // сбрасываем все поля
   formAddElement.reset();
 }
@@ -187,14 +223,14 @@ editButton.addEventListener('click', () => prepareEditFormToOpened(popUpEdit));
 // слушатель открытия формы добавления карточки
 addButton.addEventListener('click', () => prepareAddFormToOpened(popUpAdd));
 
-// слушатель закрытия формы редактирования профиля
-closeEditFormButton.addEventListener('click', () => togglePopup(popUpEdit));
+// слушатель закрытия формы редактирования профиля >>> тест класса Popup
+// closeEditFormButton.addEventListener('click', () => togglePopup(popUpEdit));
 
 // слушатель закрытия формы добавления карточки
-closeAddFormButton.addEventListener('click', () => togglePopup(popUpAdd));
+// closeAddFormButton.addEventListener('click', () => togglePopup(popUpAdd));
 
 // слушатель закрытия формы с большим изображением
-closeImgFormButton.addEventListener('click', () => togglePopup(popUpImg));
+// closeImgFormButton.addEventListener('click', () => togglePopup(popUpImg));
 
 // Прикрепляем обработчики к форме редактирования профиля
 formEditElement.addEventListener('submit', formEditSubmitHandler);

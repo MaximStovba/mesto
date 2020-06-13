@@ -1,6 +1,6 @@
 // ------ начало класса Card ------- //
 
-import { popupBigImage, popupFigcaption, popUpImg, togglePopup } from './index.js'
+import { popupBigImage, popupFigcaption, popUpImg, popupImage } from './index.js'
 
 export class Card {
 	constructor(item, cardSelector) {
@@ -51,7 +51,8 @@ export class Card {
     popupBigImage.src = cardImageElement.src;
     popupBigImage.alt = cardImageElement.alt;
     popupFigcaption.textContent = cardImageElement.alt;
-    togglePopup(popUpImg); // открываем попап с большым изображением!
+    // togglePopup(popUpImg); // открываем попап с большым изображением!
+    popupImage.openPopup();
     }
 
   // публичный метод наполнение карточки данными
