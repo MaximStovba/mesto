@@ -48,11 +48,11 @@ export class Card {
   // приватный метод открытия попапа с большым изображением
   _openPopupImg() {
     const cardImageElement = this._element.querySelector('.card__image');
-    popupBigImage.src = cardImageElement.src;
-    popupBigImage.alt = cardImageElement.alt;
-    popupFigcaption.textContent = cardImageElement.alt;
+    // popupBigImage.src = cardImageElement.src;
+    // popupBigImage.alt = cardImageElement.alt;
+    // popupFigcaption.textContent = cardImageElement.alt;
     // togglePopup(popUpImg); // открываем попап с большым изображением!
-    popupImage.openPopup();
+    popupImage.openPopup(cardImageElement);
     }
 
   // публичный метод наполнение карточки данными

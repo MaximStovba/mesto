@@ -1,4 +1,5 @@
 import { Popup } from './Popup.js';
+import { PopupWithImage } from './PopupWithImage.js';
 import { Section } from './Section.js';
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
@@ -132,7 +133,7 @@ const popupAdd = new Popup({
 // ---------   тест класса PopupAdd ------------
 
 // ---------   тест класса PopupImg ------------
-export const popupImage = new Popup({
+export const popupImage = new PopupWithImage({
   formSelector: '.popup_type_image',
   closeButtonSelector: '.popup__btn-close_formtype_image'
   });
