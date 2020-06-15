@@ -1,6 +1,4 @@
-// ------ начало класса Card ------- //
-
-import { popupBigImage, popupFigcaption, popUpImg, popupImage } from './index.js'
+import { popupImage } from '../pages/index.js';
 
 export class Card {
 	constructor(item, cardSelector) {
@@ -48,10 +46,6 @@ export class Card {
   // приватный метод открытия попапа с большым изображением
   _openPopupImg() {
     const cardImageElement = this._element.querySelector('.card__image');
-    // popupBigImage.src = cardImageElement.src;
-    // popupBigImage.alt = cardImageElement.alt;
-    // popupFigcaption.textContent = cardImageElement.alt;
-    // togglePopup(popUpImg); // открываем попап с большым изображением!
     popupImage.openPopup(cardImageElement);
     }
 
@@ -68,4 +62,3 @@ export class Card {
   }
 }
 
-// ------ конец класса Card ------- //

@@ -1,6 +1,4 @@
 import { Popup } from './Popup.js';
-// import { popupBigImage, popupFigcaption } from './index.js'
-
 
 export class PopupWithForm extends Popup {
 	constructor({ formSelector, closeButtonSelector, handleFormSubmit }) {
