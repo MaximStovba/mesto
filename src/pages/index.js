@@ -3,21 +3,15 @@ import { PopupWithForm } from '../components/PopupWithForm.js';
 import { Section } from '../components/Section.js';
 import { Card } from '../components/Card.js';
 import { FormValidator } from '../components/FormValidator.js';
+import { UserInfo } from '../components/UserInfo.js';
 import './index.css';
 
 import {
-  popUpEdit,
-  popUpAdd,
   editButton,
   addButton,
   saveButton,
   formEditElement,
   formAddElement,
-  profileTitle,
-  profileSubtitle,
-  profileAvatar,
-  popupTextTypeName,
-  popupTextTypeAbout,
   cardListSection,
   inputListEditForm,
   inputListAddForm,
@@ -40,11 +34,12 @@ function checkInputBeforeFormOpening (inputList, formElement, formValid) {
   });
 }
 
-// Функция отображения в форме информации из профиля
-function showInfoOfProfile () {
-  popupTextTypeName.value = profileTitle.textContent;
-  popupTextTypeAbout.value = profileSubtitle.textContent;
-}
+// создаем экземпляр класса UserInfo ---------
+const newUserInfo = new UserInfo({
+  userNameSelector: '.popup__text_type_name',
+  aboutInfoSelector: '.popup__text_type_about'
+});
+// создаем экземпляр класса UserInfo ---------
 
 // ---------   экземпляр класса PopupWithForm ------------
 const popupEdit = new PopupWithForm({
@@ -53,9 +48,7 @@ const popupEdit = new PopupWithForm({
   // объект, который мы передадим при вызове handleFormSubmit
   // окажется на месте параметра formData
   handleFormSubmit: (formData) => {
-    profileTitle.textContent = formData.name; // => Сохраняем значение "Имя"
-    profileSubtitle.textContent = formData.about; // => Сохраняем значение "О себе"
-    profileAvatar.setAttribute('alt', formData.name); // => Изменяем "альт" аватара профиля
+    newUserInfo.setUserInfo(formData);
   }
 });
 popupEdit.setEventListeners();
@@ -94,9 +87,9 @@ export const popupImage = new PopupWithImage({
 
 
 // Функция подготовки формы "редактирования профиля" к открытию
-function prepareEditFormToOpened(popupElement) {
+function prepareEditFormToOpened() {
   // отображаем в форме информацию из профиля
-  showInfoOfProfile();
+  newUserInfo.getUserInfo();
   // проводим валидацию полей ввода формы "редактирования профиля"
   checkInputBeforeFormOpening(inputListEditForm, formEditElement, formEditValid);
   // делаем кнопку активной при открытии
@@ -106,7 +99,7 @@ function prepareEditFormToOpened(popupElement) {
 }
 
 // Функция подготовки формы "создания карточки" к открытию
-function prepareAddFormToOpened(popupElement) {
+function prepareAddFormToOpened() {
   // сбрасываем все поля формы
   formAddElement.reset();
   // проводим валидацию полей ввода формы "создания карточки"
@@ -116,10 +109,10 @@ function prepareAddFormToOpened(popupElement) {
 }
 
 // слушатель открытия формы редактирования профиля
-editButton.addEventListener('click', () => prepareEditFormToOpened(popUpEdit));
+editButton.addEventListener('click', prepareEditFormToOpened);
 
 // слушатель открытия формы добавления карточки
-addButton.addEventListener('click', () => prepareAddFormToOpened(popUpAdd));
+addButton.addEventListener('click', prepareAddFormToOpened);
 
 // Первоначальная загрузка карточек v3
 const cardsList = new Section({
