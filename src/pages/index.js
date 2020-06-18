@@ -34,6 +34,23 @@ function checkInputBeforeFormOpening (inputList, formElement, formValid) {
   });
 }
 
+// ------ Первоначальная загрузка карточек v3 --------
+const cardsList = new Section({
+  data: initialCards,
+  renderer: (item) => {
+    const card = new Card(item, '#card');
+    const cardElement = card.generateCard();
+    cardsList.setItem(cardElement);
+    },
+  },
+  cardListSection
+);
+
+// отрисовка карточек v3
+cardsList.renderItems();
+
+// ------ Первоначальная загрузка карточек v3 --------
+
 // создаем экземпляр класса UserInfo ---------
 const newUserInfo = new UserInfo({
   userNameSelector: '.popup__text_type_name',
@@ -59,19 +76,8 @@ const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
   closeButtonSelector: '.popup__btn-close_formtype_add',
   handleFormSubmit: (formData) => {
-    // создаем, наполняем данными и публикуем новую карточку v3
-  const newCard = new Section({
-    data: [{ name: formData.place, link: formData.url }],
-    renderer: (item) => {
-      const card = new Card(item, '#card');
-      const cardElement = card.generateCard();
-      newCard.setItem(cardElement);
-      },
-    },
-    cardListSection
-  );
-  // отрисовка карточек v3
-  newCard.renderItems();
+  // отрисовка новой карточки
+  cardsList.renderItems([{ name: formData.place, link: formData.url }]);
   }
 });
 popupAdd.setEventListeners();
@@ -113,18 +119,3 @@ editButton.addEventListener('click', prepareEditFormToOpened);
 
 // слушатель открытия формы добавления карточки
 addButton.addEventListener('click', prepareAddFormToOpened);
-
-// Первоначальная загрузка карточек v3
-const cardsList = new Section({
-  data: initialCards,
-  renderer: (item) => {
-    const card = new Card(item, '#card');
-    const cardElement = card.generateCard();
-    cardsList.setItem(cardElement);
-    },
-  },
-  cardListSection
-);
-
-// отрисовка карточек v3
-cardsList.renderItems();
