@@ -6,19 +6,20 @@
   line-height: 17px;
   color: #000000;
   border-width: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2); /* opacity: 0.2 */
 }
 
 .popup__text:focus {
   outline: none;
 }
 
-.popup__text:valid {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2); /* opacity: 0.2 */
-}
+/* .popup__text:valid {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+} */
 
-.popup__text:invalid {
+/* .popup__text:invalid {
   border-bottom: 1px solid #FF0000;
-}
+} */
 
 @media all and (max-width : 550px) {
   /* телефоны */

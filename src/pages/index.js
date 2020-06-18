@@ -10,6 +10,7 @@ import {
   editButton,
   addButton,
   saveButton,
+  createButton,
   formEditElement,
   formAddElement,
   cardListSection,
@@ -110,8 +111,14 @@ function prepareAddFormToOpened() {
   formAddElement.reset();
   // проводим валидацию полей ввода формы "создания карточки"
   checkInputBeforeFormOpening(inputListAddForm, formAddElement, formAddValid);
+  // делаем кнопку неактивной при открытии
+  createButton.classList.add(formConfig.inactiveButtonClass);
   // тогглим попап v2
   popupAdd.openPopup();
+  // убираем подчеркивание полей ввода красным при открытии
+  inputListAddForm.forEach((inputElement) => {
+    inputElement.classList.remove(formConfig.inputErrorClass);
+  });
 }
 
 // слушатель открытия формы редактирования профиля

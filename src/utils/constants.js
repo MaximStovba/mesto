@@ -6,6 +6,7 @@ export const popUpImg = content.querySelector('.popup_type_image'); // Нахо�
 export const editButton = content.querySelector('.profile__edit-button'); // Находим кнопку редактирования профиля
 export const addButton = content.querySelector('.profile__add-button'); // Находим кнопку добавления карточки
 export const saveButton = content.querySelector('.popup__btn_action_save'); // Находим кнопку сохранения профиля
+export const createButton = content.querySelector('.popup__btn_action_create'); // Находим кнопку создания карточки
 
 export const formEditElement = content.querySelector('.popup__container_formtype_edit'); // Находим форму редактирования профиля
 export const formAddElement = content.querySelector('.popup__container_formtype_add'); // Находим форму добавления карточки
