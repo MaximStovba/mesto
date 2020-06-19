@@ -1,10 +1,11 @@
-import { popupImage } from '../pages/index.js';
+// Card.js
 
 export class Card {
-	constructor(item, cardSelector) {
+	constructor({ item, cardSelector, handleCardClick }) {
     this._link = item.link;
     this._name = item.name;
     this._cardSelector = cardSelector;
+    this._handleCardClick = handleCardClick;
 	}
 
   _getTemplate() {
@@ -29,7 +30,8 @@ export class Card {
     });
     // настройка открытия попапа с большым изображением
     this._element.querySelector('.card__image').addEventListener('click', () => {
-			this._openPopupImg();
+      // добавим вызов функции _handleCardClick передадим ей нужное изображение
+      this._handleCardClick(this._element.querySelector('.card__image'));
     });
 	}
 
@@ -42,12 +44,6 @@ export class Card {
   _delCard() {
     this._element.querySelector('.card__trash').closest('.card').remove();
   }
-
-  // приватный метод открытия попапа с большым изображением
-  _openPopupImg() {
-    const cardImageElement = this._element.querySelector('.card__image');
-    popupImage.openPopup(cardImageElement);
-    }
 
   // публичный метод наполнение карточки данными
   generateCard() {

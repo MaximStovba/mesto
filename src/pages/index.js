@@ -39,7 +39,15 @@ function checkInputBeforeFormOpening (inputList, formElement, formValid) {
 const cardsList = new Section({
   data: initialCards,
   renderer: (item) => {
-    const card = new Card(item, '#card');
+    const card = new Card({
+      item: item,
+      cardSelector: '#card',
+      handleCardClick: (cardData) => {
+        // объект, который мы передадим при вызове handleCardClick
+        // окажется на месте параметра cardData
+        popupImage.openPopup(cardData);
+      }
+    });
     const cardElement = card.generateCard();
     cardsList.setItem(cardElement);
     },
