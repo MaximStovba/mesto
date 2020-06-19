@@ -1,4 +1,6 @@
 import {
+  popupTextTypeName,
+  popupTextTypeAbout,
   profileTitle,
   profileSubtitle,
   profileAvatar
@@ -11,13 +13,16 @@ export class UserInfo {
   }
   // публичный метод, который возвращает объект с данными пользователя
   getUserInfo() {
-    this._userNameElement.value = profileTitle.textContent;
-    this._aboutInfoElement.value = profileSubtitle.textContent;
+    this._formValues = {};
+    this._formValues[popupTextTypeName.name] = profileTitle.textContent;
+    this._formValues[popupTextTypeAbout.name] = profileSubtitle.textContent;
+
+    return this._formValues;
   }
   // публичный метод, принимает новые данные пользователя и добавляет их на страницу
   setUserInfo(formData) {
-    profileTitle.textContent = formData.name; // => Сохраняем значение "Имя"
-    profileSubtitle.textContent = formData.about; // => Сохраняем значение "О себе"
-    profileAvatar.setAttribute('alt', formData.name); // => Изменяем "альт" аватара профиля
+    this._userNameElement.textContent = formData.name;
+    this._aboutInfoElement.textContent = formData.about;
+    profileAvatar.setAttribute('alt', formData.name);
   }
 }

@@ -13,6 +13,8 @@ import {
   createButton,
   formEditElement,
   formAddElement,
+  popupTextTypeName,
+  popupTextTypeAbout,
   cardListSection,
   inputListEditForm,
   inputListAddForm,
@@ -62,8 +64,8 @@ cardsList.renderItems();
 
 // создаем экземпляр класса UserInfo ---------
 const newUserInfo = new UserInfo({
-  userNameSelector: '.popup__text_type_name',
-  aboutInfoSelector: '.popup__text_type_about'
+  userNameSelector: '.profile__title',
+  aboutInfoSelector: '.profile__subtitle'
 });
 // создаем экземпляр класса UserInfo ---------
 
@@ -101,7 +103,9 @@ export const popupImage = new PopupWithImage({
 // Функция подготовки формы "редактирования профиля" к открытию
 function prepareEditFormToOpened() {
   // отображаем в форме информацию из профиля
-  newUserInfo.getUserInfo();
+  const formValues = newUserInfo.getUserInfo();
+  popupTextTypeName.value = formValues.name;
+  popupTextTypeAbout.value = formValues.about;
   // проводим валидацию полей ввода формы "редактирования профиля"
   checkInputBeforeFormOpening(inputListEditForm, formEditElement, formEditValid);
   // делаем кнопку активной при открытии
