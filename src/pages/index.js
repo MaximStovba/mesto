@@ -45,7 +45,7 @@ const cardsList = new Section({
       handleCardClick: (cardData) => {
         // объект, который мы передадим при вызове handleCardClick
         // окажется на месте параметра cardData
-        popupImage.openPopup(cardData);
+        popupImage.open(cardData);
       }
     });
     const cardElement = card.generateCard();
@@ -70,7 +70,6 @@ const newUserInfo = new UserInfo({
 // ---------   экземпляр класса PopupWithForm ------------
 const popupEdit = new PopupWithForm({
   formSelector: '.popup_type_edit',
-  closeButtonSelector: '.popup__btn-close_formtype_edit',
   // объект, который мы передадим при вызове handleFormSubmit
   // окажется на месте параметра formData
   handleFormSubmit: (formData) => {
@@ -83,7 +82,6 @@ popupEdit.setEventListeners();
 // ---------   экземпляр класса PopupWithForm ------------
 const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
-  closeButtonSelector: '.popup__btn-close_formtype_add',
   handleFormSubmit: (formData) => {
   // отрисовка новой карточки
   cardsList.renderItems([{ name: formData.place, link: formData.url }]);
@@ -95,7 +93,6 @@ popupAdd.setEventListeners();
 // ---------   экземпляр класса PopupWithImage ------------
 export const popupImage = new PopupWithImage({
   formSelector: '.popup_type_image',
-  closeButtonSelector: '.popup__btn-close_formtype_image'
   });
   popupImage.setEventListeners();
 // ---------   экземпляр класса PopupWithImage ------------
@@ -110,7 +107,7 @@ function prepareEditFormToOpened() {
   // делаем кнопку активной при открытии
   saveButton.classList.remove(formConfig.inactiveButtonClass);
   // тогглим попап v2
-  popupEdit.openPopup();
+  popupEdit.open();
 }
 
 // Функция подготовки формы "создания карточки" к открытию
@@ -122,7 +119,7 @@ function prepareAddFormToOpened() {
   // делаем кнопку неактивной при открытии
   createButton.classList.add(formConfig.inactiveButtonClass);
   // тогглим попап v2
-  popupAdd.openPopup();
+  popupAdd.open();
   // убираем подчеркивание полей ввода красным при открытии
   inputListAddForm.forEach((inputElement) => {
     inputElement.classList.remove(formConfig.inputErrorClass);
