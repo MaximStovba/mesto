@@ -1,3 +1,5 @@
+// Popup.js
+
 export class Popup {
   constructor({ formSelector }) {
     this._popupElement = document.querySelector(formSelector);
@@ -5,15 +7,19 @@ export class Popup {
 
   // приватный метод закрытия попапа клавишей Esc / Overlay
   _handleEscClose(evt) {
-    // console.log(this._popupElement.classList.contains('popup_opened'));
     if ((this._popupElement.classList.contains('popup_opened')) && ((evt.target.classList.contains('popup')) || (evt.key === 'Escape'))) {
-      //this.close();
       this._popupElement.classList.remove('popup_opened');
     }
   }
 
   // публичный метод добавления слушателей
   setEventListeners() {
+    this._popupCloseButton = this._popupElement
+      .querySelector('.popup__form')
+      .querySelector('.popup__btn-close');
+
+    // слушатель клика кнопки закрытия попапа
+    this._popupCloseButton.addEventListener('click', () => this.close());
     // слушатель ~Esc
     document.addEventListener('keydown', (evt) => this._handleEscClose(evt));
     // слушатель ~Overlay

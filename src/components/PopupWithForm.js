@@ -1,12 +1,11 @@
+// PopupWithForm.js
+
 import { Popup } from './Popup.js';
 
 export class PopupWithForm extends Popup {
 	constructor({ formSelector, handleFormSubmit }) {
     super(formSelector);
     this._popupElement = document.querySelector(formSelector);
-    this._popupCloseButton = this._popupElement
-      .querySelector('.popup__container')
-      .querySelector('.popup__btn-close');
     this._handleFormSubmit = handleFormSubmit; // функция-колбэк
   }
 
@@ -25,6 +24,10 @@ export class PopupWithForm extends Popup {
 
   // публичный метод добавления слушателей
   setEventListeners() {
+    this._popupCloseButton = this._popupElement
+      .querySelector('.popup__form')
+      .querySelector('.popup__btn-close');
+
     // слушатель клика кнопки закрытия попапа
     this._popupCloseButton.addEventListener('click', () => super.close());
     // слушатель ~Esc

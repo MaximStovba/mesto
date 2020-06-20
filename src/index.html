@@ -24,7 +24,7 @@
         <!--Заполняется JS-->
       </section>
       <section class="popup popup_type_edit">
-        <form name="edit-profile" method="POST" action="#" class="popup__container popup__container_formtype_edit" novalidate>
+        <form name="edit-profile" method="POST" action="#" class="popup__form popup__container popup__container_formtype_edit" novalidate>
           <h2 class="popup__title">Редактировать профиль</h2>
           <input type="text" name="name" placeholder="Имя" id="name-input" class="popup__text popup__text_location_top popup__text_type_name" minlength="2" maxlength="40" required pattern="[А-Яа-яA-Za-z -]{1,}">
           <span class="popup__text-error" id="name-input-error">Введите данные.</span>
@@ -35,7 +35,7 @@
         </form>
       </section>
       <section class="popup popup_type_add">
-        <form name="add-item" method="POST" action="#" class="popup__container popup__container_formtype_add" novalidate>
+        <form name="add-item" method="POST" action="#" class="popup__form popup__container popup__container_formtype_add" novalidate>
           <h2 class="popup__title">Новое место</h2>
           <input type="text" name="place" placeholder="Название" id="place-input" class="popup__text popup__text_location_top popup__text_type_place" minlength="1" maxlength="30" required>
           <span class="popup__text-error popup__text-error_active" id="place-input-error">Вы пропустили это поле.</span>
@@ -46,7 +46,7 @@
         </form>
       </section>
       <section class="popup popup_type_image">
-        <figure class="popup__img-container">
+        <figure class="popup__form popup__img-container">
           <button type="button" class="popup__btn-close popup__btn-close_formtype_image" aria-label="Закрыть"></button>
           <img class="popup__big-image">
           <figcaption class="popup__figcaption"></figcaption>
