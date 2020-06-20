@@ -122,6 +122,7 @@ function prepareAddFormToOpened() {
   checkInputBeforeFormOpening(inputListAddForm, formAddElement, formAddValid);
   // делаем кнопку неактивной при открытии
   createButton.classList.add(formConfig.inactiveButtonClass);
+  createButton.disabled = true;
   // тогглим попап v2
   popupAdd.open();
   // убираем подчеркивание полей ввода красным при открытии
