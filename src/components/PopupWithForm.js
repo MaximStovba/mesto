@@ -24,16 +24,7 @@ export class PopupWithForm extends Popup {
 
   // публичный метод добавления слушателей
   setEventListeners() {
-    this._popupCloseButton = this._popupElement
-      .querySelector('.popup__form')
-      .querySelector('.popup__btn-close');
-
-    // слушатель клика кнопки закрытия попапа
-    this._popupCloseButton.addEventListener('click', () => super.close());
-    // слушатель ~Esc
-    document.addEventListener('keydown', (evt) => super._handleEscClose(evt));
-    // слушатель ~Overlay
-    document.addEventListener('click', (evt) => super._handleEscClose(evt));
+    super.setEventListeners();
     // обработчик сабмита формы
     this._popupElement.addEventListener('submit', (evt) => {
       evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
@@ -48,7 +39,7 @@ export class PopupWithForm extends Popup {
   // публичный метод закрытия попапа
   close() {
     super.close();
-    this._popupElement.reset();
+    this._popupElement.querySelector('.popup__container').reset();
   }
 }
 
