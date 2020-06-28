@@ -4,6 +4,7 @@ import { Section } from '../components/Section.js';
 import { Card } from '../components/Card.js';
 import { FormValidator } from '../components/FormValidator.js';
 import { UserInfo } from '../components/UserInfo.js';
+import { Api } from '../components/Api.js';
 import './index.css';
 
 import {
@@ -22,6 +23,16 @@ import {
   initialCards
 } from '../utils/constants.js';
 
+// ------------ тест Api ----------- //
+const api = new Api();
+// загружаем данные пользователя с сервера
+api.getUserInfo();
+// загружаем карточки с сервера
+api.getInitialCards();
+// добавить новую карточку
+// api.postNewCard();
+// ------------ тест Api ----------- //
+
 // Для каждой проверяемой формы создаем экземпляр класса
 // и вызываем метод enableValidation
 const formEditValid = new FormValidator(formConfig, formEditElement);
@@ -37,9 +48,9 @@ function checkInputBeforeFormOpening (inputList, formElement, formValid) {
   });
 }
 
-// ------ Первоначальная загрузка карточек v3 --------
-const cardsList = new Section({
-  data: initialCards,
+// ------ Экземпляр класса Section для загрузки карточек v4 -------- //
+export const cardsList = new Section({
+  data: null,
   renderer: (item) => {
     const card = new Card({
       item: item,
@@ -56,11 +67,7 @@ const cardsList = new Section({
   },
   cardListSection
 );
-
-// отрисовка карточек v3
-cardsList.renderItems();
-
-// ------ Первоначальная загрузка карточек v3 --------
+// ------ Экземпляр класса Section для загрузки карточек v4 -------- //
 
 // создаем экземпляр класса UserInfo ---------
 const newUserInfo = new UserInfo({
@@ -75,7 +82,10 @@ const popupEdit = new PopupWithForm({
   // объект, который мы передадим при вызове handleFormSubmit
   // окажется на месте параметра formData
   handleFormSubmit: (formData) => {
+    // добавление данных профиля на страницу
     newUserInfo.setUserInfo(formData);
+    // сохранение данных профиля на сервере
+    api.patchUserInfo(formData);
   }
 });
 popupEdit.setEventListeners();
@@ -86,7 +96,9 @@ const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
   handleFormSubmit: (formData) => {
   // отрисовка новой карточки
-  cardsList.renderItems([{ name: formData.place, link: formData.url }]);
+  // cardsList.renderItems([{ name: formData.place, link: formData.url }]);
+  // загрузка новой карточки
+  api.postNewCard(formData);
   }
 });
 popupAdd.setEventListeners();
@@ -136,3 +148,4 @@ editButton.addEventListener('click', prepareEditFormToOpened);
 
 // слушатель открытия формы добавления карточки
 addButton.addEventListener('click', prepareAddFormToOpened);
+
