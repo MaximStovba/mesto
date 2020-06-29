@@ -1,15 +1,18 @@
 .card__title {
-  margin: 25px 0 0 21px;
+  margin: 0 0 0 21px;
   font-style: normal;
   font-weight: 900;
   font-size: 24px;
   line-height: 29px;
   color: #000000;
+  max-width: 200px;
   white-space: nowrap; /* Запрещаем перенос строк */
   overflow: hidden; /* Обрезаем все, что не помещается в область */
   text-overflow: ellipsis; /* Добавляем многоточие */
   /*позтционирование
   и выравнивание в сетке*/
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 2/-1;
+  justify-self: start; /* выравнивание по горизонтали */
+  align-self: center; /* выравнивание по вертикали */
 }

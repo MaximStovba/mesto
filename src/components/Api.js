@@ -95,7 +95,7 @@ export class Api {
       return Promise.reject(`Что-то пошло не так: ${res.status}`);
     })
     .then((data) => {
-    //  console.log(data);
+    // console.log(data);
     })
     .catch((err) => {
       console.log('Ошибка. Запрос не выполнен: ', err);

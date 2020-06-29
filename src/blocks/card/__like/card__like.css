@@ -1,5 +1,5 @@
 .card__like {
-  margin: 31px 22.24px 0 0;
+  margin: 0;
   padding: 0;
   width: 20.76px;
   height: 18.13px;
@@ -11,7 +11,8 @@
   и выравнивание в сетке*/
   grid-column: 2;
   grid-row: 2;
-  justify-self: end;
+  justify-self: center; /* выравнивание по горизонтали */
+  align-self: end; /* выравнивание по вертикали */
 }
 
 .card__like:hover {

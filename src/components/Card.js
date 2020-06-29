@@ -54,6 +54,7 @@ export class Card {
     cardImageElement.src = this._link;
     cardImageElement.alt = this._name;
     this._element.querySelector('.card__title').textContent = this._name;
+    this._element.querySelector('.card__num-like').textContent = '1';
     return this._element;
   }
 }

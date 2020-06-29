@@ -1,6 +1,7 @@
 @import url(./__image/card__image.css);
 @import url(./__title/card__title.css);
 @import url(./__like/card__like.css);
+@import url(./__num-like/card__num-like.css);
 @import url(./__like/_active/card__like_active.css);
 @import url(./__trash/card__trash.css);
 
@@ -10,5 +11,5 @@
   border-radius: 10px;
   display: grid;
   grid-template-columns: 210px 72px;
-  grid-template-rows: 282px 79px;
+  grid-template-rows: 282px 39.5px 39.5px;
 }
