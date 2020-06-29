@@ -26,7 +26,7 @@ import {
 } from '../utils/constants.js';
 
 // ------------ тест Api ----------- //
-const api = new Api();
+export const api = new Api();
 // загружаем данные пользователя с сервера
 api.getUserInfo();
 // загружаем карточки с сервера

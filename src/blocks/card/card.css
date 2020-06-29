@@ -4,6 +4,7 @@
 @import url(./__num-like/card__num-like.css);
 @import url(./__like/_active/card__like_active.css);
 @import url(./__trash/card__trash.css);
+@import url(./__trash/_hidden/card__trash_hidden.css);
 
 .card {
   margin: 0;

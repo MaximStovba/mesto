@@ -122,9 +122,31 @@ export class Api {
       return Promise.reject(`Что-то пошло не так: ${res.status}`);
     })
     .then((data) => {
-      // console.log(data);
+      console.log(data.owner._id);
       // отрисовка новой карточки
       cardsList.renderItems([data]);
+    })
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+    });
+  }
+
+  // публичный метод удаления своей карточки
+  deleteMyCard(cardId) {
+    fetch(this._baseUrl + '/cards/' + cardId, {
+      method: 'DELETE',
+      headers: {
+        authorization: this._headers
+      }
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Что-то пошло не так: ${res.status}`);
+    })
+    .then((data) => {
+      console.log(data);
     })
     .catch((err) => {
       console.log('Ошибка. Запрос не выполнен: ', err);

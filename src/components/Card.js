@@ -5,7 +5,9 @@ export class Card {
 	constructor({ item, cardSelector, handleCardClick }) {
     this._link = item.link;
     this._name = item.name;
-    this._numlikes = item.likes.length;
+    this._numLikes = item.likes.length;
+    this._ownerId = item.owner._id;
+    this._cardId = item._id;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
 	}
@@ -28,8 +30,7 @@ export class Card {
     });
     // настройка удаления карточки
     this._element.querySelector('.card__trash').addEventListener('click', () => {
-      popupImgDelete.open(this._element);
-		  //	this._delCard();
+      popupImgDelete.open(this._element, this._cardId);
     });
     // настройка открытия попапа с большым изображением
     this._element.querySelector('.card__image').addEventListener('click', () => {
@@ -43,11 +44,6 @@ export class Card {
     this._element.querySelector('.card__like').classList.toggle('card__like_active');
   }
 
-  // приватный метод удаления карточки
-    // _delCard() {
-    // this._element.querySelector('.card__trash').closest('.card').remove();
-  // }
-
   // публичный метод наполнение карточки данными
   generateCard() {
     this._getTemplate();
@@ -57,7 +53,11 @@ export class Card {
     cardImageElement.src = this._link;
     cardImageElement.alt = this._name;
     this._element.querySelector('.card__title').textContent = this._name;
-    this._element.querySelector('.card__num-like').textContent = this._numlikes;
+    this._element.querySelector('.card__num-like').textContent = this._numLikes;
+    // отображаем кнопку удаления карточки только на своих карточках
+    if (this._ownerId != '303b85c270fdb869280964e8') {
+      this._element.querySelector('.card__trash').classList.add('card__trash_hidden');
+    }
     return this._element;
   }
 }

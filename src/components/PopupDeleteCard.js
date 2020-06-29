@@ -1,6 +1,7 @@
 // PopupDeleteCard.js
-
+import { Api } from './Api.js';
 import { Popup } from './Popup.js';
+import { api } from '../pages/index.js';
 
 export class PopupDeleteCard extends Popup {
 	constructor({ formSelector }) {
@@ -14,16 +15,19 @@ export class PopupDeleteCard extends Popup {
     this._popupElement.addEventListener('submit', (evt) => {
       // отменяем стандартную отправку формы
       evt.preventDefault();
-      // удаляем карточку
+      // удаляем карточку со страницы
       this._element.querySelector('.card__trash').closest('.card').remove();
+      // удаляем карточку с сервера
+      api.deleteMyCard(this._cardId);
       // закрываем форму
       super.close();
     });
   }
 
   // публичный метод открытия попапа
-  open(delElement) {
+  open(delElement, cardId) {
     super.open();
     this._element = delElement;
+    this._cardId = cardId;
   }
 }
