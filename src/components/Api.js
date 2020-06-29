@@ -152,4 +152,51 @@ export class Api {
       console.log('Ошибка. Запрос не выполнен: ', err);
     });
   }
+
+  // публичный метод постановки лайка
+  putLike(element, cardId) {
+    fetch(this._baseUrl + '/cards/likes/' + cardId, {
+      method: 'PUT',
+      headers: {
+        authorization: this._headers
+      }
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Что-то пошло не так: ${res.status}`);
+    })
+    .then((data) => {
+      console.log(data.likes.length);
+      element.querySelector('.card__num-like').textContent = data.likes.length;
+    })
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+    });
+  }
+
+  // публичный метод снятия лайка
+  delLike(element, cardId) {
+    fetch(this._baseUrl + '/cards/likes/' + cardId, {
+      method: 'DELETE',
+      headers: {
+        authorization: this._headers
+      }
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Что-то пошло не так: ${res.status}`);
+    })
+    .then((data) => {
+      console.log(data.likes.length);
+      element.querySelector('.card__num-like').textContent = data.likes.length;
+    })
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+    });
+  }
+
 }
