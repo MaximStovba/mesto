@@ -1,3 +1,4 @@
+import { PopupDeleteCard } from '../components/PopupDeleteCard.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
 import { Section } from '../components/Section.js';
@@ -12,6 +13,7 @@ import {
   addButton,
   saveButton,
   createButton,
+  deleteButton,
   formEditElement,
   formAddElement,
   popupTextTypeName,
@@ -29,8 +31,7 @@ const api = new Api();
 api.getUserInfo();
 // загружаем карточки с сервера
 api.getInitialCards();
-// добавить новую карточку
-// api.postNewCard();
+
 // ------------ тест Api ----------- //
 
 // Для каждой проверяемой формы создаем экземпляр класса
@@ -111,6 +112,13 @@ export const popupImage = new PopupWithImage({
   popupImage.setEventListeners();
 // ---------   экземпляр класса PopupWithImage ------------
 
+// ---------   экземпляр класса PopupDeleteCard (удаление картоки) ------------
+export const popupImgDelete = new PopupDeleteCard({
+  formSelector: '.popup_type_del',
+  });
+  popupImgDelete.setEventListeners();
+// ---------   экземпляр класса PopupDeleteCard (удаление картоки) ------------
+
 
 // Функция подготовки формы "редактирования профиля" к открытию
 function prepareEditFormToOpened() {
@@ -148,4 +156,3 @@ editButton.addEventListener('click', prepareEditFormToOpened);
 
 // слушатель открытия формы добавления карточки
 addButton.addEventListener('click', prepareAddFormToOpened);
-

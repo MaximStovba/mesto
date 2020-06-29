@@ -1,9 +1,11 @@
 // Card.js
+import { popupImgDelete } from '../pages/index.js';
 
 export class Card {
 	constructor({ item, cardSelector, handleCardClick }) {
     this._link = item.link;
     this._name = item.name;
+    this._numlikes = item.likes.length;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
 	}
@@ -26,7 +28,8 @@ export class Card {
     });
     // настройка удаления карточки
     this._element.querySelector('.card__trash').addEventListener('click', () => {
-			this._delCard();
+      popupImgDelete.open(this._element);
+		  //	this._delCard();
     });
     // настройка открытия попапа с большым изображением
     this._element.querySelector('.card__image').addEventListener('click', () => {
@@ -41,9 +44,9 @@ export class Card {
   }
 
   // приватный метод удаления карточки
-  _delCard() {
-    this._element.querySelector('.card__trash').closest('.card').remove();
-  }
+    // _delCard() {
+    // this._element.querySelector('.card__trash').closest('.card').remove();
+  // }
 
   // публичный метод наполнение карточки данными
   generateCard() {
@@ -54,7 +57,7 @@ export class Card {
     cardImageElement.src = this._link;
     cardImageElement.alt = this._name;
     this._element.querySelector('.card__title').textContent = this._name;
-    this._element.querySelector('.card__num-like').textContent = '1';
+    this._element.querySelector('.card__num-like').textContent = this._numlikes;
     return this._element;
   }
 }
