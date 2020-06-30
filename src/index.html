@@ -12,7 +12,12 @@
     </header>
     <main class="content">
       <section class="profile">
-        <img src="./images/profile__avatar.jpg" alt="Жак-Ив Кусто" class="profile__avatar">
+        <div class="profile__avatar-container">
+          <img src="./images/profile__avatar.jpg" alt="Жак-Ив Кусто" class="profile__avatar">
+          <div class="profile__avatar-overlay">
+            <button type="button" class="profile__patchavatar-btn" aria-label="Редактировать"></button>
+          </div>
+        </div>
         <div class="profile__profile-info">
           <h1 class="profile__title">Жак-Ив Кусто</h1>
           <button type="button" class="profile__edit-button" aria-label="Редактировать"></button>
@@ -50,6 +55,15 @@
           <h2 class="popup__title">Вы уверены?</h2>
           <button type="submit" class="popup__submit popup__btn popup__btn_action_del">Да</button>
           <button type="button" class="popup__btn-close popup__btn-close_formtype_del" aria-label="Закрыть"></button>
+        </form>
+      </section>
+      <section class="popup popup_type_avatar">
+        <form name="patch-avatar" method="POST" action="#" class="popup__form popup__container popup__container_formtype_avatar" novalidate>
+          <h2 class="popup__title">Обновить аватар</h2>
+          <input type="text" name="url" placeholder="Ссылка на картинку" id="url-input" class="popup__text popup__text_location_center popup__text_type_avatar-url" required pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$">
+          <span class="popup__text-error popup__text-error_active" id="url-input-error">Введите адрес изображения.</span>
+          <button type="submit" class="popup__submit popup__btn popup__btn_action_patch">Сохранить</button>
+          <button type="button" class="popup__btn-close popup__btn-close_formtype_patch" aria-label="Закрыть"></button>
         </form>
       </section>
       <section class="popup popup_type_image">

@@ -1,3 +1,4 @@
+import { PopupPatchAvatar } from '../components/PopupPatchAvatar.js';
 import { PopupDeleteCard } from '../components/PopupDeleteCard.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
@@ -14,16 +15,21 @@ import {
   saveButton,
   createButton,
   deleteButton,
+  avatarButton,
+  patchButton,
   formEditElement,
   formAddElement,
+  formAvatarElement,
   popupTextTypeName,
   popupTextTypeAbout,
   cardListSection,
   inputListEditForm,
   inputListAddForm,
+  inputListAvatarForm,
   formConfig,
   initialCards
 } from '../utils/constants.js';
+import { Popup } from '../components/Popup.js';
 
 // ------------ тест Api ----------- //
 export const api = new Api();
@@ -40,7 +46,8 @@ const formEditValid = new FormValidator(formConfig, formEditElement);
   formEditValid.enableValidation();
 const formAddValid = new FormValidator(formConfig, formAddElement);
   formAddValid.enableValidation();
-
+const formAvatarValid = new FormValidator(formConfig, formAvatarElement);
+  formAvatarValid.enableValidation();
 
 // Функция подготовки к скрытию ошибок валидации при открытии формы
 function checkInputBeforeFormOpening (inputList, formElement, formValid) {
@@ -96,8 +103,6 @@ popupEdit.setEventListeners();
 const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
   handleFormSubmit: (formData) => {
-  // отрисовка новой карточки
-  // cardsList.renderItems([{ name: formData.place, link: formData.url }]);
   // загрузка новой карточки
   api.postNewCard(formData);
   }
@@ -119,6 +124,12 @@ export const popupImgDelete = new PopupDeleteCard({
   popupImgDelete.setEventListeners();
 // ---------   экземпляр класса PopupDeleteCard (удаление картоки) ------------
 
+// ---------   экземпляр класса PopupPatchAvatar ------------
+const popupPatchAvatar = new PopupPatchAvatar({
+  formSelector: '.popup_type_avatar',
+  });
+  popupPatchAvatar.setEventListeners();
+// ---------   экземпляр класса PopupPatchAvatar ------------
 
 // Функция подготовки формы "редактирования профиля" к открытию
 function prepareEditFormToOpened() {
@@ -151,8 +162,24 @@ function prepareAddFormToOpened() {
   });
 }
 
+// Функция подготовки формы смены аватара к открытию
+function preparePatchFormToOpened() {
+  // сбрасываем все поля формы
+  formAvatarElement.reset();
+  // проводим валидацию полей ввода формы
+  checkInputBeforeFormOpening(inputListAvatarForm, formAvatarElement, formAvatarValid);
+  // делаем кнопку неактивной при открытии
+  patchButton.classList.add(formConfig.inactiveButtonClass);
+  patchButton.disabled = true;
+  // тогглим попап
+  popupPatchAvatar.open();
+}
+
 // слушатель открытия формы редактирования профиля
 editButton.addEventListener('click', prepareEditFormToOpened);
 
 // слушатель открытия формы добавления карточки
 addButton.addEventListener('click', prepareAddFormToOpened);
+
+// слушатель открытия формы смены аватара
+avatarButton.addEventListener('click', preparePatchFormToOpened);

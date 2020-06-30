@@ -1,0 +1,11 @@
+.popup__text_location_center {
+  margin: 40px 36px 0 36px; /*29-20*/
+}
+
+@media all and (max-width : 550px) {
+  /* телефоны */
+  .popup__text_location_center {
+    margin: 30px 20px 0 20px; /*15-10*/
+  }
+}
+

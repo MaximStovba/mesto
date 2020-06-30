@@ -199,4 +199,30 @@ export class Api {
     });
   }
 
+  // публичный метод загрузки аватара
+  patchAvatar(avatarUrl) {
+    fetch(this._baseUrl + '/users/me/avatar', {
+      method: 'PATCH',
+      headers: {
+        authorization: this._headers,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        avatar: avatarUrl,
+      })
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Что-то пошло не так: ${res.status}`);
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+    });
+  }
+
 }

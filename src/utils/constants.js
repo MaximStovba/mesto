@@ -6,14 +6,17 @@ export const popUpDel = content.querySelector('.popup_type_del'); // Наход�
 
 export const editButton = content.querySelector('.profile__edit-button'); // Находим кнопку редактирования профиля
 export const addButton = content.querySelector('.profile__add-button'); // Находим кнопку добавления карточки
+export const avatarButton = content.querySelector('.profile__patchavatar-btn'); // Находим кнопку изменения аватара
+
 export const saveButton = content.querySelector('.popup__btn_action_save'); // Находим кнопку сохранения профиля
 export const createButton = content.querySelector('.popup__btn_action_create'); // Находим кнопку создания карточки
 export const deleteButton = content.querySelector('.popup__btn_action_del'); // Находим кнопку создания карточки
+export const patchButton = content.querySelector('.popup__btn_action_patch'); // Находим кнопку загрузки аватара профиля
 
 export const formEditElement = content.querySelector('.popup__container_formtype_edit'); // Находим форму редактирования профиля
 export const formAddElement = content.querySelector('.popup__container_formtype_add'); // Находим форму добавления карточки
 export const formDelElement = content.querySelector('.popup__container_formtype_del'); // Находим форму удаления карточки
-
+export const formAvatarElement = content.querySelector('.popup__container_formtype_avatar');// Находим форму изменения аватара профиля
 
 export const profileTitle = content.querySelector('.profile__title'); // Находим заголовок "Имени"
 export const profileSubtitle = content.querySelector('.profile__subtitle'); // Находим заголовок "О себе"
@@ -30,6 +33,8 @@ export const cardListSection = '.card-container'; // Селектор, куда 
 // Находим все поля внутри форм, делаем из них массив
 export const inputListEditForm = Array.from(formEditElement.querySelectorAll('.popup__text'));
 export const inputListAddForm = Array.from(formAddElement.querySelectorAll('.popup__text'));
+export const inputListAvatarForm = Array.from(formAvatarElement.querySelectorAll('.popup__text'));
+
 
 export const formConfig = { // настройки формы
   formSelector: '.popup__container',

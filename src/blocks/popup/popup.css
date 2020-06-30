@@ -4,6 +4,7 @@
 @import url(./__text/_type/popup__text_type_error.css);
 @import url(./__text/_location/popup__text_location_bottom.css);
 @import url(./__text/_location/popup__text_location_top.css);
+@import url(./__text/_location/popup__text_location_center.css);
 @import url(./__text-error/popup__text-error.css);
 @import url(./__text-error/_active/popup__text-error_active.css);
 @import url(./__btn/popup__btn.css);
@@ -29,7 +30,7 @@
   justify-content: center;
   align-items: center;
   z-index: 2;
-  
+
   /* плавное открытие попапа
   visibility: visible;
   opacity: 1;
