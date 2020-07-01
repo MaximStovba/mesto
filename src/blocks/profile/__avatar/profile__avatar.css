@@ -1,8 +1,8 @@
 .profile__avatar {
   grid-area: avatar;
   height: 100%;
-  width: auto;
-  margin-left: -35px;
+  width: 100%;
+  /*margin-left: -35px;*/
 }
 
 @media all and (max-width : 920px) {

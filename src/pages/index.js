@@ -56,6 +56,24 @@ function checkInputBeforeFormOpening (inputList, formElement, formValid) {
   });
 }
 
+
+// Функция отображения состояния загрузки данных
+export function renderLoading(isLoading, typeOfForm, btnElement) {
+  const mainBtnName = {
+    editProfile: 'Сохранить',
+    addCard: 'Создать',
+    patchAvatar: 'Сохранить',
+  }
+  if (isLoading) {
+    // добавляем надпись "Сохранение..."
+    btnElement.textContent = 'Сохранение...';
+  } else {
+    // устанавливаем стандартное название кнопки
+    btnElement.textContent = mainBtnName[typeOfForm];
+  }
+}
+
+
 // ------ Экземпляр класса Section для загрузки карточек v4 -------- //
 export const cardsList = new Section({
   data: null,
@@ -93,7 +111,9 @@ const popupEdit = new PopupWithForm({
     // добавление данных профиля на страницу
     newUserInfo.setUserInfo(formData);
     // сохранение данных профиля на сервере
-    api.patchUserInfo(formData);
+    api.patchUserInfo(formData, saveButton);
+    // меняем название кнопки сабмита при загрузке данных на сервис
+    renderLoading(true, 'editProfile', saveButton);
   }
 });
 popupEdit.setEventListeners();
@@ -104,7 +124,9 @@ const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
   handleFormSubmit: (formData) => {
   // загрузка новой карточки
-  api.postNewCard(formData);
+  api.postNewCard(formData, createButton);
+  // меняем название кнопки сабмита при загрузке данных на сервис
+  renderLoading(true, 'addCard', createButton);
   }
 });
 popupAdd.setEventListeners();

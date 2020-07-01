@@ -1,7 +1,7 @@
 // Api.js
 // import { Section } from '../components/Section.js';
 // import { Card } from '../components/Card.js';
-import { cardsList } from '../pages/index.js';
+import { cardsList, renderLoading } from '../pages/index.js';
 import {
   profileTitle,
   profileSubtitle,
@@ -75,8 +75,8 @@ export class Api {
     });
   }
 
-  // публичный метод загрузки данных пользователя на сервер
-  patchUserInfo(formData) {
+  // публичный метод загрузки новых данных пользователя на сервер
+  patchUserInfo(formData, btnElement) {
     fetch(this._baseUrl + '/users/me', {
       method: 'PATCH',
       headers: {
@@ -95,15 +95,19 @@ export class Api {
       return Promise.reject(`Что-то пошло не так: ${res.status}`);
     })
     .then((data) => {
-    // console.log(data);
+      console.log(data);
     })
     .catch((err) => {
       console.log('Ошибка. Запрос не выполнен: ', err);
+    })
+    .finally(() => {
+      // вызываем renderLoading
+      renderLoading(false, 'editProfile', btnElement);
     });
   }
 
   // публичный метод добавления новой карточки
-  postNewCard(formData) {
+  postNewCard(formData, btnElement) {
     fetch(this._baseUrl + '/cards', {
       method: 'POST',
       headers: {
@@ -122,12 +126,16 @@ export class Api {
       return Promise.reject(`Что-то пошло не так: ${res.status}`);
     })
     .then((data) => {
-      console.log(data.owner._id);
+      // console.log(data.owner._id);
       // отрисовка новой карточки
       cardsList.renderItems([data]);
     })
     .catch((err) => {
       console.log('Ошибка. Запрос не выполнен: ', err);
+    })
+    .finally(() => {
+      // вызываем renderLoading
+      renderLoading(false, 'addCard', btnElement);
     });
   }
 
@@ -168,7 +176,7 @@ export class Api {
       return Promise.reject(`Что-то пошло не так: ${res.status}`);
     })
     .then((data) => {
-      console.log(data.likes.length);
+      // console.log(data.likes.length);
       element.querySelector('.card__num-like').textContent = data.likes.length;
     })
     .catch((err) => {
@@ -191,7 +199,7 @@ export class Api {
       return Promise.reject(`Что-то пошло не так: ${res.status}`);
     })
     .then((data) => {
-      console.log(data.likes.length);
+      // console.log(data.likes.length);
       element.querySelector('.card__num-like').textContent = data.likes.length;
     })
     .catch((err) => {
@@ -200,7 +208,7 @@ export class Api {
   }
 
   // публичный метод загрузки аватара
-  patchAvatar(avatarUrl) {
+  patchAvatar(avatarUrl, btnElement) {
     fetch(this._baseUrl + '/users/me/avatar', {
       method: 'PATCH',
       headers: {
@@ -218,11 +226,15 @@ export class Api {
       return Promise.reject(`Что-то пошло не так: ${res.status}`);
     })
     .then((data) => {
-      console.log(data);
+      // обновляем аватар пользователя на странице
+      profileAvatar.src = data.avatar;
     })
     .catch((err) => {
       console.log('Ошибка. Запрос не выполнен: ', err);
+    })
+    .finally(() => {
+      // вызываем renderLoading
+      renderLoading(false, 'patchAvatar', btnElement);
     });
   }
-
 }

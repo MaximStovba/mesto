@@ -27,7 +27,8 @@ export class PopupWithForm extends Popup {
     super.setEventListeners();
     // обработчик сабмита формы
     this._popupElement.addEventListener('submit', (evt) => {
-      evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы
+      // отменяем стандартную отправку формы
+      evt.preventDefault();
       // добавим вызов функции _handleFormSubmit
       // передадим ей объект — результат работы _getInputValues
       this._handleFormSubmit(this._getInputValues());

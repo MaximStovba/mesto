@@ -2,7 +2,10 @@
 
 import { Api } from './Api.js';
 import { Popup } from './Popup.js';
-import { api } from '../pages/index.js';
+import { api, renderLoading } from '../pages/index.js';
+import {
+  patchButton
+  } from '../utils/constants.js';
 
 export class PopupPatchAvatar extends Popup {
 	constructor({ formSelector }) {
@@ -16,9 +19,11 @@ export class PopupPatchAvatar extends Popup {
     this._popupElement.addEventListener('submit', (evt) => {
       // отменяем стандартную отправку формы
       evt.preventDefault();
+      // меняем название кнопки сабмита при загрузке данных на сервис
+      renderLoading(true, 'patchAvatar', patchButton);
+      // обновляем аватар пользователя на сервере
       const avatarUrl = document.querySelector('.popup__text_type_avatar-url').value;
-      console.log(avatarUrl);
-      api.patchAvatar(avatarUrl);
+      api.patchAvatar(avatarUrl, patchButton);
       // закрываем форму
       super.close();
     });
