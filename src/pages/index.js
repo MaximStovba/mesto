@@ -14,7 +14,7 @@ import {
   addButton,
   saveButton,
   createButton,
-  deleteButton,
+//  deleteButton,
   avatarButton,
   patchButton,
   formEditElement,
@@ -27,9 +27,9 @@ import {
   inputListAddForm,
   inputListAvatarForm,
   formConfig,
-  initialCards
+//  initialCards
 } from '../utils/constants.js';
-import { Popup } from '../components/Popup.js';
+// import { Popup } from '../components/Popup.js';
 
 // ------------ тест Api ----------- //
 export const api = new Api();

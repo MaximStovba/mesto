@@ -1,6 +1,3 @@
-// Api.js
-// import { Section } from '../components/Section.js';
-// import { Card } from '../components/Card.js';
 import { cardsList, renderLoading } from '../pages/index.js';
 import {
   profileTitle,
