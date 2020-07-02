@@ -130,23 +130,25 @@ const popupEdit = new PopupWithForm({
   formSelector: '.popup_type_edit',
   // объект, который мы передадим при вызове handleFormSubmit
   // окажется на месте параметра formData
-  handleFormSubmit: (formData) => {
+  handleFormSubmit: (formData, closeForm) => {
     // добавление данных профиля на страницу
     newUserInfo.setUserInfo(formData);
     // меняем название кнопки сабмита перед началом загрузки
     renderLoading(true, 'editProfile', saveButton);
     // сохранение данных профиля на сервере v2
     api.patchUserInfo(formData)
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-    })
-    .finally(() => {
-      // меняем название кнопки сабмита при завершении загрузки
-      renderLoading(false, 'editProfile', saveButton);
-    });
+      .then((data) => {
+        console.log(data);
+        // закрываем попап после успешного ответа сервера
+        closeForm;
+      })
+      .catch((err) => {
+        console.log('Ошибка. Запрос не выполнен: ', err);
+      })
+      .finally(() => {
+        // меняем название кнопки сабмита при завершении загрузки
+        renderLoading(false, 'editProfile', saveButton);
+      });
   }
 });
 popupEdit.setEventListeners();
@@ -155,23 +157,25 @@ popupEdit.setEventListeners();
 // ---------   экземпляр класса PopupWithForm ------------
 const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
-  handleFormSubmit: (formData) => {
-  // меняем название кнопки сабмита перед началом загрузки
-  renderLoading(true, 'addCard', createButton);
-  // загрузка новой карточки
-  api.postNewCard(formData)
-    .then((data) => {
-      // console.log(data.owner._id);
-      // отрисовка новой карточки
-      cardsList.renderItems([data]);
-    })
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-    })
-    .finally(() => {
-      // меняем название кнопки сабмита при завершении загрузки
-      renderLoading(false, 'addCard', createButton);
-    });
+  handleFormSubmit: (formData, closeForm) => {
+    // меняем название кнопки сабмита перед началом загрузки
+    renderLoading(true, 'addCard', createButton);
+    // загрузка новой карточки
+    api.postNewCard(formData)
+      .then((data) => {
+        // console.log(data.owner._id);
+        // отрисовка новой карточки
+        cardsList.renderItems([data]);
+        // закрываем попап после успешного ответа сервера
+        closeForm;
+      })
+      .catch((err) => {
+        console.log('Ошибка. Запрос не выполнен: ', err);
+      })
+      .finally(() => {
+        // меняем название кнопки сабмита при завершении загрузки
+        renderLoading(false, 'addCard', createButton);
+      });
   }
 });
 popupAdd.setEventListeners();
