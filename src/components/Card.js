@@ -47,9 +47,23 @@ export class Card {
     cardLike.classList.toggle('card__like_active');
     // передаем данные по лайкам на сервер
     if (cardLike.classList.contains('card__like_active')) {
-      api.putLike(this._element, this._cardId);
+      api.putLike(this._cardId)
+        .then((data) => {
+          // console.log(data.likes.length);
+          this._element.querySelector('.card__num-like').textContent = data.likes.length;
+        })
+        .catch((err) => {
+          console.log('Ошибка. Запрос не выполнен: ', err);
+        });
     } else {
-      api.delLike(this._element, this._cardId);
+      api.delLike(this._cardId)
+        .then((data) => {
+          // console.log(data.likes.length);
+          this._element.querySelector('.card__num-like').textContent = data.likes.length;
+        })
+        .catch((err) => {
+          console.log('Ошибка. Запрос не выполнен: ', err);
+        });
     }
   }
 

@@ -8,7 +8,8 @@ export class Section {
 
   renderItems(data=false) {
     if (data) {
-      data.forEach(item => this._renderer(item));
+      const revData = data.reverse();
+      revData.forEach(item => this._renderer(item));
     } else {
       this._renderedItems.forEach(item => this._renderer(item));
     }

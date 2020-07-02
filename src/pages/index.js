@@ -14,7 +14,9 @@ import {
   addButton,
   saveButton,
   createButton,
-//  deleteButton,
+  profileTitle,
+  profileSubtitle,
+  profileAvatar,
   avatarButton,
   patchButton,
   formEditElement,
@@ -27,51 +29,7 @@ import {
   inputListAddForm,
   inputListAvatarForm,
   formConfig,
-//  initialCards
 } from '../utils/constants.js';
-// import { Popup } from '../components/Popup.js';
-
-// ------------ тест Api ----------- //
-export const api = new Api();
-// загружаем данные пользователя с сервера
-api.getUserInfo();
-// загружаем карточки с сервера
-api.getInitialCards();
-
-// ------------ тест Api ----------- //
-
-// Для каждой проверяемой формы создаем экземпляр класса
-// и вызываем метод enableValidation
-const formEditValid = new FormValidator(formConfig, formEditElement);
-  formEditValid.enableValidation();
-const formAddValid = new FormValidator(formConfig, formAddElement);
-  formAddValid.enableValidation();
-const formAvatarValid = new FormValidator(formConfig, formAvatarElement);
-  formAvatarValid.enableValidation();
-
-// Функция подготовки к скрытию ошибок валидации при открытии формы
-function checkInputBeforeFormOpening (inputList, formElement, formValid) {
-  inputList.forEach((inputElement) => {
-    formValid.hideInputError(formElement, inputElement, formConfig);
-  });
-}
-
-
-// Функция отображения состояния загрузки данных
-export function renderLoading(isLoading, typeOfForm, btnElement) {
-  const mainBtnName = {
-    editProfile: 'Сохранить',
-    addCard: 'Создать',
-    patchAvatar: 'Сохранить',
-  }
-  if (isLoading) {
-    // добавляем надпись "Сохранение..."
-    btnElement.textContent = 'Сохранение...';
-  } else {
-    // устанавливаем стандартное название кнопки
-    btnElement.textContent = mainBtnName[typeOfForm];
-  }
-}
 
 
 // ------ Экземпляр класса Section для загрузки карточек v4 -------- //
@@ -95,6 +53,71 @@ export const cardsList = new Section({
 );
 // ------ Экземпляр класса Section для загрузки карточек v4 -------- //
 
+
+// ------------ Api ----------- //
+export const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-12',
+  headers: '71b905c5-e266-4c23-af42-a4b6735dea36',
+});
+
+// загружаем данные пользователя с сервера v2
+api.getUserInfo()
+  .then((data) => {
+    // добавляем информации о пользователе на страницу
+    profileTitle.textContent = data.name;
+    profileSubtitle.textContent = data.about;
+    profileAvatar.src = data.avatar;
+    profileAvatar.alt = data.name;
+  })
+  .catch((err) => {
+    console.log('Ошибка. Запрос не выполнен: ', err);
+  });
+
+// загружаем карточки с сервера v2
+api.getInitialCards()
+  .then((data) => {
+    // первоначальная загрузка карточек
+    cardsList.renderItems(data);
+    console.log(data);
+  })
+  .catch((err) => {
+    console.log('Ошибка. Запрос не выполнен: ', err);
+  });
+
+// ------------ Api ----------- //
+
+// Для каждой проверяемой формы создаем экземпляр класса
+// и вызываем метод enableValidation
+const formEditValid = new FormValidator(formConfig, formEditElement);
+  formEditValid.enableValidation();
+const formAddValid = new FormValidator(formConfig, formAddElement);
+  formAddValid.enableValidation();
+const formAvatarValid = new FormValidator(formConfig, formAvatarElement);
+  formAvatarValid.enableValidation();
+
+// Функция подготовки к скрытию ошибок валидации при открытии формы
+function checkInputBeforeFormOpening (inputList, formElement, formValid) {
+  inputList.forEach((inputElement) => {
+    formValid.hideInputError(formElement, inputElement, formConfig);
+  });
+}
+
+// Функция отображения состояния загрузки данных
+export function renderLoading(isLoading, typeOfForm, btnElement) {
+  const mainBtnName = {
+    editProfile: 'Сохранить',
+    addCard: 'Создать',
+    patchAvatar: 'Сохранить',
+  }
+  if (isLoading) {
+    // добавляем надпись "Сохранение..."
+    btnElement.textContent = 'Сохранение...';
+  } else {
+    // устанавливаем стандартное название кнопки
+    btnElement.textContent = mainBtnName[typeOfForm];
+  }
+}
+
 // создаем экземпляр класса UserInfo ---------
 const newUserInfo = new UserInfo({
   userNameSelector: '.profile__title',
@@ -110,10 +133,20 @@ const popupEdit = new PopupWithForm({
   handleFormSubmit: (formData) => {
     // добавление данных профиля на страницу
     newUserInfo.setUserInfo(formData);
-    // сохранение данных профиля на сервере
-    api.patchUserInfo(formData, saveButton);
-    // меняем название кнопки сабмита при загрузке данных на сервис
+    // меняем название кнопки сабмита перед началом загрузки
     renderLoading(true, 'editProfile', saveButton);
+    // сохранение данных профиля на сервере v2
+    api.patchUserInfo(formData)
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+    })
+    .finally(() => {
+      // меняем название кнопки сабмита при завершении загрузки
+      renderLoading(false, 'editProfile', saveButton);
+    });
   }
 });
 popupEdit.setEventListeners();
@@ -123,10 +156,22 @@ popupEdit.setEventListeners();
 const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
   handleFormSubmit: (formData) => {
-  // загрузка новой карточки
-  api.postNewCard(formData, createButton);
-  // меняем название кнопки сабмита при загрузке данных на сервис
+  // меняем название кнопки сабмита перед началом загрузки
   renderLoading(true, 'addCard', createButton);
+  // загрузка новой карточки
+  api.postNewCard(formData)
+    .then((data) => {
+      // console.log(data.owner._id);
+      // отрисовка новой карточки
+      cardsList.renderItems([data]);
+    })
+    .catch((err) => {
+      console.log('Ошибка. Запрос не выполнен: ', err);
+    })
+    .finally(() => {
+      // меняем название кнопки сабмита при завершении загрузки
+      renderLoading(false, 'addCard', createButton);
+    });
   }
 });
 popupAdd.setEventListeners();

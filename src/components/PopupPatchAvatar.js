@@ -4,7 +4,8 @@ import { Api } from './Api.js';
 import { Popup } from './Popup.js';
 import { api, renderLoading } from '../pages/index.js';
 import {
-  patchButton
+  patchButton,
+  profileAvatar,
   } from '../utils/constants.js';
 
 export class PopupPatchAvatar extends Popup {
@@ -23,7 +24,19 @@ export class PopupPatchAvatar extends Popup {
       renderLoading(true, 'patchAvatar', patchButton);
       // обновляем аватар пользователя на сервере
       const avatarUrl = document.querySelector('.popup__text_type_avatar-url').value;
-      api.patchAvatar(avatarUrl, patchButton);
+      api.patchAvatar(avatarUrl)
+        .then((data) => {
+          // обновляем аватар пользователя на странице
+          profileAvatar.src = data.avatar;
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log('Ошибка. Запрос не выполнен: ', err);
+        })
+        .finally(() => {
+          // вызываем renderLoading
+          renderLoading(false, 'patchAvatar', patchButton);
+        });
       // закрываем форму
       super.close();
     });

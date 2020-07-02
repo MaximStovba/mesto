@@ -18,7 +18,13 @@ export class PopupDeleteCard extends Popup {
       // удаляем карточку со страницы
       this._element.querySelector('.card__trash').closest('.card').remove();
       // удаляем карточку с сервера
-      api.deleteMyCard(this._cardId);
+      api.deleteMyCard(this._cardId)
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log('Ошибка. Запрос не выполнен: ', err);
+        });
       // закрываем форму
       super.close();
     });
