@@ -15,12 +15,13 @@ export class PopupDeleteCard extends Popup {
     this._popupElement.addEventListener('submit', (evt) => {
       // отменяем стандартную отправку формы
       evt.preventDefault();
-      // удаляем карточку со страницы
-      this._element.querySelector('.card__trash').closest('.card').remove();
       // удаляем карточку с сервера
       api.deleteMyCard(this._cardId)
         .then((data) => {
           console.log(data);
+          // удаляем карточку со страницы
+          // после удачного ответа сервера
+          this._element.querySelector('.card__trash').closest('.card').remove();
         })
         .catch((err) => {
           console.log('Ошибка. Запрос не выполнен: ', err);

@@ -1,4 +1,3 @@
-import { PopupPatchAvatar } from '../components/PopupPatchAvatar.js';
 import { PopupDeleteCard } from '../components/PopupDeleteCard.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
@@ -35,7 +34,7 @@ import {
 // ------ Экземпляр класса Section для загрузки карточек v4 -------- //
 export const cardsList = new Section({
   data: null,
-  renderer: (item) => {
+  renderer: (item, userId) => {
     const card = new Card({
       item: item,
       cardSelector: '#card',
@@ -45,7 +44,7 @@ export const cardsList = new Section({
         popupImage.open(cardData);
       }
     });
-    const cardElement = card.generateCard();
+    const cardElement = card.generateCard(userId);
     cardsList.setItem(cardElement);
     },
   },
@@ -53,6 +52,18 @@ export const cardsList = new Section({
 );
 // ------ Экземпляр класса Section для загрузки карточек v4 -------- //
 
+// функция добавления информации о пользователе на страницу
+function setUserInfo(userInfo) {
+  profileTitle.textContent = userInfo.name;
+  profileSubtitle.textContent = userInfo.about;
+  profileAvatar.src = userInfo.avatar;
+  profileAvatar.alt = userInfo.name;
+}
+
+// функция первоначальной загрузки карточек
+function addCards(cards, userId) {
+  cardsList.renderItems(cards, userId);
+}
 
 // ------------ Api ----------- //
 export const api = new Api({
@@ -60,25 +71,12 @@ export const api = new Api({
   headers: '71b905c5-e266-4c23-af42-a4b6735dea36',
 });
 
-// загружаем данные пользователя с сервера v2
-api.getUserInfo()
-  .then((data) => {
-    // добавляем информации о пользователе на страницу
-    profileTitle.textContent = data.name;
-    profileSubtitle.textContent = data.about;
-    profileAvatar.src = data.avatar;
-    profileAvatar.alt = data.name;
-  })
-  .catch((err) => {
-    console.log('Ошибка. Запрос не выполнен: ', err);
-  });
-
-// загружаем карточки с сервера v2
-api.getInitialCards()
-  .then((data) => {
-    // первоначальная загрузка карточек
-    cardsList.renderItems(data);
-    console.log(data);
+// загружаем данные пользователя с сервера
+// загружаем карточки с сервера
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userInfo, cards]) => {
+    setUserInfo(userInfo);
+    addCards(cards, userInfo._id);
   })
   .catch((err) => {
     console.log('Ошибка. Запрос не выполнен: ', err);
@@ -125,21 +123,21 @@ const newUserInfo = new UserInfo({
 });
 // создаем экземпляр класса UserInfo ---------
 
-// ---------   экземпляр класса PopupWithForm ------------
+// ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 const popupEdit = new PopupWithForm({
   formSelector: '.popup_type_edit',
   // объект, который мы передадим при вызове handleFormSubmit
   // окажется на месте параметра formData
   handleFormSubmit: (formData, closeForm) => {
-    // добавление данных профиля на страницу
-    newUserInfo.setUserInfo(formData);
     // меняем название кнопки сабмита перед началом загрузки
     renderLoading(true, 'editProfile', saveButton);
     // сохранение данных профиля на сервере v2
     api.patchUserInfo(formData)
       .then((data) => {
-        console.log(data);
-        // закрываем попап после успешного ответа сервера
+        // добавление данных профиля на страницу
+        // после успешного ответа сервера
+        newUserInfo.setUserInfo(data);
+        // закрываем попап
         closeForm;
       })
       .catch((err) => {
@@ -152,9 +150,9 @@ const popupEdit = new PopupWithForm({
   }
 });
 popupEdit.setEventListeners();
-// ---------   экземпляр класса PopupWithForm ------------
+// ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 
-// ---------   экземпляр класса PopupWithForm ------------
+// ---------   экземпляр класса PopupWithForm (Add Card) ------------
 const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
   handleFormSubmit: (formData, closeForm) => {
@@ -163,9 +161,8 @@ const popupAdd = new PopupWithForm({
     // загрузка новой карточки
     api.postNewCard(formData)
       .then((data) => {
-        // console.log(data.owner._id);
         // отрисовка новой карточки
-        cardsList.renderItems([data]);
+        cardsList.renderItems([data], data.owner._id);
         // закрываем попап после успешного ответа сервера
         closeForm;
       })
@@ -179,7 +176,36 @@ const popupAdd = new PopupWithForm({
   }
 });
 popupAdd.setEventListeners();
-// ---------   экземпляр класса PopupWithForm ------------
+// ---------   экземпляр класса PopupWithForm (Add Card) ------------
+
+// ---------   экземпляр класса PopupWithForm (Patch Avatar) ------------
+const popupPatchAvatar = new PopupWithForm({
+  formSelector: '.popup_type_avatar',
+  handleFormSubmit: (formData, closeForm) => {
+    // меняем название кнопки сабмита при загрузке данных на сервис
+    renderLoading(true, 'patchAvatar', patchButton);
+    // обновляем аватар пользователя на сервере
+    api.patchAvatar(formData.url)
+      .then((data) => {
+        // обновляем аватар пользователя на странице
+        // после удачного ответа сервера
+        profileAvatar.src = data.avatar;
+        console.log('Успешно: ', data.avatar);
+        // закрываем попап после успешного ответа сервера
+        closeForm;
+      })
+      .catch((err) => {
+        console.log('Ошибка. Запрос не выполнен: ', err);
+      })
+      .finally(() => {
+        // вызываем renderLoading
+        renderLoading(false, 'patchAvatar', patchButton);
+      });
+  }
+});
+popupPatchAvatar.setEventListeners();
+// ---------   экземпляр класса PopupWithForm (Patch Avatar) ------------
+
 
 // ---------   экземпляр класса PopupWithImage ------------
 export const popupImage = new PopupWithImage({
@@ -194,13 +220,6 @@ export const popupImgDelete = new PopupDeleteCard({
   });
   popupImgDelete.setEventListeners();
 // ---------   экземпляр класса PopupDeleteCard (удаление картоки) ------------
-
-// ---------   экземпляр класса PopupPatchAvatar ------------
-const popupPatchAvatar = new PopupPatchAvatar({
-  formSelector: '.popup_type_avatar',
-  });
-  popupPatchAvatar.setEventListeners();
-// ---------   экземпляр класса PopupPatchAvatar ------------
 
 // Функция подготовки формы "редактирования профиля" к открытию
 function prepareEditFormToOpened() {

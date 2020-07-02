@@ -68,7 +68,7 @@ export class Card {
   }
 
   // публичный метод наполнение карточки данными
-  generateCard() {
+  generateCard(userId) {
     this._getTemplate();
     this._setEventListeners();
 
@@ -79,13 +79,13 @@ export class Card {
     this._element.querySelector('.card__num-like').textContent = this._numLikes;
 
     // отображаем кнопку удаления карточки только на своих карточках
-    if (this._ownerId != '303b85c270fdb869280964e8') {
+    if (this._ownerId != userId) {
       this._element.querySelector('.card__trash').classList.add('card__trash_hidden');
     }
 
     // отображаем свои лайки
     this._likes.forEach((like) => {
-      if (like._id == '303b85c270fdb869280964e8') {
+      if (like._id == userId) {
         this._element.querySelector('.card__like').classList.add('card__like_active');
       }
     });
@@ -93,4 +93,3 @@ export class Card {
     return this._element;
   }
 }
-

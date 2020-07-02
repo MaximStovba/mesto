@@ -6,12 +6,12 @@ export class Section {
     this._container = document.querySelector(containerSelector);
   }
 
-  renderItems(data=false) {
+  renderItems(data=false, userId) {
     if (data) {
       const revData = data.reverse();
-      revData.forEach(item => this._renderer(item));
+      revData.forEach(item => this._renderer(item, userId));
     } else {
-      this._renderedItems.forEach(item => this._renderer(item));
+      this._renderedItems.forEach(item => this._renderer(item, userId));
     }
   }
 
