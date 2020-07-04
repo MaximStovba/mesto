@@ -1,8 +1,8 @@
 // Card.js
-import { popupImgDelete, api } from '../pages/index.js';
+import { api } from '../pages/index.js';
 
 export class Card {
-	constructor({ item, cardSelector, handleCardClick }) {
+	constructor({ item, cardSelector, handleCardClick, handleTrashBtnClick }) {
     this._link = item.link;
     this._name = item.name;
     this._likes = item.likes;
@@ -11,6 +11,7 @@ export class Card {
     this._cardId = item._id;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
+    this._handleTrashBtnClick = handleTrashBtnClick;
 	}
 
   _getTemplate() {
@@ -31,7 +32,7 @@ export class Card {
     });
     // настройка удаления карточки
     this._element.querySelector('.card__trash').addEventListener('click', () => {
-      popupImgDelete.open(this._element, this._cardId);
+      this._handleTrashBtnClick(this._element, this._cardId);
     });
     // настройка открытия попапа с большым изображением
     this._element.querySelector('.card__image').addEventListener('click', () => {
@@ -43,13 +44,13 @@ export class Card {
   // приватный метод переключения лайка
   _toggleLike() {
     const cardLike = this._element.querySelector('.card__like');
-    // тогглим лайк
-    cardLike.classList.toggle('card__like_active');
     // передаем данные по лайкам на сервер
-    if (cardLike.classList.contains('card__like_active')) {
+    if (!cardLike.classList.contains('card__like_active')) {
       api.putLike(this._cardId)
         .then((data) => {
-          // console.log(data.likes.length);
+          // тогглим лайк
+          cardLike.classList.add('card__like_active');
+          // отражаем актуальное количество лайков
           this._element.querySelector('.card__num-like').textContent = data.likes.length;
         })
         .catch((err) => {
@@ -58,7 +59,9 @@ export class Card {
     } else {
       api.delLike(this._cardId)
         .then((data) => {
-          // console.log(data.likes.length);
+          // тогглим лайк
+          cardLike.classList.remove('card__like_active');
+          // отражаем актуальное количество лайков
           this._element.querySelector('.card__num-like').textContent = data.likes.length;
         })
         .catch((err) => {

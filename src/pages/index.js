@@ -31,7 +31,7 @@ import {
 } from '../utils/constants.js';
 
 
-// ------ Экземпляр класса Section для загрузки карточек v4 -------- //
+// ------ Экземпляр класса Section для загрузки карточек -------- //
 export const cardsList = new Section({
   data: null,
   renderer: (item, userId) => {
@@ -39,9 +39,10 @@ export const cardsList = new Section({
       item: item,
       cardSelector: '#card',
       handleCardClick: (cardData) => {
-        // объект, который мы передадим при вызове handleCardClick
-        // окажется на месте параметра cardData
         popupImage.open(cardData);
+      },
+      handleTrashBtnClick: (cardElement, cardId) => {
+        popupImgDelete.open(cardElement, cardId);
       }
     });
     const cardElement = card.generateCard(userId);
@@ -50,7 +51,7 @@ export const cardsList = new Section({
   },
   cardListSection
 );
-// ------ Экземпляр класса Section для загрузки карточек v4 -------- //
+// ------ Экземпляр класса Section для загрузки карточек -------- //
 
 // функция добавления информации о пользователе на страницу
 function setUserInfo(userInfo) {
