@@ -1,9 +1,10 @@
 // -------- начало класса FormValidator ------------ //
 
 export class FormValidator {
-  constructor(formConfig, formElement) {
+  constructor(formConfig, formElement, inputList) {
     this._formConfig = formConfig;
     this._formElement = formElement;
+    this._inputList = inputList;
   }
 
   // приватный метод отображения ошибок валидации
@@ -14,8 +15,15 @@ export class FormValidator {
     errorElement.classList.add(formConfig.errorClass);
   }
 
+  // публичный метод подготовки к скрытию ошибок валидации при открытии формы
+  clearErrors() {
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(this._formElement, inputElement, this._formConfig);
+    });
+  }
+
   // публичный метод скрытия ошибок валидации
-  hideInputError(formElement, inputElement, formConfig) {
+  _hideInputError(formElement, inputElement, formConfig) {
     const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
     inputElement.classList.remove(formConfig.inputErrorClass);
     errorElement.classList.remove(formConfig.errorClass);
@@ -28,7 +36,7 @@ export class FormValidator {
     if (!inputElement.validity.valid) {
       this._showInputError(formElement, inputElement, inputElement.validationMessage, formConfig);
     } else {
-      this.hideInputError(formElement ,inputElement, formConfig);
+      this._hideInputError(formElement ,inputElement, formConfig);
     }
   }
 

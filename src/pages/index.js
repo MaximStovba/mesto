@@ -54,6 +54,18 @@ export const cardsList = new Section({
 );
 // ------ Экземпляр класса Section для загрузки карточек -------- //
 
+// создаем экземпляр класса UserInfo ---------
+const newUserInfo = new UserInfo({
+  userNameSelector: '.profile__title',
+  aboutInfoSelector: '.profile__subtitle',
+  popupTextTypeName: popupTextTypeName,
+  popupTextTypeAbout: popupTextTypeAbout,
+  profileTitle: profileTitle,
+  profileSubtitle: profileSubtitle,
+  profileAvatar: profileAvatar,
+});
+// создаем экземпляр класса UserInfo ---------
+
 // функция добавления информации о пользователе на страницу
 function setUserInfo(userInfo) {
   profileTitle.textContent = userInfo.name;
@@ -77,7 +89,7 @@ export const api = new Api({
 // загружаем карточки с сервера
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userInfo, cards]) => {
-    setUserInfo(userInfo);
+    newUserInfo.setUserInfo(userInfo);
     addCards(cards, userInfo._id);
   })
   .catch((err) => {
@@ -87,20 +99,13 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
 // ------------ Api ----------- //
 
 // Для каждой проверяемой формы создаем экземпляр класса
-// и вызываем метод enableValidation
-const formEditValid = new FormValidator(formConfig, formEditElement);
+  // вызываем метод enableValidation
+const formEditValid = new FormValidator(formConfig, formEditElement, inputListEditForm);
   formEditValid.enableValidation();
-const formAddValid = new FormValidator(formConfig, formAddElement);
+const formAddValid = new FormValidator(formConfig, formAddElement, inputListAddForm);
   formAddValid.enableValidation();
-const formAvatarValid = new FormValidator(formConfig, formAvatarElement);
+const formAvatarValid = new FormValidator(formConfig, formAvatarElement, inputListAvatarForm);
   formAvatarValid.enableValidation();
-
-// Функция подготовки к скрытию ошибок валидации при открытии формы
-function checkInputBeforeFormOpening (inputList, formElement, formValid) {
-  inputList.forEach((inputElement) => {
-    formValid.hideInputError(formElement, inputElement, formConfig);
-  });
-}
 
 // Функция отображения состояния загрузки данных
 export function renderLoading(isLoading, typeOfForm, btnElement) {
@@ -117,18 +122,6 @@ export function renderLoading(isLoading, typeOfForm, btnElement) {
     btnElement.textContent = mainBtnName[typeOfForm];
   }
 }
-
-// создаем экземпляр класса UserInfo ---------
-const newUserInfo = new UserInfo({
-  userNameSelector: '.profile__title',
-  aboutInfoSelector: '.profile__subtitle',
-  popupTextTypeName: popupTextTypeName,
-  popupTextTypeAbout: popupTextTypeAbout,
-  profileTitle: profileTitle,
-  profileSubtitle: profileSubtitle,
-  profileAvatar: profileAvatar,
-});
-// создаем экземпляр класса UserInfo ---------
 
 // ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 const popupEdit = new PopupWithForm({
@@ -247,7 +240,7 @@ function prepareEditFormToOpened() {
   popupTextTypeName.value = formValues.name;
   popupTextTypeAbout.value = formValues.about;
   // проводим валидацию полей ввода формы "редактирования профиля"
-  checkInputBeforeFormOpening(inputListEditForm, formEditElement, formEditValid);
+  formEditValid.clearErrors();
   // делаем кнопку активной при открытии
   saveButton.classList.remove(formConfig.inactiveButtonClass);
   // тогглим попап v2
@@ -259,7 +252,7 @@ function prepareAddFormToOpened() {
   // сбрасываем все поля формы
   formAddElement.reset();
   // проводим валидацию полей ввода формы "создания карточки"
-  checkInputBeforeFormOpening(inputListAddForm, formAddElement, formAddValid);
+  formAddValid.clearErrors();
   // делаем кнопку неактивной при открытии
   createButton.classList.add(formConfig.inactiveButtonClass);
   createButton.disabled = true;
@@ -276,7 +269,7 @@ function preparePatchFormToOpened() {
   // сбрасываем все поля формы
   formAvatarElement.reset();
   // проводим валидацию полей ввода формы
-  checkInputBeforeFormOpening(inputListAvatarForm, formAvatarElement, formAvatarValid);
+  formAvatarValid.clearErrors();
   // делаем кнопку неактивной при открытии
   patchButton.classList.add(formConfig.inactiveButtonClass);
   patchButton.disabled = true;

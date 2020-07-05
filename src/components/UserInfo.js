@@ -30,6 +30,7 @@ export class UserInfo {
   setUserInfo(formData) {
     this._userNameElement.textContent = formData.name;
     this._aboutInfoElement.textContent = formData.about;
-    this._profileAvatar.setAttribute('alt', formData.name);
+    this._profileAvatar.src = formData.avatar;
+    this._profileAvatar.alt = formData.name;
   }
 }
