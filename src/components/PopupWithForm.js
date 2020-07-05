@@ -7,6 +7,7 @@ export class PopupWithForm extends Popup {
     super(formSelector);
     this._popupElement = document.querySelector(formSelector);
     this._handleFormSubmit = handleFormSubmit; // функция-колбэк
+    this._handleSubmitPopupWithForm = this._handleSubmitPopupWithForm.bind(this);
   }
 
   _getInputValues() {
@@ -22,23 +23,28 @@ export class PopupWithForm extends Popup {
     return this._formValues;
   }
 
-  // публичный метод добавления слушателей
-  setEventListeners() {
-    super.setEventListeners();
-    // обработчик сабмита формы
-    this._popupElement.addEventListener('submit', (evt) => {
-      // отменяем стандартную отправку формы
-      evt.preventDefault();
-      // добавим вызов функции _handleFormSubmit
-      // передадим ей объект — результат работы _getInputValues
-      this._handleFormSubmit(this._getInputValues(), super.close());
-    });
+  // приватный метод обработки сабмита формы
+  _handleSubmitPopupWithForm(evt) {
+    // отменяем стандартную отправку формы
+    evt.preventDefault();
+    // добавим вызов функции _handleFormSubmit
+    // передадим ей объект — результат работы _getInputValues
+    this._handleFormSubmit(this._getInputValues(), super.close());
+  }
+
+  // публичный метод открытия попапа
+  open() {
+    super.open();
+    // устанавливаем бработчик сабмита формы
+    this._popupElement.addEventListener('submit', this._handleSubmitPopupWithForm);
   }
 
   // публичный метод закрытия попапа
   close() {
     super.close();
     this._popupElement.querySelector('.popup__container').reset();
+    // снимаем бработчик сабмита формы
+    this._popupElement.removeEventListener('submit', this._handleSubmitPopupWithForm);
   }
 }
 

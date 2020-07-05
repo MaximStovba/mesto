@@ -11,11 +11,10 @@ export class PopupWithImage extends Popup {
 
   // публичный метод открытия попапа
   open(cardImageElement) {
+    super.open();
     // вставляем в попап картинку и атрибут src изображения
     popupBigImage.src = cardImageElement.src;
     popupBigImage.alt = cardImageElement.alt;
     popupFigcaption.textContent = cardImageElement.alt;
-    // открываем попап
-    super.open();
   }
 }

@@ -150,7 +150,7 @@ const popupEdit = new PopupWithForm({
       });
   }
 });
-popupEdit.setEventListeners();
+// popupEdit.setEventListeners();
 // ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 
 // ---------   экземпляр класса PopupWithForm (Add Card) ------------
@@ -176,7 +176,7 @@ const popupAdd = new PopupWithForm({
       });
   }
 });
-popupAdd.setEventListeners();
+// popupAdd.setEventListeners();
 // ---------   экземпляр класса PopupWithForm (Add Card) ------------
 
 // ---------   экземпляр класса PopupWithForm (Patch Avatar) ------------
@@ -204,7 +204,7 @@ const popupPatchAvatar = new PopupWithForm({
       });
   }
 });
-popupPatchAvatar.setEventListeners();
+// popupPatchAvatar.setEventListeners();
 // ---------   экземпляр класса PopupWithForm (Patch Avatar) ------------
 
 
@@ -212,14 +212,14 @@ popupPatchAvatar.setEventListeners();
 export const popupImage = new PopupWithImage({
   formSelector: '.popup_type_image',
   });
-  popupImage.setEventListeners();
+  // popupImage.setEventListeners();
 // ---------   экземпляр класса PopupWithImage ------------
 
 // ---------   экземпляр класса PopupDeleteCard (удаление картоки) ------------
 export const popupImgDelete = new PopupDeleteCard({
   formSelector: '.popup_type_del',
   });
-  popupImgDelete.setEventListeners();
+  // popupImgDelete.setEventListeners();
 // ---------   экземпляр класса PopupDeleteCard (удаление картоки) ------------
 
 // Функция подготовки формы "редактирования профиля" к открытию
