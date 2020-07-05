@@ -1,21 +1,28 @@
-import {
-  popupTextTypeName,
-  popupTextTypeAbout,
-  profileTitle,
-  profileSubtitle,
-  profileAvatar
-} from '../utils/constants.js';
+// UserInfo.js
 
 export class UserInfo {
-	constructor({ userNameSelector, aboutInfoSelector }) {
+	constructor({
+    userNameSelector,
+    aboutInfoSelector,
+    popupTextTypeName,
+    popupTextTypeAbout,
+    profileTitle,
+    profileSubtitle,
+    profileAvatar,
+  }) {
     this._userNameElement = document.querySelector(userNameSelector);
     this._aboutInfoElement = document.querySelector(aboutInfoSelector);
+    this._popupTextTypeName = popupTextTypeName;
+    this._popupTextTypeAbout = popupTextTypeAbout;
+    this._profileTitle = profileTitle;
+    this._profileSubtitle = profileSubtitle;
+    this._profileAvatar = profileAvatar;
   }
   // публичный метод, который возвращает объект с данными пользователя
   getUserInfo() {
     this._formValues = {};
-    this._formValues[popupTextTypeName.name] = profileTitle.textContent;
-    this._formValues[popupTextTypeAbout.name] = profileSubtitle.textContent;
+    this._formValues[this._popupTextTypeName.name] = this._profileTitle.textContent;
+    this._formValues[this._popupTextTypeAbout.name] = this._profileSubtitle.textContent;
 
     return this._formValues;
   }
@@ -23,6 +30,6 @@ export class UserInfo {
   setUserInfo(formData) {
     this._userNameElement.textContent = formData.name;
     this._aboutInfoElement.textContent = formData.about;
-    profileAvatar.setAttribute('alt', formData.name);
+    this._profileAvatar.setAttribute('alt', formData.name);
   }
 }

@@ -121,7 +121,12 @@ export function renderLoading(isLoading, typeOfForm, btnElement) {
 // создаем экземпляр класса UserInfo ---------
 const newUserInfo = new UserInfo({
   userNameSelector: '.profile__title',
-  aboutInfoSelector: '.profile__subtitle'
+  aboutInfoSelector: '.profile__subtitle',
+  popupTextTypeName: popupTextTypeName,
+  popupTextTypeAbout: popupTextTypeAbout,
+  profileTitle: profileTitle,
+  profileSubtitle: profileSubtitle,
+  profileAvatar: profileAvatar,
 });
 // создаем экземпляр класса UserInfo ---------
 
