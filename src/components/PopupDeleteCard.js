@@ -1,30 +1,20 @@
 // PopupDeleteCard.js
-import { Api } from './Api.js';
 import { Popup } from './Popup.js';
-import { api } from '../pages/index.js';
 
 export class PopupDeleteCard extends Popup {
-	constructor({ formSelector }) {
+	constructor({ formSelector, handleFormSubmit }) {
     super(formSelector);
     this._popupElement = document.querySelector(formSelector);
+    this._handleFormSubmit = handleFormSubmit; // функция-колбэк
     this._handleSubmitDelCard = this._handleSubmitDelCard.bind(this);
   }
 
-// приватный метод обработки сабмита формы
-_handleSubmitDelCard(evt) {
-  // отменяем стандартную отправку формы
-  evt.preventDefault();
-  // удаляем карточку с сервера
-  api.deleteMyCard(this._cardId)
-    .then((data) => {
-      console.log(data);
-      // удаляем карточку со страницы
-      // после удачного ответа сервера
-      this._element.querySelector('.card__trash').closest('.card').remove();
-    })
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен: ', err);
-    });
+  // приватный метод обработки сабмита формы
+  _handleSubmitDelCard(evt) {
+    // отменяем стандартную отправку формы
+    evt.preventDefault();
+    // удаляем карточку с сервера
+    this._handleFormSubmit(this._cardId, this._element);
     // закрываем форму
     super.close();
   }

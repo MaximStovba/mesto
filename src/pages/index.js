@@ -28,8 +28,9 @@ import {
   inputListAddForm,
   inputListAvatarForm,
   formConfig,
+  popupBigImage,
+  popupFigcaption,
 } from '../utils/constants.js';
-
 
 // ------ Экземпляр класса Section для загрузки карточек -------- //
 export const cardsList = new Section({
@@ -204,22 +205,34 @@ const popupPatchAvatar = new PopupWithForm({
       });
   }
 });
-// popupPatchAvatar.setEventListeners();
 // ---------   экземпляр класса PopupWithForm (Patch Avatar) ------------
 
 
 // ---------   экземпляр класса PopupWithImage ------------
 export const popupImage = new PopupWithImage({
   formSelector: '.popup_type_image',
+  popupBigImage: popupBigImage,
+  popupFigcaption: popupFigcaption,
   });
-  // popupImage.setEventListeners();
 // ---------   экземпляр класса PopupWithImage ------------
 
 // ---------   экземпляр класса PopupDeleteCard (удаление картоки) ------------
 export const popupImgDelete = new PopupDeleteCard({
   formSelector: '.popup_type_del',
+  handleFormSubmit: (cardId, cardElement) => {
+    // удаляем карточку с сервера
+    api.deleteMyCard(cardId)
+      .then((data) => {
+        console.log(data);
+        // удаляем карточку со страницы
+        // после удачного ответа сервера
+        cardElement.querySelector('.card__trash').closest('.card').remove();
+      })
+      .catch((err) => {
+        console.log('Ошибка. Запрос не выполнен: ', err);
+      });
+    }
   });
-  // popupImgDelete.setEventListeners();
 // ---------   экземпляр класса PopupDeleteCard (удаление картоки) ------------
 
 // Функция подготовки формы "редактирования профиля" к открытию

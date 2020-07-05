@@ -1,11 +1,11 @@
 // PopupWithImage.js
-
 import { Popup } from './Popup.js';
-import { popupBigImage, popupFigcaption } from '../utils/constants.js';
 
 export class PopupWithImage extends Popup {
-	constructor({ formSelector }) {
+	constructor({ formSelector, popupBigImage, popupFigcaption }) {
     super(formSelector);
+    this._popupBigImage = popupBigImage;
+    this._popupFigcaption = popupFigcaption;
     this._popupElement = document.querySelector(formSelector);
   }
 
@@ -13,8 +13,8 @@ export class PopupWithImage extends Popup {
   open(cardImageElement) {
     super.open();
     // вставляем в попап картинку и атрибут src изображения
-    popupBigImage.src = cardImageElement.src;
-    popupBigImage.alt = cardImageElement.alt;
-    popupFigcaption.textContent = cardImageElement.alt;
+    this._popupBigImage.src = cardImageElement.src;
+    this._popupBigImage.alt = cardImageElement.alt;
+    this._popupFigcaption.textContent = cardImageElement.alt;
   }
 }
