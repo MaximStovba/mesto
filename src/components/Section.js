@@ -14,12 +14,12 @@ export class Section {
 
   setItem(element) {
     this._container.prepend(element);
-    console.log('prepend');
+    // console.log('prepend');
   }
 
   addItem(element) {
     this._container.append(element);
-    console.log('append');
+    // console.log('append');
   }
 
 }
