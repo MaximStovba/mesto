@@ -100,12 +100,29 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
 
 // Для каждой проверяемой формы создаем экземпляр класса
   // вызываем метод enableValidation
-const formEditValid = new FormValidator(formConfig, formEditElement, inputListEditForm);
-  formEditValid.enableValidation();
-const formAddValid = new FormValidator(formConfig, formAddElement, inputListAddForm);
-  formAddValid.enableValidation();
-const formAvatarValid = new FormValidator(formConfig, formAvatarElement, inputListAvatarForm);
-  formAvatarValid.enableValidation();
+const formEditValid = new FormValidator(
+  formConfig,
+  formEditElement,
+  inputListEditForm,
+  saveButton
+);
+formEditValid.enableValidation();
+
+const formAddValid = new FormValidator(
+  formConfig,
+  formAddElement,
+  inputListAddForm,
+  createButton
+);
+formAddValid.enableValidation();
+
+const formAvatarValid = new FormValidator(
+  formConfig,
+  formAvatarElement,
+  inputListAvatarForm,
+  patchButton
+);
+formAvatarValid.enableValidation();
 
 // ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 const popupEdit = new PopupWithForm({
@@ -175,8 +192,8 @@ const popupPatchAvatar = new PopupWithForm({
     api.patchAvatar(formData.url)
       .then((data) => {
         // обновляем аватар пользователя на странице
-        // после удачного ответа сервера
-        profileAvatar.src = data.avatar;
+        // после удачного ответа сервера (newUserInfo)
+        newUserInfo.setNewAvatar(data.avatar);
         console.log('Успешно: ', data.avatar);
         // закрываем попап после успешного ответа сервера
         popupPatchAvatar.close();
@@ -230,8 +247,8 @@ function prepareEditFormToOpened() {
   // проводим валидацию полей ввода формы "редактирования профиля"
   formEditValid.clearErrors();
   // делаем кнопку активной при открытии
-  saveButton.classList.remove(formConfig.inactiveButtonClass);
-  // тогглим попап v2
+  formEditValid.submitButtonState();
+  // тогглим попап
   popupEdit.open();
 }
 
@@ -242,9 +259,8 @@ function prepareAddFormToOpened() {
   // проводим валидацию полей ввода формы "создания карточки"
   formAddValid.clearErrors();
   // делаем кнопку неактивной при открытии
-  createButton.classList.add(formConfig.inactiveButtonClass);
-  createButton.disabled = true;
-  // тогглим попап v2
+  formAddValid.submitButtonState();
+  // тогглим попап
   popupAdd.open();
   // убираем подчеркивание полей ввода красным при открытии
   inputListAddForm.forEach((inputElement) => {
@@ -259,8 +275,7 @@ function preparePatchFormToOpened() {
   // проводим валидацию полей ввода формы
   formAvatarValid.clearErrors();
   // делаем кнопку неактивной при открытии
-  patchButton.classList.add(formConfig.inactiveButtonClass);
-  patchButton.disabled = true;
+  formAvatarValid.submitButtonState();
   // тогглим попап
   popupPatchAvatar.open();
 }

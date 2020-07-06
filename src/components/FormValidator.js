@@ -1,10 +1,11 @@
 // -------- начало класса FormValidator ------------ //
 
 export class FormValidator {
-  constructor(formConfig, formElement, inputList) {
+  constructor(formConfig, formElement, inputList, submitButton) {
     this._formConfig = formConfig;
     this._formElement = formElement;
     this._inputList = inputList;
+    this._submitButton = submitButton; // кнопка сабмита
   }
 
   // приватный метод отображения ошибок валидации
@@ -20,6 +21,11 @@ export class FormValidator {
     this._inputList.forEach((inputElement) => {
       this._hideInputError(this._formElement, inputElement, this._formConfig);
     });
+  }
+
+  // публичный метод установки состояния кнопки сабмита при открытии формы
+  submitButtonState() {
+    this._toggleButtonState(this._inputList, this._submitButton, this._formConfig);
   }
 
   // публичный метод скрытия ошибок валидации

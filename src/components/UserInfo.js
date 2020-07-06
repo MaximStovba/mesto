@@ -33,4 +33,9 @@ export class UserInfo {
     this._profileAvatar.src = formData.avatar;
     this._profileAvatar.alt = formData.name;
   }
+
+  // публичный метод обновления аватар пользователя на странице
+  setNewAvatar(dataAvata) {
+    this._profileAvatar.src = dataAvata;
+  }
 }
