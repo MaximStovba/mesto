@@ -107,30 +107,15 @@ const formAddValid = new FormValidator(formConfig, formAddElement, inputListAddF
 const formAvatarValid = new FormValidator(formConfig, formAvatarElement, inputListAvatarForm);
   formAvatarValid.enableValidation();
 
-// Функция отображения состояния загрузки данных
-export function renderLoading(isLoading, typeOfForm, btnElement) {
-  const mainBtnName = {
-    editProfile: 'Сохранить',
-    addCard: 'Создать',
-    patchAvatar: 'Сохранить',
-  }
-  if (isLoading) {
-    // добавляем надпись "Сохранение..."
-    btnElement.textContent = 'Сохранение...';
-  } else {
-    // устанавливаем стандартное название кнопки
-    btnElement.textContent = mainBtnName[typeOfForm];
-  }
-}
-
 // ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 const popupEdit = new PopupWithForm({
   formSelector: '.popup_type_edit',
   // объект, который мы передадим при вызове handleFormSubmit
   // окажется на месте параметра formData
-  handleFormSubmit: (formData, closeForm) => {
+  handleFormSubmit: (formData) => {
     // меняем название кнопки сабмита перед началом загрузки
-    renderLoading(true, 'editProfile', saveButton);
+    // добавляем надпись "Сохранение..."
+    popupEdit.setBtnStartLoading();
     // сохранение данных профиля на сервере v2
     api.patchUserInfo(formData)
       .then((data) => {
@@ -138,52 +123,54 @@ const popupEdit = new PopupWithForm({
         // после успешного ответа сервера
         newUserInfo.setUserInfo(data);
         // закрываем попап
-        closeForm;
+        popupEdit.close();
       })
       .catch((err) => {
         console.log('Ошибка. Запрос не выполнен: ', err);
       })
       .finally(() => {
         // меняем название кнопки сабмита при завершении загрузки
-        renderLoading(false, 'editProfile', saveButton);
+        popupEdit.setBtnEndLoading();
       });
-  }
+  },
+  submitButton: saveButton
 });
-// popupEdit.setEventListeners();
 // ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 
 // ---------   экземпляр класса PopupWithForm (Add Card) ------------
 const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
-  handleFormSubmit: (formData, closeForm) => {
+  handleFormSubmit: (formData) => {
     // меняем название кнопки сабмита перед началом загрузки
-    renderLoading(true, 'addCard', createButton);
+    // добавляем надпись "Сохранение..."
+    popupAdd.setBtnStartLoading();
     // загрузка новой карточки
     api.postNewCard(formData)
       .then((data) => {
         // отрисовка новой карточки
         cardsList.renderItems([data], data.owner._id);
         // закрываем попап после успешного ответа сервера
-        closeForm;
+        popupAdd.close();
       })
       .catch((err) => {
         console.log('Ошибка. Запрос не выполнен: ', err);
       })
       .finally(() => {
         // меняем название кнопки сабмита при завершении загрузки
-        renderLoading(false, 'addCard', createButton);
+        popupAdd.setBtnEndLoading();
       });
-  }
+  },
+  submitButton: createButton
 });
-// popupAdd.setEventListeners();
 // ---------   экземпляр класса PopupWithForm (Add Card) ------------
 
 // ---------   экземпляр класса PopupWithForm (Patch Avatar) ------------
 const popupPatchAvatar = new PopupWithForm({
   formSelector: '.popup_type_avatar',
-  handleFormSubmit: (formData, closeForm) => {
-    // меняем название кнопки сабмита при загрузке данных на сервис
-    renderLoading(true, 'patchAvatar', patchButton);
+  handleFormSubmit: (formData) => {
+    // меняем название кнопки сабмита перед началом загрузки
+    // добавляем надпись "Сохранение..."
+    popupPatchAvatar.setBtnStartLoading();
     // обновляем аватар пользователя на сервере
     api.patchAvatar(formData.url)
       .then((data) => {
@@ -192,16 +179,17 @@ const popupPatchAvatar = new PopupWithForm({
         profileAvatar.src = data.avatar;
         console.log('Успешно: ', data.avatar);
         // закрываем попап после успешного ответа сервера
-        closeForm;
+        popupPatchAvatar.close();
       })
       .catch((err) => {
         console.log('Ошибка. Запрос не выполнен: ', err);
       })
       .finally(() => {
-        // вызываем renderLoading
-        renderLoading(false, 'patchAvatar', patchButton);
+        // меняем название кнопки сабмита при завершении загрузки
+        popupPatchAvatar.setBtnEndLoading();
       });
-  }
+  },
+  submitButton: patchButton
 });
 // ---------   экземпляр класса PopupWithForm (Patch Avatar) ------------
 

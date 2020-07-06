@@ -3,10 +3,12 @@
 import { Popup } from './Popup.js';
 
 export class PopupWithForm extends Popup {
-	constructor({ formSelector, handleFormSubmit }) {
+	constructor({ formSelector, handleFormSubmit, submitButton}) {
     super(formSelector);
     this._popupElement = document.querySelector(formSelector);
     this._handleFormSubmit = handleFormSubmit; // функция-колбэк
+    this._submitButton = submitButton; // кнопка сабмита
+    this._submitButtonText = this._submitButton.textContent; // сохраняем начальное значение кнопки
     this._handleSubmitPopupWithForm = this._handleSubmitPopupWithForm.bind(this);
   }
 
@@ -29,7 +31,18 @@ export class PopupWithForm extends Popup {
     evt.preventDefault();
     // добавим вызов функции _handleFormSubmit
     // передадим ей объект — результат работы _getInputValues
-    this._handleFormSubmit(this._getInputValues(), super.close());
+    this._handleFormSubmit(
+      this._getInputValues()
+    );
+  }
+
+  // публичный метод добавления надписи "Сохранение..." кнопки сабмита
+  setBtnStartLoading() {
+    this._submitButton.textContent = 'Сохранение...';
+  }
+  // публичный метод возврата стандартной надписи кнопки сабмита
+  setBtnEndLoading() {
+    this._submitButton.textContent = this._submitButtonText;
   }
 
   // публичный метод открытия попапа
