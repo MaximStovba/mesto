@@ -32,28 +32,6 @@ import {
   popupFigcaption,
 } from '../utils/constants.js';
 
-// ------ Экземпляр класса Section для загрузки карточек -------- //
-export const cardsList = new Section({
-  data: null,
-  renderer: (item, userId) => {
-    const card = new Card({
-      item: item,
-      cardSelector: '#card',
-      handleCardClick: (cardData) => {
-        popupImage.open(cardData);
-      },
-      handleTrashBtnClick: (cardElement, cardId) => {
-        popupImgDelete.open(cardElement, cardId);
-      }
-    });
-    const cardElement = card.generateCard(userId);
-    cardsList.setItem(cardElement);
-    },
-  },
-  cardListSection
-);
-// ------ Экземпляр класса Section для загрузки карточек -------- //
-
 // создаем экземпляр класса UserInfo ---------
 const newUserInfo = new UserInfo({
   userNameSelector: '.profile__title',
@@ -66,17 +44,33 @@ const newUserInfo = new UserInfo({
 });
 // создаем экземпляр класса UserInfo ---------
 
-// функция добавления информации о пользователе на страницу
-function setUserInfo(userInfo) {
-  profileTitle.textContent = userInfo.name;
-  profileSubtitle.textContent = userInfo.about;
-  profileAvatar.src = userInfo.avatar;
-  profileAvatar.alt = userInfo.name;
-}
-
-// функция первоначальной загрузки карточек
+// функция публикации карточек на странице
 function addCards(cards, userId) {
-  cardsList.renderItems(cards, userId);
+  const cardsList = new Section({
+    data: cards,
+    renderer: (item, userId) => {
+      const card = new Card({
+        item: item,
+        cardSelector: '#card',
+        handleCardClick: (cardData) => {
+          popupImage.open(cardData);
+        },
+        handleTrashBtnClick: (cardElement, cardId) => {
+          popupImgDelete.open(cardElement, cardId);
+        }
+      });
+      const cardElement = card.generateCard(userId);
+      if (cards.length != 1) {
+        cardsList.addItem(cardElement);
+      } else {
+        cardsList.setItem(cardElement);
+      }
+    },
+    userId: userId,
+    },
+    cardListSection
+  );
+cardsList.renderItems();
 }
 
 // ------------ Api ----------- //
@@ -154,6 +148,7 @@ const popupEdit = new PopupWithForm({
 });
 // ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 
+
 // ---------   экземпляр класса PopupWithForm (Add Card) ------------
 const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
@@ -165,7 +160,7 @@ const popupAdd = new PopupWithForm({
     api.postNewCard(formData)
       .then((data) => {
         // отрисовка новой карточки
-        cardsList.renderItems([data], data.owner._id);
+        addCards([data], data.owner._id);
         // закрываем попап после успешного ответа сервера
         popupAdd.close();
       })
