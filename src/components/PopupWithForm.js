@@ -55,7 +55,6 @@ export class PopupWithForm extends Popup {
   // публичный метод закрытия попапа
   close() {
     super.close();
-    this._popupElement.querySelector('.popup__container').reset();
     // снимаем бработчик сабмита формы
     this._popupElement.removeEventListener('submit', this._handleSubmitPopupWithForm);
   }

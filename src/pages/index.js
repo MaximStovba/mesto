@@ -254,7 +254,7 @@ function prepareEditFormToOpened() {
 
 // Функция подготовки формы "создания карточки" к открытию
 function prepareAddFormToOpened() {
-  // сбрасываем все поля формы
+  // сбрасываем все поля формы перед открытием
   formAddElement.reset();
   // проводим валидацию полей ввода формы "создания карточки"
   formAddValid.clearErrors();
