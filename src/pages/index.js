@@ -44,53 +44,54 @@ const newUserInfo = new UserInfo({
 });
 // создаем экземпляр класса UserInfo ---------
 
-// функция публикации карточек на странице
-function addCards(cards, userId) {
-  const cardsList = new Section({
-    data: cards,
-    renderer: (item, userId) => {
-      const card = new Card({
-        item: item,
-        cardSelector: '#card',
-        handleCardClick: (cardData) => {
-          popupImage.open(cardData);
-        },
-        handleTrashBtnClick: (cardElement, cardId) => {
-          popupImgDelete.open(cardElement, cardId);
-        }
-      });
-      const cardElement = card.generateCard(userId);
-      if (cards.length != 1) {
-        cardsList.addItem(cardElement);
-      } else {
-        cardsList.setItem(cardElement);
-      }
-    },
-    userId: userId,
-    },
-    cardListSection
-  );
-cardsList.renderItems();
-}
-
 // ------------ Api ----------- //
 export const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-12',
   headers: '71b905c5-e266-4c23-af42-a4b6735dea36',
 });
 
+// --- экземпляр класса Card --- //
+const card = new Card({
+  //  item: item,
+    cardSelector: '#card',
+    handleCardClick: (cardData) => {
+      popupImage.open(cardData);
+    },
+    handleTrashBtnClick: (cardElement, cardId) => {
+      popupImgDelete.open(cardElement, cardId);
+    }
+  });
+// --- экземпляр класса Card --- //
+
+// функция генерации карточки
+function addCards(item, userId) {
+  const cardElement = card.generateCard(item, userId);
+  return cardElement;
+}
+
+// ---------- экземпляр класса Section --------- //
+const cardsList = new Section({
+  renderer: (item, userId) => {
+    const newCard = addCards(item, userId);
+    cardsList.setItems(newCard);
+    },
+  },
+  cardListSection
+);
+// ---------- экземпляр класса Section --------- //
+
+
 // загружаем данные пользователя с сервера
 // загружаем карточки с сервера
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userInfo, cards]) => {
     newUserInfo.setUserInfo(userInfo);
-    addCards(cards, userInfo._id);
+    cardsList.renderItems(cards, userInfo._id);
   })
   .catch((err) => {
     console.log('Ошибка. Запрос не выполнен: ', err);
   });
 
-// ------------ Api ----------- //
 
 // Для каждой проверяемой формы создаем экземпляр класса
   // вызываем метод enableValidation
@@ -148,7 +149,6 @@ const popupEdit = new PopupWithForm({
 });
 // ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 
-
 // ---------   экземпляр класса PopupWithForm (Add Card) ------------
 const popupAdd = new PopupWithForm({
   formSelector: '.popup_type_add',
@@ -160,7 +160,8 @@ const popupAdd = new PopupWithForm({
     api.postNewCard(formData)
       .then((data) => {
         // отрисовка новой карточки
-        addCards([data], data.owner._id);
+        const newCard = addCards(data, data.owner._id);
+        cardsList.setNewItem(newCard);
         // закрываем попап после успешного ответа сервера
         popupAdd.close();
       })

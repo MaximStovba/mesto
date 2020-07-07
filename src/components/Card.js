@@ -2,13 +2,8 @@
 import { api } from '../pages/index.js';
 
 export class Card {
-	constructor({ item, cardSelector, handleCardClick, handleTrashBtnClick }) {
-    this._link = item.link;
-    this._name = item.name;
-    this._likes = item.likes;
-    this._numLikes = item.likes.length;
-    this._ownerId = item.owner._id;
-    this._cardId = item._id;
+	constructor({ cardSelector, handleCardClick, handleTrashBtnClick }) {
+
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
     this._handleTrashBtnClick = handleTrashBtnClick;
@@ -71,7 +66,13 @@ export class Card {
   }
 
   // публичный метод наполнение карточки данными
-  generateCard(userId) {
+  generateCard(item, userId) {
+    this._link = item.link;
+    this._name = item.name;
+    this._likes = item.likes;
+    this._numLikes = item.likes.length;
+    this._ownerId = item.owner._id;
+    this._cardId = item._id;
     this._getTemplate();
     this._setEventListeners();
 
