@@ -1,12 +1,11 @@
 // Card.js
-import { api } from '../pages/index.js';
-
 export class Card {
-	constructor({ cardSelector, handleCardClick, handleTrashBtnClick }) {
+	constructor({ cardSelector, handleCardClick, handleTrashBtnClick, handleLikeClick }) {
 
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
     this._handleTrashBtnClick = handleTrashBtnClick;
+    this._handleLikeClick = handleLikeClick;
 	}
 
   _getTemplate() {
@@ -20,14 +19,14 @@ export class Card {
   }
 
   // установка слушателей
-	_setEventListeners(cardId) {
+	_setEventListeners() {
     // настройка переключения лайка
 		this._element.querySelector('.card__like').addEventListener('click', () => {
-			this._toggleLike(cardId);
+      this._handleLikeClick(this);
     });
     // настройка удаления карточки
     this._element.querySelector('.card__trash').addEventListener('click', () => {
-      this._handleTrashBtnClick(this._element, cardId);
+      this._handleTrashBtnClick(this);
     });
     // настройка открытия попапа с большым изображением
     this._element.querySelector('.card__image').addEventListener('click', () => {
@@ -36,35 +35,6 @@ export class Card {
     });
 	}
 
-  // приватный метод переключения лайка
-  _toggleLike(cardId) {
-    const cardLike = this._element.querySelector('.card__like');
-    // передаем данные по лайкам на сервер
-    if (!cardLike.classList.contains('card__like_active')) {
-      api.putLike(cardId)
-        .then((data) => {
-          // тогглим лайк
-          cardLike.classList.add('card__like_active');
-          // отражаем актуальное количество лайков
-          this._element.querySelector('.card__num-like').textContent = data.likes.length;
-        })
-        .catch((err) => {
-          console.log('Ошибка. Запрос не выполнен: ', err);
-        });
-    } else {
-      api.delLike(cardId)
-        .then((data) => {
-          // тогглим лайк
-          cardLike.classList.remove('card__like_active');
-          // отражаем актуальное количество лайков
-          this._element.querySelector('.card__num-like').textContent = data.likes.length;
-        })
-        .catch((err) => {
-          console.log('Ошибка. Запрос не выполнен: ', err);
-        });
-    }
-  }
-
   // публичный метод наполнение карточки данными
   generateCard(item, userId) {
     const link = item.link;
@@ -72,10 +42,11 @@ export class Card {
     const likes = item.likes;
     const numLikes = item.likes.length;
     const ownerId = item.owner._id;
-    const cardId = item._id;
+    this._cardId = item._id;
+    this._numLikes = item.likes.length;
 
     this._getTemplate();
-    this._setEventListeners(cardId);
+    this._setEventListeners();
 
     const cardImageElement = this._element.querySelector('.card__image');
     cardImageElement.src = link;
@@ -94,7 +65,32 @@ export class Card {
         this._element.querySelector('.card__like').classList.add('card__like_active');
       }
     });
-
     return this._element;
   }
+
+  // публичный метод isLiked
+  isLiked() {
+    if (this._element.querySelector('.card__like').classList.contains('card__like_active')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // публичный метод getId
+  getId() {
+    return this._cardId;
+  }
+
+  // публичный метод cardDelete
+  delete() {
+    this._element.querySelector('.card__trash').closest('.card').remove();
+  }
+
+  // публичный метод updateLikes
+  updateLikes(count) {
+    this._element.querySelector('.card__like').classList.toggle('card__like_active');
+    this._element.querySelector('.card__num-like').textContent = count;
+  }
+
 }

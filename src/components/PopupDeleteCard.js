@@ -14,16 +14,15 @@ export class PopupDeleteCard extends Popup {
     // отменяем стандартную отправку формы
     evt.preventDefault();
     // удаляем карточку с сервера
-    this._handleFormSubmit(this._cardId, this._element);
+    this._handleFormSubmit(this._card);
     // закрываем форму
     super.close();
   }
 
   // публичный метод открытия попапа
-  open(delElement, cardId) {
+  open(card) {
     super.open();
-    this._element = delElement;
-    this._cardId = cardId;
+    this._card = card;
     // устанавливаем слушатель
     this._popupElement.addEventListener('submit', this._handleSubmitDelCard);
   }

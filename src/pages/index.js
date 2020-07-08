@@ -50,6 +50,28 @@ export const api = new Api({
   headers: '71b905c5-e266-4c23-af42-a4b6735dea36',
 });
 
+// ---
+function manageLikes(card) {
+const id = card.getId();
+  if (card.isLiked()) {
+    api.delLike(id)
+      .then((data) => {
+        card.updateLikes(data.likes.length);
+      })
+      .catch((err) => {
+        console.log('Ошибка. Запрос не выполнен: ', err);
+      });
+  } else {
+    api.putLike(id)
+      .then((data) => {
+        card.updateLikes(data.likes.length);
+      })
+      .catch((err) => {
+        console.log('Ошибка. Запрос не выполнен: ', err);
+      });
+  }
+}
+// ---
 
 // функция генерации карточки
 function addCards(item, userId) {
@@ -59,8 +81,11 @@ function addCards(item, userId) {
     handleCardClick: (cardData) => {
       popupImage.open(cardData);
     },
-    handleTrashBtnClick: (cardElement, cardId) => {
-      popupImgDelete.open(cardElement, cardId);
+    handleTrashBtnClick: (card) => {
+      popupImgDelete.open(card);
+    },
+    handleLikeClick: (card) => {
+      manageLikes(card);
     }
   });
   // --- экземпляр класса Card --- //
@@ -217,14 +242,15 @@ export const popupImage = new PopupWithImage({
 // ---------   экземпляр класса PopupDeleteCard (удаление картоки) ------------
 export const popupImgDelete = new PopupDeleteCard({
   formSelector: '.popup_type_del',
-  handleFormSubmit: (cardId, cardElement) => {
+  handleFormSubmit: (card) => {
+    const id = card.getId();
     // удаляем карточку с сервера
-    api.deleteMyCard(cardId)
+    api.deleteMyCard(id)
       .then((data) => {
         console.log(data);
         // удаляем карточку со страницы
         // после удачного ответа сервера
-        cardElement.querySelector('.card__trash').closest('.card').remove();
+        card.delete();
       })
       .catch((err) => {
         console.log('Ошибка. Запрос не выполнен: ', err);
