@@ -3,8 +3,7 @@ import { Popup } from './Popup.js';
 
 export class PopupDeleteCard extends Popup {
 	constructor({ formSelector, handleFormSubmit }) {
-    super(formSelector);
-    this._popupElement = document.querySelector(formSelector);
+    super({ formSelector });
     this._handleFormSubmit = handleFormSubmit; // функция-колбэк
     this._handleSubmitDelCard = this._handleSubmitDelCard.bind(this);
   }

@@ -4,8 +4,7 @@ import { Popup } from './Popup.js';
 
 export class PopupWithForm extends Popup {
 	constructor({ formSelector, handleFormSubmit, submitButton }) {
-    super(formSelector);
-    this._popupElement = document.querySelector(formSelector);
+    super({ formSelector });
     this._handleFormSubmit = handleFormSubmit; // функция-колбэк
     this._submitButton = submitButton; // кнопка сабмита
     this._submitButtonText = this._submitButton.textContent; // сохраняем начальное значение кнопки
@@ -16,13 +15,13 @@ export class PopupWithForm extends Popup {
     // достаём все элементы полей
     this._inputList = this._popupElement.querySelectorAll('.popup__text');
     // создаём пустой объект
-    this._formValues = {};
+    const formValues = {};
     // добавляем в этот объет значения всех полей
     this._inputList.forEach(input => {
-      this._formValues[input.name] = input.value;
+      formValues[input.name] = input.value;
     });
     // возвращаем объект значений
-    return this._formValues;
+    return formValues;
   }
 
   // приватный метод обработки сабмита формы
