@@ -50,9 +50,11 @@ export const api = new Api({
   headers: '71b905c5-e266-4c23-af42-a4b6735dea36',
 });
 
-// --- экземпляр класса Card --- //
-const card = new Card({
-  //  item: item,
+
+// функция генерации карточки
+function addCards(item, userId) {
+  // --- экземпляр класса Card --- //
+  const card = new Card({
     cardSelector: '#card',
     handleCardClick: (cardData) => {
       popupImage.open(cardData);
@@ -61,10 +63,7 @@ const card = new Card({
       popupImgDelete.open(cardElement, cardId);
     }
   });
-// --- экземпляр класса Card --- //
-
-// функция генерации карточки
-function addCards(item, userId) {
+  // --- экземпляр класса Card --- //
   const cardElement = card.generateCard(item, userId);
   return cardElement;
 }

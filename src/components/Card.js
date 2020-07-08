@@ -20,14 +20,14 @@ export class Card {
   }
 
   // установка слушателей
-	_setEventListeners() {
+	_setEventListeners(cardId) {
     // настройка переключения лайка
 		this._element.querySelector('.card__like').addEventListener('click', () => {
-			this._toggleLike();
+			this._toggleLike(cardId);
     });
     // настройка удаления карточки
     this._element.querySelector('.card__trash').addEventListener('click', () => {
-      this._handleTrashBtnClick(this._element, this._cardId);
+      this._handleTrashBtnClick(this._element, cardId);
     });
     // настройка открытия попапа с большым изображением
     this._element.querySelector('.card__image').addEventListener('click', () => {
@@ -37,11 +37,11 @@ export class Card {
 	}
 
   // приватный метод переключения лайка
-  _toggleLike() {
+  _toggleLike(cardId) {
     const cardLike = this._element.querySelector('.card__like');
     // передаем данные по лайкам на сервер
     if (!cardLike.classList.contains('card__like_active')) {
-      api.putLike(this._cardId)
+      api.putLike(cardId)
         .then((data) => {
           // тогглим лайк
           cardLike.classList.add('card__like_active');
@@ -52,7 +52,7 @@ export class Card {
           console.log('Ошибка. Запрос не выполнен: ', err);
         });
     } else {
-      api.delLike(this._cardId)
+      api.delLike(cardId)
         .then((data) => {
           // тогглим лайк
           cardLike.classList.remove('card__like_active');
@@ -67,28 +67,29 @@ export class Card {
 
   // публичный метод наполнение карточки данными
   generateCard(item, userId) {
-    this._link = item.link;
-    this._name = item.name;
-    this._likes = item.likes;
-    this._numLikes = item.likes.length;
-    this._ownerId = item.owner._id;
-    this._cardId = item._id;
+    const link = item.link;
+    const name = item.name;
+    const likes = item.likes;
+    const numLikes = item.likes.length;
+    const ownerId = item.owner._id;
+    const cardId = item._id;
+
     this._getTemplate();
-    this._setEventListeners();
+    this._setEventListeners(cardId);
 
     const cardImageElement = this._element.querySelector('.card__image');
-    cardImageElement.src = this._link;
-    cardImageElement.alt = this._name;
-    this._element.querySelector('.card__title').textContent = this._name;
-    this._element.querySelector('.card__num-like').textContent = this._numLikes;
+    cardImageElement.src = link;
+    cardImageElement.alt = name;
+    this._element.querySelector('.card__title').textContent = name;
+    this._element.querySelector('.card__num-like').textContent = numLikes;
 
     // отображаем кнопку удаления карточки только на своих карточках
-    if (this._ownerId != userId) {
+    if (ownerId != userId) {
       this._element.querySelector('.card__trash').classList.add('card__trash_hidden');
     }
 
     // отображаем свои лайки
-    this._likes.forEach((like) => {
+    likes.forEach((like) => {
       if (like._id == userId) {
         this._element.querySelector('.card__like').classList.add('card__like_active');
       }
