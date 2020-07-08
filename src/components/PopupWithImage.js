@@ -2,10 +2,10 @@
 import { Popup } from './Popup.js';
 
 export class PopupWithImage extends Popup {
-	constructor({ formSelector, popupBigImage, popupFigcaption }) {
+	constructor({ formSelector, popupBigImageSelector, popupFigcaptionSelector }) {
     super({ formSelector });
-    this._popupBigImage = popupBigImage;
-    this._popupFigcaption = popupFigcaption;
+    this._popupBigImage = document.querySelector(popupBigImageSelector);
+    this._popupFigcaption = document.querySelector(popupFigcaptionSelector);
   }
 
   // публичный метод открытия попапа

@@ -34,8 +34,6 @@ import {
 
 // создаем экземпляр класса UserInfo ---------
 const newUserInfo = new UserInfo({
-  userNameSelector: '.profile__title',
-  aboutInfoSelector: '.profile__subtitle',
   popupTextTypeName: popupTextTypeName,
   popupTextTypeAbout: popupTextTypeAbout,
   profileTitle: profileTitle,
@@ -169,7 +167,7 @@ const popupEdit = new PopupWithForm({
         popupEdit.setBtnEndLoading();
       });
   },
-  submitButton: saveButton
+  submitButtonSelector: '.popup__btn_action_save'
 });
 // ---------   экземпляр класса PopupWithForm (Edit Profile) ------------
 
@@ -197,7 +195,7 @@ const popupAdd = new PopupWithForm({
         popupAdd.setBtnEndLoading();
       });
   },
-  submitButton: createButton
+  submitButtonSelector: '.popup__btn_action_create'
 });
 // ---------   экземпляр класса PopupWithForm (Add Card) ------------
 
@@ -226,7 +224,7 @@ const popupPatchAvatar = new PopupWithForm({
         popupPatchAvatar.setBtnEndLoading();
       });
   },
-  submitButton: patchButton
+  submitButtonSelector: '.popup__btn_action_patch'
 });
 // ---------   экземпляр класса PopupWithForm (Patch Avatar) ------------
 
@@ -234,8 +232,8 @@ const popupPatchAvatar = new PopupWithForm({
 // ---------   экземпляр класса PopupWithImage ------------
 export const popupImage = new PopupWithImage({
   formSelector: '.popup_type_image',
-  popupBigImage: popupBigImage,
-  popupFigcaption: popupFigcaption,
+  popupBigImageSelector: '.popup__big-image',
+  popupFigcaptionSelector: '.popup__figcaption',
   });
 // ---------   экземпляр класса PopupWithImage ------------
 

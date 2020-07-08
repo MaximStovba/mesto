@@ -3,13 +3,14 @@
 import { Popup } from './Popup.js';
 
 export class PopupWithForm extends Popup {
-	constructor({ formSelector, handleFormSubmit, submitButton }) {
+	constructor({ formSelector, handleFormSubmit, submitButtonSelector }) {
     super({ formSelector });
     this._handleFormSubmit = handleFormSubmit; // функция-колбэк
-    this._submitButton = submitButton; // кнопка сабмита
+    this._submitButton = document.querySelector(submitButtonSelector); // кнопка сабмита
     this._submitButtonText = this._submitButton.textContent; // сохраняем начальное значение кнопки
     this._handleSubmitPopupWithForm = this._handleSubmitPopupWithForm.bind(this);
   }
+
 
   _getInputValues() {
     // достаём все элементы полей
