@@ -257,10 +257,6 @@ function prepareAddFormToOpened() {
   formAddValid.submitButtonState();
   // тогглим попап
   popupAdd.open();
-  // убираем подчеркивание полей ввода красным при открытии
-  inputListAddForm.forEach((inputElement) => {
-    inputElement.classList.remove(formConfig.inputErrorClass);
-  });
 }
 
 // Функция подготовки формы смены аватара к открытию
